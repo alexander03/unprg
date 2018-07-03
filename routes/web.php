@@ -32,6 +32,14 @@ Route::group(['middleware' => 'auth'], function () {
         return View::make('dashboard.home');
     });
 
+    Route::post('encuesta/buscar', 'EncuestaController@buscar')->name('encuesta.buscar');
+    Route::get('encuesta/eliminar/{id}/{listarluego}', 'EncuestaController@eliminar')->name('encuesta.eliminar');
+    Route::resource('encuesta', 'EncuestaController', array('except' => array('show')));
+
+    Route::post('tipoencuesta/buscar', 'TipoencuestaController@buscar')->name('tipoencuesta.buscar');
+    Route::get('tipoencuesta/eliminar/{id}/{listarluego}', 'TipoencuestaController@eliminar')->name('tipoencuesta.eliminar');
+    Route::resource('tipoencuesta', 'TipoencuestaController', array('except' => array('show')));
+
     Route::post('categoriaopcionmenu/buscar', 'CategoriaopcionmenuController@buscar')->name('categoriaopcionmenu.buscar');
     Route::get('categoriaopcionmenu/eliminar/{id}/{listarluego}', 'CategoriaopcionmenuController@eliminar')->name('categoriaopcionmenu.eliminar');
     Route::resource('categoriaopcionmenu', 'CategoriaopcionmenuController', array('except' => array('show')));
