@@ -51,8 +51,6 @@ class TipoeventoController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Tarjeta', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Huella', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -120,8 +118,6 @@ class TipoeventoController extends Controller
         $error = DB::transaction(function() use($request){
             $tipoevento       = new Tipoevento();
             $tipoevento->nombre = $request->input('nombre');
-            $tipoevento->tarjeta = $request->input('tarjeta');
-            $tipoevento->huella = $request->input('huella');
             $tipoevento->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -181,8 +177,6 @@ class TipoeventoController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $tipoevento       = Tipoevento::find($id);
             $tipoevento->nombre = $request->input('nombre');
-            $tipoevento->tarjeta = $request->input('tarjeta');
-            $tipoevento->huella = $request->input('huella');
             $tipoevento->save();
         });
         return is_null($error) ? "OK" : $error;
