@@ -17,20 +17,35 @@ class Alumno extends Model
      * @param  string $name  nombre
      * @return sql        sql
      */
-    public function scopelistar($query, $name, $type)
+    public function scopelistar($query, $codigo, $nombre, $escuela_id)
     {
-        return $query->where(function($subquery) use($name)
+        return $query->where(function($subquery) use($codigo)
 		            {
-		            	if (!is_null($name)) {
-		            		$subquery->where(DB::raw('CONCAT(nombres," ",apellidos)'), 'LIKE', '%'.$name.'%')->orWhere('razonsocial','LIKE','%'.$name.'%');
+		            	if (!is_null($codigo)) {
+		            		$subquery->where('codigo', 'LIKE', '%'.$codigo.'%');
 		            	}
 		            })
-        			->where(function($subquery) use($type)
+        			->where(function($subquery) use($nombre)
 		            {
-		            	if (!is_null($type)) {
-		            		$subquery->where('type', '=', $type);
+		            	if (!is_null($nombre)) {
+		            		$subquery->where('nombres', 'LIKE', '%'.$nombre.'%');
 		            	}
-		            })
-        			->orderBy('apellidos', 'ASC')->orderBy('nombres', 'ASC')->orderBy('razonsocial', 'ASC');
+		            })->where(function($subquery) use($escuela_id){
+                        if (!is_null($escuela_id)) {
+		            		$subquery->where('escuela_id', '=', $escuela_id);
+		            	}
+                    })
+        			->orderBy('codigo', 'ASC')
+        			->orderBy('nombres', 'ASC');
     }
+
+    public function escuela()
+	{
+		return $this->belongsTo('App\Escuela', 'escuela_id');
+    }
+    
+    public function especialidad()
+	{
+		return $this->belongsTo('App\Especialidad', 'especialidad_id');
+	}
 }

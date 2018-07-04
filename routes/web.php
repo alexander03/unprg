@@ -115,6 +115,12 @@ Route::group(['middleware' => 'auth'], function () {
     /* PREGUNTAS */
     Route::get('encuesta/listarpreguntas/{encuesta_id}', 'EncuestaController@listarpreguntas')->name('encuesta.listarpreguntas');
     Route::get('encuesta/nuevapregunta/{encuesta_id}', 'EncuestaController@nuevapregunta')->name('encuesta.nuevapregunta');
+
+    /*ALUMNO*/
+    Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
+    Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
+    Route::resource('alumno', 'AlumnoController', array('except' => array('show')));
+
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
