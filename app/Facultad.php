@@ -17,6 +17,7 @@ class Facultad extends Model
 		            		$subquery->where('nombre', 'LIKE', '%'.$name.'%');
 		            	}
 		            })
-        			->orderBy('nombre', 'ASC');
+                    ->orderBy('nombre', 'ASC');
+                    
     }
 }
