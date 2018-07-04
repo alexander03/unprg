@@ -255,7 +255,8 @@ class EncuestaController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Alternativas', 'numero' => '1');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -274,13 +275,32 @@ class EncuestaController extends Controller
         $pregunta->encuesta_id = $encuesta_id;
         $pregunta->save();
 
+        echo $this->retornarTablaPreguntas($encuesta_id);
+    }
+
+    public function eliminarPregunta($id, $encuesta_id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'pregunta');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $error = DB::transaction(function() use($id){
+            $pregunta = Pregunta::find($id);
+            $pregunta->delete();
+        });
+        echo $this->retornarTablaPreguntas($encuesta_id);
+    }
+
+    public function retornarTablaPreguntas($encuesta_id)
+    {
         $resultado        = Pregunta::listar($encuesta_id);
         $lista            = $resultado->get();
 
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Alternativas', 'numero' => '1');
         
         $titulo_modificar      = $this->tituloModificar;
         $titulo_eliminar       = $this->tituloEliminar;
@@ -288,7 +308,7 @@ class EncuestaController extends Controller
         $inicio                = 0;
 
         if(count($lista) == 0) {
-            echo '<h3 class="text-warning">No se encontraron resultados.</h3>';
+            return '<h3 class="text-warning">No se encontraron resultados.</h3>';
         } else {
             $tabla = '<table id="example1" class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
@@ -309,11 +329,10 @@ class EncuestaController extends Controller
                         <td>'. $contador . '</td>
                         <td>'. $value->nombre . "</td>
                         <td>";
-                    $tabla .= "<button onclick='modal(\"http://localhost/unprg/encuesta/" . $value->id . "/edit?listar=SI\", \"Modificar encuesta\", this);' class='btn btn-xs btn-warning' type='button'><div class='glyphicon glyphicon-pencil'></div> Editar</button>";
-
+                    $tabla .= "<button onclick='gestionpregunta(2, " . $value->id . ");' class='btn btn-xs btn-danger' type='button'><div class='glyphicon glyphicon-remove'></div> Eliminar</button>";
                     $tabla .= '</td>
                         <td>';
-                    $tabla .= "<button onclick='modal(\"http://localhost/unprg/encuesta/eliminar/25/SI\", \"Eliminar encuesta\", this);' class='btn btn-xs btn-danger' type='button'><div class='glyphicon glyphicon-remove'></div> Eliminar</button>";
+                    $tabla .= "<button onclick='#' class='btn btn-default btn-xs' type='button'><div class='glyphicon glyphicon-list'></div> Alternativas</button>";
                     $tabla .= "</td>
                     </tr>";
                     $contador = $contador + 1;
@@ -331,7 +350,6 @@ class EncuestaController extends Controller
                     $tabla .= '</tr>
                 </tfoot>
             </table>';
-            echo $tabla;
+            return $tabla;
         }
     }
-}
