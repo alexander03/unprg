@@ -6,12 +6,18 @@
 
 
 <div class="form-group">
-	{!! Form::label('nombre', 'Nombre:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+	{!! Form::label('nombre', 'Nombres:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
 	<div class="col-lg-9 col-md-9 col-sm-9">
 		{!! Form::text('nombre', null, array('class' => 'form-control input-xs', 'id' => 'nombre', 'placeholder' => 'Ingrese nombre')) !!}
 	</div>
 </div>
 
+<div class="form-group">
+	{!! Form::label('escuela_id', 'Escuela:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+	<div class="col-lg-9 col-md-9 col-sm-9">
+		{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-xs', 'id' => 'escuela_id')) !!}
+	</div>
+</div>
 
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">

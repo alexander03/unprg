@@ -8,6 +8,7 @@ use Hash;
 use Validator;
 use App\Http\Requests;
 use App\Especialidad;
+use App\Escuela;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -47,11 +48,13 @@ class EspecialidadController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Especialidad';
         $name             = Libreria::getParam($request->input('nombre'));
-        $resultado        = Especialidad::listar($name);
+        $escuela_id         = Libreria::getParam($request->input('escuela_id'));
+        $resultado        = Especialidad::listar($name,$escuela_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Escuela', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -82,7 +85,8 @@ class EspecialidadController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        $cboEscuela     = [''=>'Todos'] + Escuela::pluck('nombre', 'id')->all();
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta','cboEscuela'));
     }
 
     /**
@@ -95,10 +99,11 @@ class EspecialidadController extends Controller
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
         $entidad        = 'Especialidad';
         $especialidad        = null;
+        $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         $formData       = array('especialidad.store');
         $formData       = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('especialidad', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('especialidad', 'formData', 'entidad', 'boton', 'listar','cboEscuela'));
     }
 
     /**
@@ -111,15 +116,19 @@ class EspecialidadController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas = array(
-            'nombre'       => 'required|max:50|unique:especialidad,nombre,NULL,id,deleted_at,NULL'
-            );
+            'escuela_id' => 'required|integer'    
+        );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
             $especialidad               = new Especialidad();
+            //$especialidad->id = 3;
             $especialidad->nombre        = $request->input('nombre');
+            $especialidad->escuela_id = $request->input('escuela_id');
+            //echo $especialidad->nombre;
+            //echo ' - '.$especialidad->escuela_id;
             $especialidad->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -149,12 +158,13 @@ class EspecialidadController extends Controller
             return $existe;
         }
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
+        $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         $especialidad        = Especialidad::find($id);
         $entidad        = 'Especialidad';
         $formData       = array('especialidad.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('especialidad', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('especialidad', 'formData', 'entidad', 'boton', 'listar','cboEscuela'));
     }
 
     /**
@@ -171,7 +181,8 @@ class EspecialidadController extends Controller
             return $existe;
         }
         $reglas = array(
-            'nombre'       => 'required|max:50|unique:especialidad,nombre,'.$id.',id,deleted_at,NULL'
+            //'nombre'       => 'required|max:50|unique:especialidad,nombre,'.$id.',id,deleted_at,NULL',
+            'escuela_id' => 'required|integer'
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
@@ -180,6 +191,7 @@ class EspecialidadController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $especialidad                 = Especialidad::find($id);
             $especialidad->nombre = $request->input('nombre');
+            $especialidad->escuela_id = $request->input('escuela_id');
             $especialidad->save();
         });
         return is_null($error) ? "OK" : $error;

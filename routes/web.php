@@ -115,6 +115,12 @@ Route::group(['middleware' => 'auth'], function () {
     /* PREGUNTAS */
     Route::get('encuesta/listarpreguntas/{encuesta_id}', 'EncuestaController@listarpreguntas')->name('encuesta.listarpreguntas');
     Route::get('encuesta/nuevapregunta/{encuesta_id}', 'EncuestaController@nuevapregunta')->name('encuesta.nuevapregunta');
+    Route::get('encuesta/eliminarpregunta/{id}/{encuesta_id}', 'EncuestaController@eliminarpregunta')->name('encuesta.eliminarpregunta');
+
+    /* ALTERNATIVAS */
+    Route::get('encuesta/listaralternativas/{pregunta_id}', 'EncuestaController@retornarTablaAlternativas')->name('encuesta.listaralternativas');
+    Route::get('encuesta/nuevaalternativa/{pregunta_id}', 'EncuestaController@nuevaalternativa')->name('encuesta.nuevaalternativa');
+    Route::get('encuesta/eliminaralternativa/{id}/{pregunta_id}', 'EncuestaController@eliminaralternativa')->name('encuesta.eliminaralternativa');
 
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');

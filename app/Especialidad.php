@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Especialidad extends Model
 {
     protected $table = 'especialidad';
+    /**
+     * Método que retorna los usuarios con el tipo de usuario indicado
+     * @return sql sql
+     */
+    public function escuela(){
+        return $this->belongsTo('App\Escuela', 'escuela_id');
+    }
+
+    public function alumno()
+	{
+		return $this->hasMany('App\Alumno');
+    }
 
     /**
      * Método para listar
@@ -14,7 +26,7 @@ class Especialidad extends Model
      * @param  string $name  nombre
      * @return sql        sql
      */
-    public function scopelistar($query, $name)
+    public function scopelistar($query, $name, $escuela_id)
     {
         return $query->where(function($subquery) use($name)
 		            {
@@ -22,24 +34,14 @@ class Especialidad extends Model
 		            		$subquery->where('nombre', 'LIKE', '%'.$name.'%');
 		            	}
 		            })
+        			->where(function($subquery) use($escuela_id)
+		            {
+		            	if (!is_null($escuela_id)) {
+		            		$subquery->where('escuela_id', '=', $escuela_id);
+		            	}
+		            })
         			->orderBy('nombre', 'ASC');
     }
 
-    /**
-     * Método que retorna los usuarios con el tipo de usuario indicado
-     * @return sql sql
-     */
-    public function alumno()
-	{
-		return $this->hasMany('App\Alumno');
-	}
 
-	/**
-	 * Método de que retorna todos los permisos para el tpo de usuario indicado
-	 * @return sql sql
-	 */
-	public function permissions()
-	{
-		return $this->hasMany('App\Permission');
-	}
 }
