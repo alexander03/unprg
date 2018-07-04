@@ -16,6 +16,16 @@ class Encuesta extends Model
 		return $this->belongsTo('App\Tipoencuesta', 'tipoencuesta_id');
 	}
 
+    public function alumno_encuestas()
+    {
+        return $this->hasMany('App\AlumnoEncuesta');
+    }
+
+    public function preguntas()
+    {
+        return $this->hasMany('App\Pregunta');
+    }
+
     /**
      * Método para listar
      * @param  model $query modelo
