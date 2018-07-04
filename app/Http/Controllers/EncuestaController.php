@@ -8,6 +8,7 @@ use Validator;
 use App\Http\Requests;
 use App\Encuesta;
 use App\Tipoencuesta;
+use App\Pregunta;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,8 @@ class EncuestaController extends Controller
             'delete' => 'encuesta.eliminar',
             'search' => 'encuesta.buscar',
             'index'  => 'encuesta.index',
+            'listarpreguntas' => 'encuesta.listarpreguntas',
+            'nuevapregunta' => 'encuesta.nuevapregunta',
         );
 
     /**
@@ -55,6 +58,7 @@ class EncuestaController extends Controller
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Objetivo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Preguntas', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -242,5 +246,92 @@ class EncuestaController extends Controller
         $formData = array('route' => array('encuesta.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
+    }
+
+    public function listarpreguntas($encuesta_id, Request $request)
+    {
+        $resultado        = Pregunta::listar($encuesta_id);
+        $lista            = $resultado->get();
+        $cabecera         = array();
+        $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        
+        $titulo_modificar = $this->tituloModificar;
+        $titulo_eliminar  = $this->tituloEliminar;
+        $ruta             = $this->rutas;
+        $inicio           = 0;
+        if (count($lista) > 0) {
+            return view($this->folderview.'.preguntas')->with(compact('lista', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta', 'inicio', 'encuesta_id'));
+        }
+        return view($this->folderview.'.preguntas')->with(compact('lista', 'entidad', 'encuesta_id', 'ruta'));
+    }
+
+    public function nuevapregunta($encuesta_id, Request $request)
+    {
+        $pregunta              = new Pregunta();
+        $pregunta->nombre      = $request->input('pregunta');
+        $pregunta->encuesta_id = $encuesta_id;
+        $pregunta->save();
+
+        $resultado        = Pregunta::listar($encuesta_id);
+        $lista            = $resultado->get();
+
+        $cabecera         = array();
+        $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        
+        $titulo_modificar      = $this->tituloModificar;
+        $titulo_eliminar       = $this->tituloEliminar;
+        $ruta                  = $this->rutas;
+        $inicio                = 0;
+
+        if(count($lista) == 0) {
+            echo '<h3 class="text-warning">No se encontraron resultados.</h3>';
+        } else {
+            $tabla = '<table id="example1" class="table table-bordered table-striped table-condensed table-hover">
+                <thead>
+                    <tr>';
+                    foreach($cabecera as $key => $value) {
+                        $tabla .= '<th ';
+                        if((int)$value['numero'] > 1) {
+                            $tabla .= 'colspan="'. $value['numero'] . '"';
+                        }
+                        $tabla .= '>' . $value['valor'] . '</th>';
+                    }
+                $tabla .= '</tr>
+                </thead>
+                <tbody>';
+                    $contador = $inicio + 1;
+                    foreach ($lista as $key => $value) {
+                    $tabla .= '<tr>
+                        <td>'. $contador . '</td>
+                        <td>'. $value->nombre . "</td>
+                        <td>";
+                    $tabla .= "<button onclick='modal(\"http://localhost/unprg/encuesta/" . $value->id . "/edit?listar=SI\", \"Modificar encuesta\", this);' class='btn btn-xs btn-warning' type='button'><div class='glyphicon glyphicon-pencil'></div> Editar</button>";
+
+                    $tabla .= '</td>
+                        <td>';
+                    $tabla .= "<button onclick='modal(\"http://localhost/unprg/encuesta/eliminar/25/SI\", \"Eliminar encuesta\", this);' class='btn btn-xs btn-danger' type='button'><div class='glyphicon glyphicon-remove'></div> Eliminar</button>";
+                    $tabla .= "</td>
+                    </tr>";
+                    $contador = $contador + 1;
+                    }
+                $tabla .= '</tbody>
+                <tfoot>
+                    <tr>';
+                    foreach($cabecera as $key => $value) {
+                        $tabla .= '<th ';
+                        if((int)$value['numero'] > 1) {
+                            $tabla .= 'colspan="'. $value['numero'] . '"';
+                        }
+                        $tabla .= '>' . $value['valor'] . '</th>';
+                    }
+                    $tabla .= '</tr>
+                </tfoot>
+            </table>';
+            echo $tabla;
+        }
     }
 }
