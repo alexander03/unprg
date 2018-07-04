@@ -20,7 +20,7 @@ class Pregunta extends Model
                 $subquery->where('encuesta_id','=' , $encuesta_id);
             }
         })
-        ->orderBy('encuesta_id', 'DESC');
+        ->orderBy('id', 'DESC');
     }
 
     public function encuesta()
