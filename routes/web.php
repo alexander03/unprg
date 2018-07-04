@@ -115,6 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
     /* PREGUNTAS */
     Route::get('encuesta/listarpreguntas/{encuesta_id}', 'EncuestaController@listarpreguntas')->name('encuesta.listarpreguntas');
     Route::get('encuesta/nuevapregunta/{encuesta_id}', 'EncuestaController@nuevapregunta')->name('encuesta.nuevapregunta');
+    Route::get('encuesta/eliminarpregunta/{id}/{encuesta_id}', 'EncuestaController@eliminarPregunta')->name('encuesta.eliminarpregunta');
 
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
