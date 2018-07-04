@@ -1,36 +1,43 @@
 <script>
-	function gestionpregunta(num, id){
+	function gestionpa(num, tipo, id, idpadre){
 		if(num == 1){
-			if(!$('#pregunta').val()) {
-				$('#pregunta').focus()
+			if(!$('#' + tipo).val()) {
+				$('#' + tipo).focus()
 				return false;
 			}
-			route = 'encuesta/nuevapregunta/' + {{ $encuesta_id }};
+			route = 'encuesta/nueva' + tipo + '/' + idpadre;
+		} else if(num == 2){
+			route = 'encuesta/eliminar' + tipo + '/' + id + '/' + idpadre;
 		} else {
-			route = 'encuesta/eliminarpregunta/' + id + '/' + {{ $encuesta_id }};
+			route = 'encuesta/listar' + tipo + 's/' + idpadre;
 		}
 
 		$.ajax({
 			url: route,
 			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
 			type: 'GET',
-			data: $('#formNuevaPregunta').serialize(),
+			data: $('#formnueva' + tipo).serialize(),
 			beforeSend: function(){
-				$('#tablaPreguntas').html(imgCargando());
-				$('#correcto').addClass('hidden');
+				$('#tabla' + tipo + 's').html(imgCargando());
+				$('.correcto').addClass('hidden');
 	        },
 	        success: function(res){
-	        	$('#tablaPreguntas').html(res);
-				$('#pregunta').val('').focus();
-				$('#correcto').removeClass('hidden');
+	        	$('#tabla' + tipo + 's').html(res);
+				$('#' + tipo).val('').focus();
+				$('.correcto').removeClass('hidden');
+				if(num == 3) {
+					$('.correcto').addClass('hidden');
+				}
 	        }
 		});
 	}
 
 	$('.carousel').carousel({
   		pause: true,
-    	interval: false,
+    	interval: false,    	
 	});
+
+
 </script>
 
 <style>
@@ -50,18 +57,18 @@
 						        <div class="card-box table-responsive">
 						            <div class="row m-b-30">
 						                <div class="col-sm-12">
-											{!! Form::open(['route' => null, 'method' => 'GET', 'onsubmit' => 'return false;', 'class' => 'form-inline', 'id' => 'formNuevaPregunta']) !!}
+											{!! Form::open(['route' => null, 'method' => 'GET', 'onsubmit' => 'return false;', 'class' => 'form-inline', 'id' => 'formnuevapregunta']) !!}
 											<div class="form-group">
 												{!! Form::label('pregunta', 'Pregunta:') !!}
 												{!! Form::text('pregunta', '', array('class' => 'form-control input-xs', 'id' => 'pregunta')) !!}
-												{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Añadir', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnAnadir', 'onclick' => 'gestionpregunta(1, "");')) !!}
-												{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Correcto!', array('class' => 'btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden', 'id' => 'correcto', 'onclick' => '#')) !!}
+												{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Añadir', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir', 'onclick' => 'gestionpa(1, "pregunta", "", ' . $encuesta_id . ');')) !!}
+												{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Correcto!', array('class' => 'correcto btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden', 'onclick' => '#')) !!}
 											</div>					
 											{!! Form::close() !!}
 						                </div>
 						            </div>
 
-						            <div id="tablaPreguntas">
+						            <div id="tablapreguntas">
 							            @if(count($lista) == 0)
 										<h3 class="text-warning">No se encontraron resultados.</h3>
 										@else
@@ -81,8 +88,8 @@
 												<tr>
 													<td>{{ $contador }}</td>
 													<td>{{ $value->nombre }}</td>
-													<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'gestionpregunta(2, ' . $value->id . ');', 'class' => 'btn btn-xs btn-danger')) !!}</td>
-													<td><a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next"><div class="glyphicon glyphicon-list"></div> Alternativas</a>
+													<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'gestionpa(2, "pregunta", ' . $value->id . ', ' . $encuesta_id . ');', 'class' => 'btn btn-xs btn-danger')) !!}</td>
+													<td><a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick='gestionpa(3, "alternativa", "", {{ $value->id }}); $(".correcto").addClass("hidden");'><div class="glyphicon glyphicon-list"></div> Alternativas</a>
 												</tr>
 												<?php
 												$contador = $contador + 1;
@@ -105,11 +112,15 @@
     				</div>
     
 				    <div class="item">
-				      	Contenido de las altenativas pe causa 
-				      	<a href="#carousel-ejemplo" role="button" data-slide="prev">
-						    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-						    <span class="sr-only">Previo</span>
-						</a>
+				      	<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="prev" onclick="$('.correcto').addClass('hidden');"><div class="retorno glyphicon glyphicon-chevron-left"></div> Atrás</a>
+						<div class="row">
+						    <div class="col-sm-12">
+						        <div class="card-box table-responsive">
+						            <div id="tablaalternativas">							            
+									</div>
+						        </div>
+						    </div>
+						</div>
 				    </div>           
   				</div>
   			</div>
