@@ -25,4 +25,9 @@ class Escuela extends Model
         			->orderBy('nombre', 'ASC');
         			
     }
+
+    public function alumno()
+	{
+		return $this->hasMany('App\Especialidad');
+    }
 }

@@ -18,15 +18,9 @@
 		@foreach ($lista as $key => $value)
 		<tr  >
 			<td>{{ $contador }}</td>
-			<td>{{ $value->codigo }}</td>
-			<td>{{ $value->nombres }}</td>
-			<td>{{ $value->apellidopaterno }}</td>
-			<td>{{ $value->apellidomaterno }}</td>
 			<td>{{ $value->dni }}</td>
-			<td>{{ Date::parse($value->fechanacimiento )->format('d-m-Y') }}</td>
-			<td>{{ $value->direccion }}</td>
-			<td>{{ $value->telefono }}</td>
-			<td>{{ $value->email }}</td>
+			<td>{{ $value->codigo }}</td>
+			<td>{{ $value->nombres.' '.$value->apellidopaterno.' '.$value->apellidomaterno  }}</td>		
 			<td>{{ $value->escuela->nombre or  '-'  }}</td>
 			<td>{{ $value->especialidad->nombre or '-' }}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
@@ -45,5 +39,4 @@
 		</tr>
 	</tfoot>
 </table>
-{!! $paginacion or '' !!}
 @endif

@@ -57,15 +57,9 @@ class AlumnoController extends Controller
         $lista              = $resultado->get();
         $cabecera           = array();
         $cabecera[]         = array('valor' => '#', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Codigo', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Nombres', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Apellido Paterno', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Apellido Materno', 'numero' => '1');
         $cabecera[]       = array('valor' => 'DNI', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Fecha Nacimiento', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Direccion', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Telefono', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Email', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Codigo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Alumno', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Escuela', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Especialidad', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');

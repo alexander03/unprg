@@ -48,7 +48,8 @@ class CompetenciaController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Competencia';
         $name             = Libreria::getParam($request->input('nombre'));
-        $resultado        = Competencia::listar($name);
+        $escuela_id         = Libreria::getParam($request->input('escuela_id'));
+        $resultado        = Competencia::listar($name, $escuela_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -84,7 +85,8 @@ class CompetenciaController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        $cboEscuela     = [''=>'Todos'] + Escuela::pluck('nombre', 'id')->all();
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta','cboEscuela'));
     }
 
     /**
