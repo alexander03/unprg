@@ -112,14 +112,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('empresa/eliminar/{id}/{listarluego}', 'EmpresaController@eliminar')->name('empresa.eliminar');
     Route::resource('empresa', 'EmpresaController', array('except' => array('show')));
 
-    /* FACULTAD*/
-    Route::post('facultad/buscar', 'FacultadController@buscar')->name('facultad.buscar');
-    Route::get('facultad/eliminar/{id}/{listarluego}', 'FacultadController@eliminar')->name('facultad.eliminar');
-    Route::resource('facultad', 'FacultadController', array('except' => array('show')));
-    /* ESCUELA*/
-    Route::post('escuela/buscar', 'EscuelaController@buscar')->name('escuela.buscar');
-    Route::get('escuela/eliminar/{id}/{listarluego}', 'EscuelaController@eliminar')->name('escuela.eliminar');
-    Route::resource('escuela', 'EscuelaController', array('except' => array('show')));
+    /* PREGUNTAS */
+    Route::get('encuesta/listarpreguntas/{encuesta_id}', 'EncuestaController@listarpreguntas')->name('encuesta.listarpreguntas');
+    Route::get('encuesta/nuevapregunta/{encuesta_id}', 'EncuestaController@nuevapregunta')->name('encuesta.nuevapregunta');
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
