@@ -130,6 +130,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('especialidad/buscar', 'EspecialidadController@buscar')->name('especialidad.buscar');
     Route::get('especialidad/eliminar/{id}/{listarluego}', 'EspecialidadController@eliminar')->name('especialidad.eliminar');
     Route::resource('especialidad', 'EspecialidadController', array('except' => array('show')));
+
+    /*FACULTAD */
+    Route::post('facultad/buscar', 'FacultadController@buscar')->name('facultad.buscar');
+    Route::get('facultad/eliminar/{id}/{listarluego}', 'FacultadController@eliminar')->name('facultad.eliminar');
+    Route::resource('facultad', 'FacultadController', array('except' => array('show')));
+
+    /*ESCUELA */
+    Route::post('escuela/buscar', 'EscuelaController@buscar')->name('escuela.buscar');
+    Route::get('escuela/eliminar/{id}/{listarluego}', 'EscuelaController@eliminar')->name('escuela.eliminar');
+    Route::resource('escuela', 'EscuelaController', array('except' => array('show')));
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
