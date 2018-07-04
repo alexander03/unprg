@@ -106,6 +106,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('person/employeesautocompleting/{searching}', 'PersonController@employeesautocompleting')->name('person.employeesautocompleting');
     Route::get('person/providersautocompleting/{searching}', 'PersonController@providersautocompleting')->name('person.providersautocompleting');
     Route::get('person/customersautocompleting/{searching}', 'PersonController@customersautocompleting')->name('person.customersautocompleting');
+
+    /* EMPRESA */
+    Route::post('empresa/buscar', 'EmpresaController@buscar')->name('empresa.buscar');
+    Route::get('empresa/eliminar/{id}/{listarluego}', 'EmpresaController@eliminar')->name('empresa.eliminar');
+    Route::resource('empresa', 'EmpresaController', array('except' => array('show')));
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
