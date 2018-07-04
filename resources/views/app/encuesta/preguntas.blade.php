@@ -1,3 +1,26 @@
+<script>
+	function nuevapregunta(){
+		if(!$('#pregunta').val()) {
+			return false;
+		}
+		route = 'encuesta/nuevapregunta/' + {{ $encuesta_id }};
+		$.ajax({
+			url: route,
+			type: 'GET',
+			data: $('#formNuevaPregunta').serialize(),
+			beforeSend: function(){
+				$('#tablaPreguntas').html(imgCargando());
+				$('#correcto').addClass('hidden');
+	        },
+	        success: function(res){
+	        	$('#tablaPreguntas').html(res);
+				$('#pregunta').val('').focus();
+				$('#correcto').removeClass('hidden');
+	        }
+		});
+	}
+</script>
+
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
@@ -7,7 +30,8 @@
 					<div class="form-group">
 						{!! Form::label('pregunta', 'Pregunta:') !!}
 						{!! Form::text('pregunta', '', array('class' => 'form-control input-xs', 'id' => 'pregunta')) !!}
-						{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Añadir', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnAnadir', 'onclick' => 'cargarRuta(\''.URL::route($ruta["nuevapregunta"], $encuesta_id) . '\', "tablaPreguntas");')) !!}
+						{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Añadir', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnAnadir', 'onclick' => 'nuevapregunta();')) !!}
+						{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Correcto!', array('class' => 'btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden', 'id' => 'correcto', 'onclick' => '#')) !!}
 					</div>					
 					{!! Form::close() !!}
                 </div>
