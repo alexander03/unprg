@@ -278,7 +278,7 @@ class EncuestaController extends Controller
         echo $this->retornarTablaPreguntas($encuesta_id);
     }
 
-    public function eliminarPregunta($id, $encuesta_id)
+    public function eliminarpregunta($id, $encuesta_id)
     {
         $existe = Libreria::verificarExistencia($id, 'pregunta');
         if ($existe !== true) {
@@ -329,12 +329,130 @@ class EncuestaController extends Controller
                         <td>'. $contador . '</td>
                         <td>'. $value->nombre . "</td>
                         <td>";
-                    $tabla .= "<button onclick='gestionpregunta(2, " . $value->id . ");' class='btn btn-xs btn-danger' type='button'><div class='glyphicon glyphicon-remove'></div> Eliminar</button>";
+                    $tabla .= '<button onclick=\'gestionpa(2, "pregunta", ' . $value->id . ',' . $encuesta_id . ');\' class="btn btn-xs btn-danger" type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</button>';
                     $tabla .= '</td>
                         <td>';
-                    $tabla .= "<button onclick='#' class='btn btn-default btn-xs' type='button'><div class='glyphicon glyphicon-list'></div> Alternativas</button>";
+
+                    $tabla .= '<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick=\'gestionpa(3, "alternativa", "", ' . $value->id . ');\'><div class="glyphicon glyphicon-list"></div> Alternativas</a>';
                     $tabla .= "</td>
                     </tr>";
+                    $contador = $contador + 1;
+                    }
+                $tabla .= '</tbody>
+                <tfoot>
+                    <tr>';
+                    foreach($cabecera as $key => $value) {
+                        $tabla .= '<th ';
+                        if((int)$value['numero'] > 1) {
+                            $tabla .= 'colspan="'. $value['numero'] . '"';
+                        }
+                        $tabla .= '>' . $value['valor'] . '</th>';
+                    }
+                    $tabla .= '</tr>
+                </tfoot>
+            </table>';
+            return $tabla;
+        }
+    }
+
+
+    public function listaralternativas($pregunta_id, Request $request)
+    {
+        $resultado        = Alternativa::listar($pregunta_id);
+        $lista            = $resultado->get();
+        $cabecera         = array();
+        $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
+        
+        $titulo_modificar = $this->tituloModificar;
+        $titulo_eliminar  = $this->tituloEliminar;
+        $ruta             = $this->rutas;
+        $inicio           = 0;
+        if (count($lista) > 0) {
+            return view($this->folderview.'.preguntas')->with(compact('lista', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta', 'inicio', 'encuesta_id'));
+        }
+        return view($this->folderview.'.preguntas')->with(compact('lista', 'entidad', 'encuesta_id', 'ruta'));
+    }
+
+    public function nuevaalternativa($pregunta_id, Request $request)
+    {
+        $alternativa              = new Alternativa();
+        $alternativa->nombre      = $request->get('alternativa');
+        $alternativa->correcta    = false;
+        $alternativa->pregunta_id = $pregunta_id;
+        $alternativa->save();
+
+        echo $this->retornarTablaAlternativas($pregunta_id);
+    }
+
+    public function eliminarAlternativa($id, $pregunta_id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'alternativa');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $error = DB::transaction(function() use($id){
+            $alternativa = Alternativa::find($id);
+            $alternativa->delete();
+        });
+        echo $this->retornarTablaAlternativas($pregunta_id);
+    }
+
+    public function retornarTablaAlternativas($pregunta_id)
+    {
+        $resultado        = Alternativa::listar($pregunta_id);
+        $lista            = $resultado->get();
+
+        $cabecera         = array();
+        $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
+        
+        $titulo_modificar      = $this->tituloModificar;
+        $titulo_eliminar       = $this->tituloEliminar;
+        $ruta                  = $this->rutas;
+        $inicio                = 0;
+
+        $pregunta = Pregunta::find($pregunta_id);
+
+        $tabla = '<b>Altenativas para la pregunta: </b>' . $pregunta->nombre . '<br><br>';
+
+        $tabla .= '
+            <form method="GET" action="#" accept-charset="UTF-8" onsubmit="return false;" class="form-inline" id="formnuevaalternativa">
+                <div class="form-group">
+                    <label for="alternativa">Alternativa:</label>
+                    <input class="form-control input-xs" id="alternativa" name="alternativa" type="text" value="">
+                    <button class="btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir" onclick=\'gestionpa(1, "alternativa", "", ' . $pregunta_id . ');\' type="button"><i class="glyphicon glyphicon-plus"></i> Añadir</button>
+                    <button class="correcto btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden" onclick="#" type="button"><i class="glyphicon glyphicon-check"></i> ¡Correcto!</button>
+                </div>                  
+            </form><br>';
+                
+
+        if(count($lista) == 0) {
+            return $tabla . '<h3 class="text-warning">No hay alternativas para esta pregunta.</h3>';
+        } else {
+            $tabla .= '<table id="example1" class="table table-bordered table-striped table-condensed table-hover">
+                <thead>
+                    <tr>';
+                    foreach($cabecera as $key => $value) {
+                        $tabla .= '<th ';
+                        if((int)$value['numero'] > 1) {
+                            $tabla .= 'colspan="'. $value['numero'] . '"';
+                        }
+                        $tabla .= '>' . $value['valor'] . '</th>';
+                    }
+                $tabla .= '</tr>
+                </thead>
+                <tbody>';
+                    $contador = $inicio + 1;
+                    foreach ($lista as $key => $value) {
+                    $tabla .= '<tr>
+                        <td>'. $contador . '</td>
+                        <td>'. $value->nombre . "</td>
+                        <td>";
+                    $tabla .= '<button onclick=\'gestionpa(2, "alternativa", ' . $value->id . ', ' . $pregunta_id . ');\' class="btn btn-xs btn-danger" type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</button>';
+                    $tabla .= '</td></tr>';
                     $contador = $contador + 1;
                     }
                 $tabla .= '</tbody>
