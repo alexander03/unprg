@@ -270,7 +270,7 @@ class EncuestaController extends Controller
     public function nuevapregunta($encuesta_id, Request $request)
     {
         $pregunta              = new Pregunta();
-        $pregunta->nombre      = $request->input('pregunta');
+        $pregunta->nombre      = $request->get('pregunta');
         $pregunta->encuesta_id = $encuesta_id;
         $pregunta->save();
 
