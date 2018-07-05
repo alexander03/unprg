@@ -19,6 +19,6 @@ class Direccion extends Model
                 $subquery->where('encuesta_id', 'LIKE', '%'.$encuesta_id.'%');
             }
         })
-        ->orderBy('encuesta_id', 'ASC');
+        ->orderBy('id', 'DESC');
     }
 }
