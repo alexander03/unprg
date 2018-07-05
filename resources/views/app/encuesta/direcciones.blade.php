@@ -1,34 +1,42 @@
+<?php 
+
+use App\Facultad;
+use App\Escuela;
+use App\Especialidad;
+
+?>
 <script>
-	function gestionpa(num, tipo, id, idpadre){
+	function gestionpa(encuesta_id, id, num){
 		if(num == 1){
-			if(!$('#' + tipo).val()) {
-				$('#' + tipo).focus()
+			if($('#facultad_id').val() == '') {
 				return false;
 			}
-			route = 'encuesta/nueva' + tipo + '/' + idpadre;
+			route = 'encuesta/nuevadireccion/' + encuesta_id;
 		} else if(num == 2){
-			route = 'encuesta/eliminar' + tipo + '/' + id + '/' + idpadre;
-		} else {
-			route = 'encuesta/listar' + tipo + 's/' + idpadre;
-		}
+			route = 'encuesta/eliminardireccion/' + id + '/' + encuesta_id;
+		} 
 
 		$.ajax({
 			url: route,
 			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
 			type: 'GET',
-			data: $('#formnueva' + tipo).serialize(),
+			data: $('#formnuevadireccion').serialize(),
 			beforeSend: function(){
-				$('#tabla' + tipo + 's').html(imgCargando());
+				$('#tabladirecciones').html(imgCargando());
 				$('.correcto').addClass('hidden');
+				$('.incorrecto').addClass('hidden');
 	        },
 	        success: function(res){
-	        	$('#tabla' + tipo + 's').html(res);
-				$('#' + tipo).val('').focus();
+	        	$('#tabladirecciones').html(res);
 				$('.correcto').removeClass('hidden');
-				if(num == 3) {
-					$('.correcto').addClass('hidden');
-				}
+				$('.incorrecto').addClass('hidden');
+				$('#facultad_id').val('');
+				$('#escuela_id').val('');
+				$('#especialidad_id').val('');
 	        }
+		}).fail(function(){
+			$('.incorrecto').removeClass('hidden');
+			$('.correcto').addClass('hidden');
 		});
 	}
 
@@ -48,9 +56,7 @@
 	        	$('#select' + entidad).html(res);
 	        	if(padre == 'facultad'){
 					$('#selectespecialidad').html('<select class="form-control input-sm" id="especialidad_id" name="especialidad_id"><option value="" selected="selected">Seleccione</option></select>');
-
 	        	}
-	        	alert(si);
 	        }
 		});
 	}
@@ -60,7 +66,7 @@
     <div class="col-sm-12">
         <div class="card-box table-responsive">
             <div class="row">
-				{!! Form::open(['route' => null, 'method' => 'GET', 'onsubmit' => 'return false;', 'class' => 'form-horizontal', 'id' => 'formnuevapregunta']) !!}
+				{!! Form::open(['route' => null, 'method' => 'GET', 'onsubmit' => 'return false;', 'class' => 'form-horizontal', 'id' => 'formnuevadireccion']) !!}
 				<div class="form-group">
 					{!! Form::label('facultad_id', 'Facultad:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
 					<div class="col-lg-10 col-md-10 col-sm-10">
@@ -85,14 +91,15 @@
 				</div>
 				<div class="form-group">
 					<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-						{!! Form::button('<i class="glyphicon glyphicon-plus"></i>', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir input-sm', 'onclick' => 'gestionpa(1, "pregunta", "", ' . $encuesta_id . ');')) !!}
-						{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Correcto!', array('class' => 'correcto btn btn-info waves-effect waves-light m-l-10 btn-md hidden input-sm', 'onclick' => '#')) !!}	
+						{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Correcto!', array('class' => 'correcto btn btn-success waves-effect waves-light m-l-10 btn-md hidden input-sm', 'onclick' => '#')) !!}
+						{!! Form::button('<i class="glyphicon glyphicon-remove-circle"></i> ¡Incorrecto!', array('class' => 'incorrecto btn btn-danger waves-effect waves-light m-l-10 btn-md hidden input-sm', 'onclick' => '#')) !!}
+						{!! Form::button('<i class="glyphicon glyphicon-plus"></i>', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir input-sm', 'onclick' => 'gestionpa(' . $encuesta_id . ', "", 1);')) !!}
 					</div>
 				</div>
 				{!! Form::close() !!}
             </div>
 
-            <div id="tablapreguntas">
+            <div id="tabladirecciones">
 	            @if(count($lista) == 0)
 				<h3 class="text-warning">No se encontraron resultados.</h3>
 				@else
@@ -109,11 +116,26 @@
 						$contador = $inicio + 1;
 						?>
 						@foreach ($lista as $key => $value)
+						<?php
+
+						$facultadx = Facultad::find($value->facultad_id);
+				        $escuelax = Escuela::find($value->escuela_id);
+				        $especialidadx = Especialidad::find($value->especialidad_id);
+
+				        $rutadireccion = '';
+				        if($facultadx != null) {
+				            $rutadireccion .= $facultadx->nombre;
+				        } if($escuelax != null) {
+				            $rutadireccion .= ' -> ' . $escuelax->nombre;
+				        } if($especialidadx != null) {
+				            $rutadireccion .= ' -> ' . $especialidadx->nombre;
+				        }
+
+						?>
 						<tr>
 							<td>{{ $contador }}</td>
-							<td>{{ $value->nombre }}</td>
-							<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'gestionpa(2, "pregunta", ' . $value->id . ', ' . $encuesta_id . ');', 'class' => 'btn btn-xs btn-danger')) !!}</td>
-							<td><a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick='gestionpa(3, "alternativa", "", {{ $value->id }}); $(".correcto").addClass("hidden");'><div class="glyphicon glyphicon-list"></div> Alternativas</a>
+							<td>{{ $rutadireccion }}</td>
+							<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'gestionpa(' . $encuesta_id . ', ' . $value->id . ', 2);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 						</tr>
 						<?php
 						$contador = $contador + 1;
