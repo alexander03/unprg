@@ -36,5 +36,4 @@
 		</tr>
 	</tfoot>
 </table>
-{!! $paginacion or '' !!}
 @endif

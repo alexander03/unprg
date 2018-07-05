@@ -20,4 +20,9 @@ class Experiencias_Laborales extends Model
                     
     }
 
+    public function alumno(){
+        return $this->belongsTo('App\Alumno', 'alumno_id');
+    } 
+
+
 }
