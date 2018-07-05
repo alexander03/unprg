@@ -122,6 +122,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('encuesta/nuevaalternativa/{pregunta_id}', 'EncuestaController@nuevaalternativa')->name('encuesta.nuevaalternativa');
     Route::get('encuesta/eliminaralternativa/{id}/{pregunta_id}', 'EncuestaController@eliminaralternativa')->name('encuesta.eliminaralternativa');
 
+    /* PREGUNTAS */
+    Route::get('encuesta/listardirecciones/{encuesta_id}', 'EncuestaController@listardirecciones')->name('encuesta.listardirecciones');
+    Route::get('encuesta/nuevadireccion/{encuesta_id}', 'EncuestaController@nuevadireccion')->name('encuesta.nuevadireccion');
+    Route::get('encuesta/eliminardireccion/{id}/{encuesta_id}', 'EncuestaController@eliminardireccion')->name('encuesta.eliminardireccion');
+
+    /* DIRECCIONES */
+    Route::get('encuesta/cargarselect/{idselect}', 'EncuestaController@cargarselect')->name('encuesta.cargarselect');
+ 
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
     Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
