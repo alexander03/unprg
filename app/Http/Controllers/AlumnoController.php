@@ -134,7 +134,6 @@ class AlumnoController extends Controller
             'direccion' => 'required|max:100',
             'telefono' => 'required|max:12',
             'escuela_id' => 'required|integer|exists:escuela,id,deleted_at,NULL',
-            'especialidad_id' => 'required|integer|exists:especialidad,id,deleted_at,NULL',
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
@@ -215,7 +214,6 @@ class AlumnoController extends Controller
             'direccion' => 'required|max:50',
             'telefono' => 'required|max:12',
             'escuela_id' => 'required|integer|exists:escuela,id,deleted_at,NULL',
-            'especialidad_id' => 'required|integer|exists:especialidad,id,deleted_at,NULL',
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
