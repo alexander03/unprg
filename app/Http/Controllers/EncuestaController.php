@@ -521,13 +521,13 @@ class EncuestaController extends Controller
         return view($this->folderview.'.direcciones')->with(compact('lista', 'entidad', 'encuesta_id', 'ruta', 'cboFacultad', 'cboEscuela', 'cboEspecialidad'));
     }
 
-    public function nuevadireccion($encuesta_id, $facultad_id, $escuela_id, $especialidad_id, Request $request)
+    public function nuevadireccion($encuesta_id, Request $request)
     {
         $direccion                   = new Direccion();
         $direccion->encuesta_id      = $encuesta_id;
-        $direccion->facultad_id      = $facultad_id;
-        $direccion->escuela_id       = $escuela_id;
-        $direccion->especialidad_id  = $especialidad_id;
+        $direccion->facultad_id      = $request->get('facultad_id');
+        $direccion->escuela_id       = $request->get('escuela_id');
+        $direccion->especialidad_id  = $request->get('especialidad_id');
         $direccion->save();
 
         echo $this->retornarTablaDirecciones($encuesta_id);
@@ -579,17 +579,25 @@ class EncuestaController extends Controller
                 <tbody>';
                     $contador = $inicio + 1;
                     foreach ($lista as $key => $value) {
+                    //Formo la ruta de la direccion
+                    $facultadx = Facultad::find($value->facultad_id);
+                    $escuelax = Escuela::find($value->escuela_id);
+                    $especialidadx = Especialidad::find($value->especialidad_id);
+
+                    $rutadireccion = '';
+                    if($facultadx != null) {
+                        $rutadireccion .= $facultadx->nombre;
+                    } if($escuelax != null) {
+                        $rutadireccion .= ' -> ' . $escuelax->nombre;
+                    } if($especialidadx != null) {
+                        $rutadireccion .= ' -> ' . $especialidadx->nombre;
+                    }
+
                     $tabla .= '<tr>
                         <td>'. $contador . '</td>
-                        <td>'. $value->nombre . "</td>
+                        <td>'. $rutadireccion .  "</td>
                         <td>";
-                    $tabla .= '<button onclick=\'gestionpa(2, "pregunta", ' . $value->id . ',' . $encuesta_id . ');\' class="btn btn-xs btn-danger" type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</button>';
-                    $tabla .= '</td>
-                        <td>';
-
-                    $tabla .= '<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick=\'gestionpa(3, "alternativa", "", ' . $value->id . ');\'><div class="glyphicon glyphicon-list"></div> Alternativas</a>';
-                    $tabla .= "</td>
-                    </tr>";
+                    $tabla .= '<button onclick=\'gestionpa(' . $encuesta_id . ',' . $value->id . ', 2);\' class="btn btn-xs btn-danger" type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</button></td></tr>';
                     $contador = $contador + 1;
                     }
                 $tabla .= '</tbody>
@@ -634,4 +642,5 @@ class EncuestaController extends Controller
 
         echo $retorno;
     }
+
 }
