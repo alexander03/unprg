@@ -158,6 +158,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('experienciaslaborales/eliminar/{id}/{listarluego}', 'Experiencias_LaboralesController@eliminar')->name('experienciaslaborales.eliminar');
     Route::resource('experienciaslaborales', 'Experiencias_LaboralesController', array('except' => array('show')));
 
+    /*COMPETENCIAS ALUMNO */
+    Route::post('competencia_alumno/buscar', 'CompetenciaAlumnoController@buscar')->name('competencia_alumno.buscar');
+    Route::get('competencia_alumno/eliminar/{id}/{listarluego}', 'CompetenciaAlumnoController@eliminar')->name('competencia_alumno.eliminar');
+    Route::resource('competencia_alumno', 'CompetenciaAlumnoController', array('except' => array('show')));
+
+
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
