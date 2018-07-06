@@ -64,7 +64,10 @@ class EncuestaController extends Controller
         $entidad          = 'Encuesta';
         $nombre           = Libreria::getParam($request->input('nombre'));
         $tipoencuesta_id  = Libreria::getParam($request->input('tipoencuesta_id'));
-        $resultado        = Encuesta::listar($nombre,$tipoencuesta_id);
+        $facultad_id      = Libreria::getParam($request->input('_facultad_id'));
+        $escuela_id       = Libreria::getParam($request->input('_escuela_id'));
+        $especialidad_id  = Libreria::getParam($request->input('_especialidad_id'));
+        $resultado        = Encuesta::listar($nombre, $tipoencuesta_id, $facultad_id, $escuela_id, $especialidad_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -74,7 +77,7 @@ class EncuestaController extends Controller
         $cabecera[]       = array('valor' => 'Preguntas', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Direcciones', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
-        
+
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $ruta             = $this->rutas;
@@ -104,7 +107,10 @@ class EncuestaController extends Controller
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         $cboTipoEncuesta  = [''=>'Todos'] + Tipoencuesta::pluck('nombre', 'id')->all();
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboTipoEncuesta'));
+        $cboFacultad     = [''=>'Seleccione'] + Facultad::pluck('nombre', 'id')->all();
+        $cboEscuela      = [''=>'Seleccione'];
+        $cboEspecialidad = [''=>'Seleccione'];
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboTipoEncuesta', 'cboFacultad', 'cboEscuela', 'cboEspecialidad'));
     }
 
     /**
@@ -620,13 +626,20 @@ class EncuestaController extends Controller
     public function cargarselect($idselect, Request $request)
     {
         $entidad = $request->get('entidad');
+        $t = '';
+        $tt = '';
 
-        $retorno = '<select class="form-control input-sm" id="' . $entidad . '_id" name="' . $entidad . '_id"';
+        if($request->get('t') == ''){
+            $t = '_';
+            $tt = '2';
+        }
+
+        $retorno = '<select class="form-control input-sm" id="' . $t . $entidad . '_id" name="' . $t . $entidad . '_id"';
         if($entidad == 'escuela'){
             $cbo = Escuela::select('id', 'nombre')
             ->where('facultad_id', '=', $idselect)
             ->get();
-            $retorno .= ' onchange=\'cargarselect("especialidad")\'';
+            $retorno .= ' onchange=\'cargarselect' . $tt . '("especialidad")\'';
         } else {
             $cbo = Especialidad::select('id', 'nombre')
             ->where('escuela_id', '=', $idselect)
