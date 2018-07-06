@@ -46,7 +46,7 @@ use App\Especialidad;
 			padre = 'facultad';
 		}
 		var select = $('#' + padre + '_id').val();
-		route = 'encuesta/cargarselect/' + select + '?entidad=' + entidad;
+		route = 'encuesta/cargarselect/' + select + '?entidad=' + entidad + '&t=no';
 
 		$.ajax({
 			url: route,
