@@ -5,7 +5,6 @@
     {!! Html::style('assets/css/pages.css') !!}
     {!! Html::style('assets/css/menu.css') !!}
     {!! Html::style('assets/css/responsive.css') !!}
-    {!! Html::style('assets/css/estilos_new.css') !!}
 
     {!! Html::style('plugins/timepicker/bootstrap-timepicker.min.css') !!}
     {!! Html::style('plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') !!}
@@ -30,4 +29,4 @@
 <body class="fixed-left">
 
 
-@include('dashboard.topbar')
+@include('seguimiento.topbar')

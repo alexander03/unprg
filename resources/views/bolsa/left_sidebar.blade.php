@@ -29,7 +29,7 @@ $menu                  = generarMenu($tipousuario_id);
             <a href="" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
                 <img  src="assets/images/users/avatar-2.jpg" alt="user-img" class="img-circle">
                 <span class="user-info-span">
-                    <h5 class="m-t-0 m-b-0">{{ $person->firstname.' '.$person->lastname }}</h5>
+                    <h5 class="m-t-0 m-b-0"></h5>
                     <p class="text-muted m-b-0">
                         <small><i class="fa fa-circle text-success"></i> <span>Online</span></small>
                     </p>
@@ -39,7 +39,7 @@ $menu                  = generarMenu($tipousuario_id);
                 <li><a href="javascript:void(0)"><i class="md md-face-unlock"></i> Profile</a></li>
                 <li><a href="javascript:void(0)"><i class="md md-settings"></i> Settings</a></li>
                 <li><a href="javascript:void(0)"><i class="md md-lock"></i> Lock screen</a></li>
-                <li><a href="logout"><i class="md md-settings-power"></i> Cerrar Sesión</a></li>
+                <li><a href="bolsa/logout"><i class="md md-settings-power"></i> Cerrar Sesión</a></li>
             </ul>
 
         </div>
