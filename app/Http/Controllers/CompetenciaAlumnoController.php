@@ -95,7 +95,12 @@ class CompetenciaAlumnoController extends Controller
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $entidad = 'CompetenciaAlumno';
         $competencia_alumno = null;
-        $cboCompetencia = array('' => 'Seleccione') + Competencia::pluck('nombre', 'id')->all();
+        $reg_combo = Competencia::listarCompetenciasAlumno(CompetenciaAlumno::getIdEscuela(),CompetenciaAlumno::getIdAlumno());
+        echo var_dump(json_encode($reg_combo));
+        //$reg_combo = Competencia::pluck('nombre', 'id')->all();
+        //echo var_dump(json_encode($reg_combo));
+        //$cboCompetencia = array('' => 'Seleccione') + $reg_combo;
+        $cboCompetencia = $reg_combo;
         $formData = array('competencia_alumno.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento' . $entidad, 'autocomplete' => 'off');
         $boton = 'Registrar';
