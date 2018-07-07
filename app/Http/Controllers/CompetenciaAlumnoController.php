@@ -45,7 +45,8 @@ class CompetenciaAlumnoController extends Controller
         $filas = $request->input('filas');
         $entidad = 'CompetenciaAlumno';
         $alumno_id = CompetenciaAlumno::getIdAlumno();
-        $resultado = CompetenciaAlumno::listar($alumno_id);
+        $nombre = $request->input('name');
+        $resultado = CompetenciaAlumno::listar($alumno_id,$nombre);
         $lista = $resultado->get();
         $cabecera = array();
         $cabecera[] = array('valor' => '#', 'numero' => '1');

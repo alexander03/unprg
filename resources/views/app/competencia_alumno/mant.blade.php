@@ -1,12 +1,55 @@
+<style>
+	#form {
+  width: 250px;
+  margin: 0 auto;
+  height: 50px;
+}
+
+#form p {
+  text-align: center;
+}
+
+#form label {
+  font-size: 20px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  color: grey;
+}
+
+.clasificacion {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+
+label:hover,
+label:hover ~ label {
+  color: orange;
+}
+
+input[type="radio"]:checked ~ label {
+  color: orange;
+}
+</style>
+
 <div id="divMensajeError{!! $entidad !!}"></div>
+<p class="clasificacion">
+		<input id="radio1" type="radio" name="estrellas" value="5"><label for="radio1">&#9733;</label>
+		<input id="radio2" type="radio" name="estrellas" value="4"><!--
+		--><label for="radio2">&#9733;</label><!--
+		--><input id="radio3" type="radio" name="estrellas" value="3"><!--
+		--><label for="radio3">&#9733;</label><!--
+		--><input id="radio4" type="radio" name="estrellas" value="2"><!--
+		--><label for="radio4">&#9733;</label><!--
+		--><input id="radio5" type="radio" name="estrellas" value="1"><!--
+		--><label for="radio5">&#9733;</label>
+</p>
 {!! Form::model($competencia_alumno, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
-	<div class="form-group">
-		{!! Form::label('puntaje', 'Puntaje:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<div class="col-lg-9 col-md-9 col-sm-9">
-			{!! Form::text('puntaje', null, array('class' => 'form-control input-xs', 'id' => 'nombre', 'placeholder' => 'Ingrese nombre')) !!}
-		</div>
-	</div>
 	<div class="form-group">
 		{!! Form::label('competencia_id', 'Facultad:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
 		<div class="col-lg-9 col-md-9 col-sm-9">
@@ -24,5 +67,7 @@
 $(document).ready(function() {
 	configurarAnchoModal('450');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+
 }); 
+// ★
 </script>
