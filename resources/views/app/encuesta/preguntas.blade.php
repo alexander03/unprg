@@ -36,15 +36,7 @@
   		pause: true,
     	interval: false,    	
 	});
-
-
 </script>
-
-<style>
-	.modal{
-	    overflow-y: auto;
-	}
-</style>
 
 <div class="row">
 	<div class="col-sm-12">
@@ -57,12 +49,18 @@
 						        <div class="card-box table-responsive">
 						            <div class="row m-b-30">
 						                <div class="col-sm-12">
-											{!! Form::open(['route' => null, 'method' => 'GET', 'onsubmit' => 'return false;', 'class' => 'form-inline', 'id' => 'formnuevapregunta']) !!}
+											{!! Form::open(['route' => null, 'method' => 'GET', 'onsubmit' => 'return false;', 'class' => 'form-horizontal', 'id' => 'formnuevapregunta']) !!}
 											<div class="form-group">
-												{!! Form::label('pregunta', 'Pregunta:') !!}
-												{!! Form::text('pregunta', '', array('class' => 'form-control input-xs', 'id' => 'pregunta')) !!}
-												{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Añadir', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir', 'onclick' => 'gestionpa(1, "pregunta", "", ' . $encuesta_id . ');')) !!}
-												{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Correcto!', array('class' => 'correcto btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden', 'onclick' => '#')) !!}
+												{!! Form::label('pregunta', 'Pregunta:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
+													<div class="col-lg-6 col-md-6 col-sm-6">
+														{!! Form::text('pregunta', '', array('class' => 'form-control input-sm', 'id' => 'pregunta')) !!}
+													</div>
+													<div class="col-lg-1 col-md-1 col-sm-1">
+														{!! Form::button('<i class="glyphicon glyphicon-plus"></i>', array('class' => 'btn btn-info input-sm waves-effect waves-light m-l-10 btn-md btnAnadir', 'onclick' => 'gestionpa(1, "pregunta", "", ' . $encuesta_id . ');')) !!}
+													</div>
+													<div class="col-lg-2 col-md-2 col-sm-2">
+														{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Bien!', array('class' => 'correcto btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden', 'onclick' => '#')) !!}
+													</div>
 											</div>					
 											{!! Form::close() !!}
 						                </div>

@@ -154,7 +154,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('empresa/eliminar/{id}/{listarluego}', 'EmpresaController@eliminar')->name('empresa.eliminar');
     Route::resource('empresa', 'EmpresaController', array('except' => array('show')));
 
-    /* PREGUNTAS */
+   /* PREGUNTAS */
     Route::get('encuesta/listarpreguntas/{encuesta_id}', 'EncuestaController@listarpreguntas')->name('encuesta.listarpreguntas');
     Route::get('encuesta/nuevapregunta/{encuesta_id}', 'EncuestaController@nuevapregunta')->name('encuesta.nuevapregunta');
     Route::get('encuesta/eliminarpregunta/{id}/{encuesta_id}', 'EncuestaController@eliminarpregunta')->name('encuesta.eliminarpregunta');
@@ -164,6 +164,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('encuesta/nuevaalternativa/{pregunta_id}', 'EncuestaController@nuevaalternativa')->name('encuesta.nuevaalternativa');
     Route::get('encuesta/eliminaralternativa/{id}/{pregunta_id}', 'EncuestaController@eliminaralternativa')->name('encuesta.eliminaralternativa');
 
+    /* DIRECCIONES */
+    Route::get('encuesta/listardirecciones/{encuesta_id}', 'EncuestaController@listardirecciones')->name('encuesta.listardirecciones');
+    Route::get('encuesta/nuevadireccion/{encuesta_id}', 'EncuestaController@nuevadireccion')->name('encuesta.nuevadireccion');
+    Route::get('encuesta/eliminardireccion/{id}/{encuesta_id}', 'EncuestaController@eliminardireccion')->name('encuesta.eliminardireccion');
+    Route::get('encuesta/cargarselect/{idselect}', 'EncuestaController@cargarselect')->name('encuesta.cargarselect');
+ 
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
     Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
@@ -188,6 +194,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('escuela/buscar', 'EscuelaController@buscar')->name('escuela.buscar');
     Route::get('escuela/eliminar/{id}/{listarluego}', 'EscuelaController@eliminar')->name('escuela.eliminar');
     Route::resource('escuela', 'EscuelaController', array('except' => array('show')));
+
+    /*EXPERIENCIAS LABORALES */
+    Route::post('experienciaslaborales/buscar', 'Experiencias_LaboralesController@buscar')->name('experienciaslaborales.buscar');
+    Route::get('experienciaslaborales/eliminar/{id}/{listarluego}', 'Experiencias_LaboralesController@eliminar')->name('experienciaslaborales.eliminar');
+    Route::resource('experienciaslaborales', 'Experiencias_LaboralesController', array('except' => array('show')));
+
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));

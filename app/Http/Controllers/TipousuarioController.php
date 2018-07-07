@@ -95,12 +95,11 @@ class TipousuarioController extends Controller
     {
         $listar       = Libreria::getParam($request->input('listar'), 'NO');
         $entidad      = 'Tipousuario';
-        $cboCategoria = [''=>'Seleccione una categoría'] + Usertype::pluck('name', 'id')->all();
         $tipousuario  = null;
         $formData     = array('tipousuario.store');
         $formData     = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton        = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('tipousuario', 'formData', 'entidad', 'boton', 'cboCategoria', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('tipousuario', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -114,7 +113,7 @@ class TipousuarioController extends Controller
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $validacion = Validator::make($request->all(),
             array(
-                'name' => 'required|max:60'
+                'nombre' => 'required|max:60'
                 )
             );
         if ($validacion->fails()) {
@@ -122,7 +121,7 @@ class TipousuarioController extends Controller
         }
         $error = DB::transaction(function() use($request){
             $tipousuario       = new Usertype();
-            $tipousuario->name = $request->input('name');
+            $tipousuario->nombre = $request->input('nombre');
             $tipousuario->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -154,11 +153,10 @@ class TipousuarioController extends Controller
         $listar       = Libreria::getParam($request->input('listar'), 'NO');
         $tipousuario  = Usertype::find($id);
         $entidad      = 'Tipousuario';
-        $cboCategoria = [''=>'Seleccione una categoría'] + Usertype::where('id', '<>', $id)->pluck('name', 'id')->all();
         $formData     = array('tipousuario.update', $id);
         $formData     = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton        = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('tipousuario', 'formData', 'entidad', 'boton', 'cboCategoria', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('tipousuario', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -176,7 +174,7 @@ class TipousuarioController extends Controller
         }
         $validacion = Validator::make($request->all(),
             array(
-                'name' => 'required|max:60'
+                'nombre' => 'required|max:60'
                 )
             );
         if ($validacion->fails()) {
@@ -184,7 +182,7 @@ class TipousuarioController extends Controller
         } 
         $error = DB::transaction(function() use($request, $id){
             $tipousuario       = Usertype::find($id);
-            $tipousuario->name = $request->input('name');
+            $tipousuario->nombre = $request->input('nombre');
             $tipousuario->save();
 
         });

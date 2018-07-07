@@ -9,6 +9,11 @@ use App\Http\Requests;
 use App\Encuesta;
 use App\Tipoencuesta;
 use App\Pregunta;
+use App\Alternativa;
+use App\Direccion;
+use App\Facultad;
+use App\Escuela;
+use App\Especialidad;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +32,14 @@ class EncuestaController extends Controller
             'index'  => 'encuesta.index',
             'listarpreguntas' => 'encuesta.listarpreguntas',
             'nuevapregunta' => 'encuesta.nuevapregunta',
+            'eliminarpregunta' => 'encuesta.eliminarpregunta',
+            'listaralternativas' => 'encuesta.listaralternativas',
+            'nuevaalternativa' => 'encuesta.nuevaalternativa',
+            'eliminaralternativa' => 'encuesta.eliminaralternativa',
+            'listardirecciones' => 'encuesta.listardirecciones',
+            'nuevadireccion' => 'encuesta.nuevadireccion',
+            'eliminardireccion' => 'encuesta.eliminardireccion',
+            'cargarselect' => 'encuesta.cargarselect',
         );
 
     /**
@@ -51,7 +64,10 @@ class EncuestaController extends Controller
         $entidad          = 'Encuesta';
         $nombre           = Libreria::getParam($request->input('nombre'));
         $tipoencuesta_id  = Libreria::getParam($request->input('tipoencuesta_id'));
-        $resultado        = Encuesta::listar($nombre,$tipoencuesta_id);
+        $facultad_id      = Libreria::getParam($request->input('_facultad_id'));
+        $escuela_id       = Libreria::getParam($request->input('_escuela_id'));
+        $especialidad_id  = Libreria::getParam($request->input('_especialidad_id'));
+        $resultado        = Encuesta::listar($nombre, $tipoencuesta_id, $facultad_id, $escuela_id, $especialidad_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -59,8 +75,9 @@ class EncuestaController extends Controller
         $cabecera[]       = array('valor' => 'Objetivo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Preguntas', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Direcciones', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
-        
+
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $ruta             = $this->rutas;
@@ -90,7 +107,10 @@ class EncuestaController extends Controller
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         $cboTipoEncuesta  = [''=>'Todos'] + Tipoencuesta::pluck('nombre', 'id')->all();
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboTipoEncuesta'));
+        $cboFacultad     = [''=>'Seleccione'] + Facultad::pluck('nombre', 'id')->all();
+        $cboEscuela      = [''=>'Seleccione'];
+        $cboEspecialidad = [''=>'Seleccione'];
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboTipoEncuesta', 'cboFacultad', 'cboEscuela', 'cboEspecialidad'));
     }
 
     /**
@@ -248,6 +268,8 @@ class EncuestaController extends Controller
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar','mensaje'));
     }
 
+    //----------PREGUNTAS
+
     public function listarpreguntas($encuesta_id, Request $request)
     {
         $resultado        = Pregunta::listar($encuesta_id);
@@ -355,6 +377,8 @@ class EncuestaController extends Controller
         }
     }
 
+    //----------ALTERNATIVAS
+
 
     public function listaralternativas($pregunta_id, Request $request)
     {
@@ -419,12 +443,18 @@ class EncuestaController extends Controller
         $tabla = '<b>Altenativas para la pregunta: </b>' . $pregunta->nombre . '<br><br>';
 
         $tabla .= '
-            <form method="GET" action="#" accept-charset="UTF-8" onsubmit="return false;" class="form-inline" id="formnuevaalternativa">
+            <form method="GET" action="#" accept-charset="UTF-8" onsubmit="return false;" class="form-horizontal" id="formnuevaalternativa">
                 <div class="form-group">
-                    <label for="alternativa">Alternativa:</label>
-                    <input class="form-control input-xs" id="alternativa" name="alternativa" type="text" value="">
-                    <button class="btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir" onclick=\'gestionpa(1, "alternativa", "", ' . $pregunta_id . ');\' type="button"><i class="glyphicon glyphicon-plus"></i> Añadir</button>
-                    <button class="correcto btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden" onclick="#" type="button"><i class="glyphicon glyphicon-check"></i> ¡Correcto!</button>
+                    <label for="alternativa" class="col-lg-2 col-md-2 col-sm-2 control-label input-sm">Alternativa:</label>
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <input class="form-control input-sm" id="alternativa" name="alternativa" type="text" value="">
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                        <button class="btn btn-info input-sm waves-effect waves-light m-l-10 btn-md btnAnadir" onclick=\'gestionpa(1, "alternativa", "", ' . $pregunta_id . ');\' type="button"><i class="glyphicon glyphicon-plus"></i></button>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2">
+                        <button class="correcto btn btn-success input-sm waves-effect waves-light m-l-10 btn-md hidden" onclick="#" type="button"><i class="glyphicon glyphicon-check"></i> ¡Correcto!</button>
+                    </div>
                 </div>                  
             </form><br>';
                 
@@ -471,3 +501,159 @@ class EncuestaController extends Controller
             return $tabla;
         }
     }
+
+    //----------DIRECCIONES
+
+    public function listardirecciones($encuesta_id, Request $request)
+    {
+        $resultado        = Direccion::listar($encuesta_id);
+        $lista            = $resultado->get();
+        $cabecera         = array();
+        $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
+
+        $cboFacultad      = array('' => 'Seleccione') + Facultad::pluck('nombre', 'id')->all();
+        $cboEscuela      = array('' => 'Seleccione');
+        $cboEspecialidad      = array('' => 'Seleccione');
+        
+        $titulo_modificar = $this->tituloModificar;
+        $titulo_eliminar  = $this->tituloEliminar;
+        $ruta             = $this->rutas;
+        $inicio           = 0;
+        if (count($lista) > 0) {
+            return view($this->folderview.'.direcciones')->with(compact('lista', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta', 'inicio', 'encuesta_id', 'cboFacultad', 'cboEscuela', 'cboEspecialidad'));
+        }
+        return view($this->folderview.'.direcciones')->with(compact('lista', 'entidad', 'encuesta_id', 'ruta', 'cboFacultad', 'cboEscuela', 'cboEspecialidad'));
+    }
+
+    public function nuevadireccion($encuesta_id, Request $request)
+    {
+        $direccion                   = new Direccion();
+        $direccion->encuesta_id      = $encuesta_id;
+        $direccion->facultad_id      = $request->get('facultad_id');
+        $direccion->escuela_id       = $request->get('escuela_id');
+        $direccion->especialidad_id  = $request->get('especialidad_id');
+        $direccion->save();
+
+        echo $this->retornarTablaDirecciones($encuesta_id);
+    }
+
+    public function eliminardireccion($id, $encuesta_id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'direccion');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $error = DB::transaction(function() use($id){
+            $direccion = Direccion::find($id);
+            $direccion->delete();
+        });
+        echo $this->retornarTablaDirecciones($encuesta_id);
+    }
+
+    public function retornarTablaDirecciones($encuesta_id)
+    {
+        $resultado        = Direccion::listar($encuesta_id);
+        $lista            = $resultado->get();
+
+        $cabecera         = array();
+        $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
+        
+        $titulo_modificar      = $this->tituloModificar;
+        $titulo_eliminar       = $this->tituloEliminar;
+        $ruta                  = $this->rutas;
+        $inicio                = 0;
+
+        if(count($lista) == 0) {
+            return '<h3 class="text-warning">No se encontraron resultados.</h3>';
+        } else {
+            $tabla = '<table id="example1" class="table table-bordered table-striped table-condensed table-hover">
+                <thead>
+                    <tr>';
+                    foreach($cabecera as $key => $value) {
+                        $tabla .= '<th ';
+                        if((int)$value['numero'] > 1) {
+                            $tabla .= 'colspan="'. $value['numero'] . '"';
+                        }
+                        $tabla .= '>' . $value['valor'] . '</th>';
+                    }
+                $tabla .= '</tr>
+                </thead>
+                <tbody>';
+                    $contador = $inicio + 1;
+                    foreach ($lista as $key => $value) {
+                    //Formo la ruta de la direccion
+                    $facultadx = Facultad::find($value->facultad_id);
+                    $escuelax = Escuela::find($value->escuela_id);
+                    $especialidadx = Especialidad::find($value->especialidad_id);
+
+                    $rutadireccion = '';
+                    if($facultadx != null) {
+                        $rutadireccion .= $facultadx->nombre;
+                    } if($escuelax != null) {
+                        $rutadireccion .= ' -> ' . $escuelax->nombre;
+                    } if($especialidadx != null) {
+                        $rutadireccion .= ' -> ' . $especialidadx->nombre;
+                    }
+
+                    $tabla .= '<tr>
+                        <td>'. $contador . '</td>
+                        <td>'. $rutadireccion .  "</td>
+                        <td>";
+                    $tabla .= '<button onclick=\'gestionpa(' . $encuesta_id . ',' . $value->id . ', 2);\' class="btn btn-xs btn-danger" type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</button></td></tr>';
+                    $contador = $contador + 1;
+                    }
+                $tabla .= '</tbody>
+                <tfoot>
+                    <tr>';
+                    foreach($cabecera as $key => $value) {
+                        $tabla .= '<th ';
+                        if((int)$value['numero'] > 1) {
+                            $tabla .= 'colspan="'. $value['numero'] . '"';
+                        }
+                        $tabla .= '>' . $value['valor'] . '</th>';
+                    }
+                    $tabla .= '</tr>
+                </tfoot>
+            </table>';
+            return $tabla;
+        }
+    }
+
+    public function cargarselect($idselect, Request $request)
+    {
+        $entidad = $request->get('entidad');
+        $t = '';
+        $tt = '';
+
+        if($request->get('t') == ''){
+            $t = '_';
+            $tt = '2';
+        }
+
+        $retorno = '<select class="form-control input-sm" id="' . $t . $entidad . '_id" name="' . $t . $entidad . '_id"';
+        if($entidad == 'escuela'){
+            $cbo = Escuela::select('id', 'nombre')
+            ->where('facultad_id', '=', $idselect)
+            ->get();
+            $retorno .= ' onchange=\'cargarselect' . $tt . '("especialidad")\'';
+        } else {
+            $cbo = Especialidad::select('id', 'nombre')
+            ->where('escuela_id', '=', $idselect)
+            ->get();
+        }      
+
+        $retorno .= '><option value="" selected="selected">Seleccione</option>';
+
+        foreach ($cbo as $row) {
+            $retorno .= '<option value="' . $row['id'] .  '">' . $row['nombre'] . '</option>';
+        }
+        $retorno .= '</select></div>';
+
+        echo $retorno;
+    }
+
+}

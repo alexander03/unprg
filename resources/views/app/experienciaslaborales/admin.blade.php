@@ -14,8 +14,8 @@
     </div>
 </div>
 
-<!-- Main content -->
-<div class="row">
+
+<div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
 
@@ -25,25 +25,22 @@
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 					<div class="form-group">
-						{!! Form::label('nombre', 'Nombre:') !!}
-						{!! Form::text('nombre', '', array('class' => 'form-control input-xs', 'id' => 'nombre')) !!}
+						{!! Form::label('fechai', 'Desde:') !!}
+						{!! Form::date('fechai', '', array('class' => 'form-control input-xs', 'id' => 'fechai')) !!}
 					</div>
-
 					<div class="form-group">
-						{!! Form::label('escuela_id', 'Escuela:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-						<div class="col-lg-9 col-md-9 col-sm-9">
-							{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-xs', 'id' => 'escuela_id')) !!}
-						</div>
+						{!! Form::label('fechaf', 'Hasta:') !!}
+						{!! Form::date('fechaf', '', array('class' => 'form-control input-xs', 'id' => 'fechaf')) !!}
 					</div>
-
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
 						{!! Form::selectRange('filas', 1, 30, 10, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 					</div>
 					{!! Form::button('<i class="glyphicon glyphicon-search"></i> Buscar', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-md', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 					{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
+					{!! Form::button('<i class="glyphicon glyphicon-save-file"></i> PDF', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnPDF', 'onclick' => 'pdf(\''.$entidad.'\')'))!!}
 					{!! Form::close() !!}
-				</div>
+		 		</div>
             </div>
 
 			<div id="listado{{ $entidad }}"></div>
@@ -53,8 +50,15 @@
         </div>
     </div>
 </div>
-
 <script>
+var fechaActual = new Date();
+	var day = ("0" + fechaActual.getDate()).slice(-2);
+	var month = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+	var fechai = (fechaActual.getFullYear() - 1) + "-01-01";
+	var fechaf = fechaActual.getFullYear() + "-"+month+"-"+day;
+	$('#fechai').val(fechai);
+	$('#fechaf').val(fechaf);
+
 	$(document).ready(function () {
 		buscar('{{ $entidad }}');
 		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
@@ -65,4 +69,9 @@
 			}
 		});
 	});
+
+	function pdf(entidad){
+			window.open('experienciaslaborales/pdf?idalumno='+$('#txtidalumno'));
+	}
+	
 </script>
