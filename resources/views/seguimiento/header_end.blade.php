@@ -29,4 +29,4 @@
 <body class="fixed-left">
 
 
-@include('dashboard.topbar')
+@include('seguimiento.topbar')
