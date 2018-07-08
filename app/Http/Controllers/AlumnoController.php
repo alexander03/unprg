@@ -52,7 +52,7 @@ class AlumnoController extends Controller
         $entidad            = 'Alumno';
         $codigo             = Libreria::getParam($request->input('codigo'));
         $nombre             = Libreria::getParam($request->input('nombre'));
-        $escuela_id         = Libreria::getParam($request->input('escuela_id'));
+        $escuela_id         = Libreria::getParam($request->input('escuela1_id'));
         $resultado          = Alumno::listar($codigo, $nombre, $escuela_id);
         $lista              = $resultado->get();
         $cabecera           = array();
@@ -107,8 +107,8 @@ class AlumnoController extends Controller
         $entidad        = 'Alumno';
         $alumno        = null;
         $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
-        $cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
-        $cboSituacion         = array('A'=>'Activo','I' => 'Inactivo');
+        $cboEspecialidad = array('' => 'Seleccione');
+        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado');
         $formData       = array('alumno.store');
         $formData       = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Registrar'; 
@@ -134,6 +134,7 @@ class AlumnoController extends Controller
             'direccion' => 'required|max:100',
             'telefono' => 'required|max:12',
             'escuela_id' => 'required|integer|exists:escuela,id,deleted_at,NULL',
+            'situacion' => 'required'
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
@@ -152,6 +153,7 @@ class AlumnoController extends Controller
             $alumno->email     = $request->input('email');
             $alumno->escuela_id  = $request->input('escuela_id');
             $alumno->especialidad_id    = $request->input('especialidad_id');
+            $alumno->situacion    = $request->input('situacion');
             $alumno->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -181,10 +183,12 @@ class AlumnoController extends Controller
             return $existe;
         }
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
-        $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
-        $cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
         $alumno        = Alumno::find($id);
         $entidad        = 'Alumno';
+        $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
+        //$cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
+        $cboEspecialidad = array('' => 'Seleccione') + Especialidad::where('escuela_id', '=', $alumno->escuela_id)->pluck('nombre', 'id')->all();
+        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado');
         $formData       = array('alumno.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
@@ -214,6 +218,7 @@ class AlumnoController extends Controller
             'direccion' => 'required|max:50',
             'telefono' => 'required|max:12',
             'escuela_id' => 'required|integer|exists:escuela,id,deleted_at,NULL',
+            'situacion' => 'required'
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
@@ -232,6 +237,7 @@ class AlumnoController extends Controller
             $alumno->email     = $request->input('email');
             $alumno->escuela_id  = $request->input('escuela_id');
             $alumno->especialidad_id    = $request->input('especialidad_id');
+            $alumno->situacion    = $request->input('situacion');
             $alumno->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -278,6 +284,30 @@ class AlumnoController extends Controller
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
     }
+    
+    //cargar datos de especialidad segun el id de escuela
+    public function cargarselect($idselect, Request $request)
+    {
+        $entidad = $request->get('entidad');
+        $t = '';
+        $tt = '';
 
-   
+        if($request->get('t') == ''){
+            $t = '_';
+            $tt = '2';
+        }
+        $retorno = '<select class="form-control input-sm" id="' . $t . $entidad . '_id" name="' . $t . $entidad . '_id"';
+        $cbo = Especialidad::select('id', 'nombre')
+            ->where('escuela_id', '=', $idselect)
+            ->get();    
+
+        $retorno .= '><option value="" selected="selected">Seleccione</option>';
+
+        foreach ($cbo as $row) {
+            $retorno .= '<option value="' . $row['id'] .  '">' . $row['nombre'] . '</option>';
+        }
+        $retorno .= '</select></div>';
+
+        echo $retorno;
+    }
 }

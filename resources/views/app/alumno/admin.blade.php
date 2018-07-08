@@ -36,8 +36,8 @@
 					</div>
 
 					<div class="form-group">
-						{!! Form::label('escuela_id', 'Escuela:') !!}
-						{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-xs', 'id' => 'escuela_id')) !!}
+						{!! Form::label('escuela1_id', 'Escuela:') !!}
+						{!! Form::select('escuela1_id', $cboEscuela, null, array('class' => 'form-control input-xs', 'id' => 'escuela1_id')) !!}
 					</div>
 
 					<div class="form-group">
