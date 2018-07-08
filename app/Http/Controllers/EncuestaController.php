@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Validator;
 use App\Http\Requests;
+use App\Alumno;
 use App\Encuesta;
 use App\Tipoencuesta;
 use App\Pregunta;
@@ -40,6 +41,7 @@ class EncuestaController extends Controller
             'nuevadireccion' => 'encuesta.nuevadireccion',
             'eliminardireccion' => 'encuesta.eliminardireccion',
             'cargarselect' => 'encuesta.cargarselect',
+            'alternativacorrecta' => 'encuesta.alternativacorrecta',
         );
 
     /**
@@ -387,6 +389,7 @@ class EncuestaController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Respuesta', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
         
         $titulo_modificar = $this->tituloModificar;
@@ -431,6 +434,7 @@ class EncuestaController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Respuesta', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Eliminar', 'numero' => '1');
         
         $titulo_modificar      = $this->tituloModificar;
@@ -481,6 +485,17 @@ class EncuestaController extends Controller
                         <td>'. $contador . '</td>
                         <td>'. $value->nombre . "</td>
                         <td>";
+
+                    $icon = 'remove';
+                    $color = 'danger';
+
+                    if($value->correcto == 1){
+                        $icon = 'ok';
+                        $color = 'success';
+                    }
+
+                    $tabla .= '<center><button id="respuesta' . $value->id . '" onclick=\'correcto(' . $value->id . ', ' . $pregunta_id . ');\' class="respuesta btn btn-xs btn-' . $color . '" type="button"><div class="glyphicon glyphicon-' . $icon . '"></div></button>';
+                    $tabla .= '</td></center><td>';
                     $tabla .= '<button onclick=\'gestionpa(2, "alternativa", ' . $value->id . ', ' . $pregunta_id . ');\' class="btn btn-xs btn-danger" type="button"><div class="glyphicon glyphicon-remove"></div> Eliminar</button>';
                     $tabla .= '</td></tr>';
                     $contador = $contador + 1;
@@ -656,4 +671,15 @@ class EncuestaController extends Controller
         echo $retorno;
     }
 
+    public function alternativacorrecta(Request $request) 
+    {
+        $alternativa_id = $request->get('alternativa_id');
+        $pregunta_id = $request->get('pregunta_id');
+
+        Alternativa::where('pregunta_id', $pregunta_id)->update(['correcto' => false]);
+
+        $alternativa           = Alternativa::find($alternativa_id);
+        $alternativa->correcto = true;
+        $alternativa->save();
+    }
 }
