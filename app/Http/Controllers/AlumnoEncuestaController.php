@@ -49,7 +49,7 @@ class AlumnoEncuestaController extends Controller
     {
     	$pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Encuesta';
+        $entidad          = 'AlumnoEncuesta';
         $user             = Auth::user();
         $alumno_id        = $user->alumno_id;
         $alumno           = Alumno::find($alumno_id);        
@@ -67,14 +67,27 @@ class AlumnoEncuestaController extends Controller
         $resultado        = DB::table('encuesta'); 
 
         if(count($encuestas) != 0) {
-            foreach ($encuestas as $encuesta) {
-                $resultado->orWhere('id', '=', $encuesta->encuesta_id);
+            $resultado->orWhere(function($query) use ($encuestas){
+                foreach ($encuestas as $encuesta) {
+                    $query->orWhere('id', '=', $encuesta->encuesta_id);
+                }
+            });                
+
+            $tipoencuesta_id = $request->input('tipoencuesta_id');
+            $nombre          = $request->input('nombre');
+
+            if (!is_null($tipoencuesta_id)) {
+                $resultado->where('tipoencuesta_id', '=', $tipoencuesta_id);
             }
+
+            if (!is_null($nombre)) {
+                $resultado->where('nombre', 'LIKE', '%' . $nombre . '%');
+            }
+
         } else {
             $resultado->where('nombre', '=', '%%%%%%%');
         }
 
-        $entidad          = 'Encuesta';
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -102,7 +115,7 @@ class AlumnoEncuestaController extends Controller
 
     public function index()
     {
-        $entidad          = 'Encuesta';
+        $entidad          = 'AlumnoEncuesta';
         $title            = $this->tituloAdmin;
         $ruta             = $this->rutas;
         $cboTipoEncuesta  = [''=>'Todos'] + Tipoencuesta::pluck('nombre', 'id')->all();
