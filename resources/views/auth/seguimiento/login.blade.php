@@ -29,16 +29,6 @@
             </div>
             <div class="form-group">
                 <div class="col-xs-12">
-                    <i class="md md-group form-control-feedback l-h-34"></i>
-                    <select name="usertype_id" class="form-control" required="" >
-                        <option value="1" selected>Tipo de Usuario</option>
-                        <option value="2">ALUMNO</option>
-                        <option value="5">UNPRG</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-12">
                     <div class="checkbox checkbox-primary">
                         <input name="remember" id="checkbox-signup" type="checkbox">
                         <label for="checkbox-signup">
