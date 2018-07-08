@@ -35,26 +35,28 @@ input[type="radio"]:checked ~ label {
   color: orange;
 }
 </style>
-
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($competencia_alumno, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 	<div class="form-group">
-		{!! Form::label('competencia_id', 'Competencia:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-		<!--div class="col-lg-9 col-md-9 col-sm-9">
-		</div-->
-		<select class="form-control input-xs">
-
-		</select>
-		<?php
-		//<input type='hidden' value=''.$cboCompetencia.' id='cadenaCombo'>
-		?>		
-		//{!! Form::hidden('cadenaCombo', $cboCompetencia, array('id' => 'listar')) !!}
+		<label class="control-label col-xs-3">Competencia: </label>
+		<div class="col-xs-9">
+			<select class="form-control input-xs" id="competencia_id" name="competencia_id">
+					<option value=''>Seleccione...</option>
+				<?php
+					foreach ($cboCompetencia as $value) {
+						echo '<option value='.$value->id.'>'.$value->nombre.'</option>';
+					}
+					//VALIDAMOS PARA AGREGAR EL EDITAR
+					if($competencia_alumno != null){
+						echo '<option value='.$competencia_alumno->competencia->id.' selected>'.$competencia_alumno->competencia->nombre.'</option>';
+					}
+				?>
+			</select>
+		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-xs-3">
-			<label class="" style="padding-right: 30px">Calificación:</label>
-		</div>
+		<label class="control-label col-xs-3">Calificación: </label>
 		<div class="col-xs-9">
 			<p class='clasificacion text-left'>
 				<input id="radio1" type="radio" class="iestrella" name="estrellas" value="5"><label for="radio1" class="lblestrella">&#9733;</label>
@@ -63,7 +65,8 @@ input[type="radio"]:checked ~ label {
 				<input id="radio4" type="radio" class="iestrella" name="estrellas" value="2"><label for="radio4" class="lblestrella">&#9733;</label>
 				<input id="radio5" type="radio" class="iestrella" name="estrellas" value="1"><label for="radio5" class="lblestrella">&#9733;</label>
 			</p>
-			<input type="hidden" value="" name="calificacion" id="calificacion">
+			<!--input type="hidden" value="" name="calificacion" id="calificacion"-->
+			{!! Form::hidden('calificacion', null, array('id' => 'calificacion')) !!}
 		</div>
 	</div>
 	<div class="form-group">
@@ -75,7 +78,7 @@ input[type="radio"]:checked ~ label {
 {!! Form::close() !!}
 <script type="text/javascript">
 $(document).ready(function() {
-	configurarAnchoModal('450');
+	configurarAnchoModal('550');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 	var idclick;
 	$('.lblestrella').each(function(index, value){
@@ -85,6 +88,16 @@ $(document).ready(function() {
 			$('#calificacion').val($('#'+idclick).val());
 		});
 	});
+
+	if($('#calificacion').val()!==""){
+		$('.iestrella').each(function(index, value){
+			console.log('COMPARANDO ' + $(this).val() + " - " +$('#calificacion').val());
+			if($(this).val() === $('#calificacion').val()){
+				$(this).prop('checked', true);
+				return false;
+			}
+		});
+	}
 
 }); 
 // ★

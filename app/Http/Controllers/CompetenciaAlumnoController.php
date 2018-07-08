@@ -7,6 +7,7 @@ use App\CompetenciaAlumno;
 use App\Http\Controllers\Controller;
 use App\Librerias\Libreria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class CompetenciaAlumnoController extends Controller
@@ -47,11 +48,11 @@ class CompetenciaAlumnoController extends Controller
         $alumno_id = CompetenciaAlumno::getIdAlumno();
         $nombre = $request->input('name');
         $resultado = CompetenciaAlumno::listar($alumno_id,$nombre);
-        $lista = $resultado->get();
+        $lista = $resultado->get(); 
         $cabecera = array();
         $cabecera[] = array('valor' => '#', 'numero' => '1');
         $cabecera[] = array('valor' => 'Competencia', 'numero' => '1');
-        $cabecera[] = array('valor' => 'Calificacion', 'numero' => '1');
+        $cabecera[] = array('valor' => 'Calificacion(Max 5 ★)', 'numero' => '1');
         $cabecera[] = array('valor' => 'Operaciones', 'numero' => '2');
 
         $titulo_modificar = $this->tituloModificar;
@@ -96,10 +97,7 @@ class CompetenciaAlumnoController extends Controller
         $entidad = 'CompetenciaAlumno';
         $competencia_alumno = null;
         $reg_combo = Competencia::listarCompetenciasAlumno(CompetenciaAlumno::getIdEscuela(),CompetenciaAlumno::getIdAlumno());
-        echo var_dump(json_encode($reg_combo));
-        //$reg_combo = Competencia::pluck('nombre', 'id')->all();
-        //echo var_dump(json_encode($reg_combo));
-        //$cboCompetencia = array('' => 'Seleccione') + $reg_combo;
+        //$cboCompetencia = json_encode($reg_combo);
         $cboCompetencia = $reg_combo;
         $formData = array('competencia_alumno.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento' . $entidad, 'autocomplete' => 'off');
@@ -117,7 +115,7 @@ class CompetenciaAlumnoController extends Controller
     {
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $reglas = array(
-            'nombre' => 'required|max:50|unique:escuela,nombre,NULL,id,deleted_at,NULL',
+            'calificacion' => 'required|integer',
             'competencia_id' => 'required|integer|exists:competencia,id,deleted_at,NULL',
         );
         $validacion = Validator::make($request->all(), $reglas);
@@ -128,7 +126,7 @@ class CompetenciaAlumnoController extends Controller
             $competencia_alumno = new CompetenciaAlumno();
             $competencia_alumno->calificacion = $request->input('calificacion');
             $competencia_alumno->competencia_id = $request->input('competencia_id');
-            $competencia_alumno->alumno_id = getIdAlumno();
+            $competencia_alumno->alumno_id = CompetenciaAlumno::getIdAlumno();
             $competencia_alumno->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -158,8 +156,8 @@ class CompetenciaAlumnoController extends Controller
             return $existe;
         }
         $listar = Libreria::getParam($request->input('listar'), 'NO');
-        $cboCompetencia = array('' => 'Seleccione') + Competencia::pluck('nombre', 'id')->all();
-
+        $reg_combo = Competencia::listarCompetenciasAlumno(CompetenciaAlumno::getIdEscuela(),CompetenciaAlumno::getIdAlumno());
+        $cboCompetencia = $reg_combo;
         $competencia_alumno = CompetenciaAlumno::find($id);
         $entidad = 'CompetenciaAlumno';
         $formData = array('competencia_alumno.update', $id);
@@ -182,7 +180,7 @@ class CompetenciaAlumnoController extends Controller
             return $existe;
         }
         $reglas = array(
-            'nombre' => 'required|max:50|unique:escuela,nombre,' . $id . ',id,deleted_at,NULL',
+            'calificacion' => 'required|integer',
             'competencia_id' => 'required|integer|exists:competencia,id,deleted_at,NULL',
         );
         $validacion = Validator::make($request->all(), $reglas);
