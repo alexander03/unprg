@@ -42,33 +42,21 @@ Route::get('/', function(){
 
 Route::group(['middleware' => 'auth'], function () {
 
-    /*
-    if(Auth::user()->usertype_id == "2" || Auth::user()->usertype_id == "5"){
-      
-        Route::get('/seguimiento', function(){
-            return View::make('seguimiento.home');
-        });
-
-    }else if(Auth::user()->usertype_id == "3" || Auth::user()->usertype_id == "4"){
-        Route::get('/bolsa', function(){
-            return View::make('bolsa.home');
-        });
-    }else{*/
-
         Route::get('/seguimiento', function(){
             if(Auth::user()->usertype_id == "2" || Auth::user()->usertype_id == "5"|| Auth::user()->usertype_id == "1"){
-            return View::make('seguimiento.home');
+                return View::make('seguimiento.home');
+            }else{
+                return redirect('/bolsa');
             }
         });
 
         Route::get('/bolsa', function(){
             if(Auth::user()->usertype_id == "3" || Auth::user()->usertype_id == "4"|| Auth::user()->usertype_id == "1"){
-            return View::make('bolsa.home');
+                return View::make('bolsa.home');
+            }else{
+                return redirect('/seguimiento');
             }
         });
-
-    //}
-
 
     /*ACTUALIZAR DATOS*/
     Route::resource('actualizardatos', 'ActualizarDatosController', array('except' => array('show')));
@@ -164,16 +152,24 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('encuesta/nuevaalternativa/{pregunta_id}', 'EncuestaController@nuevaalternativa')->name('encuesta.nuevaalternativa');
     Route::get('encuesta/eliminaralternativa/{id}/{pregunta_id}', 'EncuestaController@eliminaralternativa')->name('encuesta.eliminaralternativa');
 
+    /* RESPUESTAS */
+    Route::get('encuesta/alternativacorrecta', 'EncuestaController@alternativacorrecta')->name('encuesta.alternativacorrecta');
+
     /* DIRECCIONES */
     Route::get('encuesta/listardirecciones/{encuesta_id}', 'EncuestaController@listardirecciones')->name('encuesta.listardirecciones');
     Route::get('encuesta/nuevadireccion/{encuesta_id}', 'EncuestaController@nuevadireccion')->name('encuesta.nuevadireccion');
     Route::get('encuesta/eliminardireccion/{id}/{encuesta_id}', 'EncuestaController@eliminardireccion')->name('encuesta.eliminardireccion');
     Route::get('encuesta/cargarselect/{idselect}', 'EncuestaController@cargarselect')->name('encuesta.cargarselect');
+
+    /* ALUMNO-ENCUESTAS */
+    Route::post('alumnoencuesta/buscar', 'AlumnoEncuestaController@buscar')->name('alumnoencuesta.buscar');
+    Route::resource('alumnoencuesta', 'AlumnoEncuestaController', array('except' => array('show')));
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
     Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
     Route::resource('alumno', 'AlumnoController', array('except' => array('show')));
+    Route::get('alumno/cargarselect/{idselect}', 'AlumnoController@cargarselect')->name('alumno.cargarselect');
 
     /*COMPETENCIA*/
     Route::post('competencia/buscar', 'CompetenciaController@buscar')->name('competencia.buscar');

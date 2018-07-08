@@ -1,104 +1,111 @@
+<?php
+use App\Escuela;
+use App\Especialidad;
+?>
+<script>
+function cargarselect(entidad){
+	var select = $('#escuela_id').val();
+	route = 'alumno/cargarselect/'+select+'?entidad= '+entidad+'&t=no';
+	console.log(route);
 
+	$.ajax({
+		url:route,
+		headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+		type: 'GET',
+		success: function(res){
+			console.log("select "+res);
+        	$('#select' + entidad).html(res);
+        }
+	});
+}
+</script>
 
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($alumno, $formData) !!}	
-{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
+	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 
-<div class="form-group">
-	{!! Form::label('codigo', 'Codigo:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('codigo', null, array('class' => 'form-control input-xs', 'id' => 'codigo', 'placeholder' => 'Ingrese codigo')) !!}
-	</div>
-</div>
+	
+		<div class="panel-body">
+			<div class="form-group col-xs-6">
+				{!! Form::label('codigo', 'Codigo:', array('class' => '')) !!}
+				{!! Form::text('codigo', null, array('class' => 'form-control input-xs', 'id' => 'codigo', 'placeholder' => 'Ingrese codigo')) !!}
+			</div>
+			<div class="form-group col-xs-6" style="margin-left: 10px;">
+				{!! Form::label('nombres', 'Nombres:', array('class' => '')) !!}
+				{!! Form::text('nombres', null, array('class' => 'form-control input-xs', 'id' => 'nombres', 'placeholder' => 'Ingrese nombre')) !!}
+			</div>
+			<div class="form-group col-xs-6">
+				{!! Form::label('apellidopaterno', 'Apellido Paterno:', array('class' => '')) !!}
+				{!! Form::text('apellidopaterno', null, array('class' => 'form-control input-xs', 'id' => 'apellidopaterno', 'placeholder' => 'Ingrese apellido paterno')) !!}
+			</div>
 
-<div class="form-group">
-	{!! Form::label('nombres', 'Nombres:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('nombres', null, array('class' => 'form-control input-xs', 'id' => 'nombres', 'placeholder' => 'Ingrese nombre')) !!}
-	</div>
-</div>
+			<div class="form-group col-xs-6" style="margin-left: 10px;">
+				{!! Form::label('apellidomaterno', 'Apellido Materno:', array('class' => '')) !!}
+				{!! Form::text('apellidomaterno', null, array('class' => 'form-control input-xs', 'id' => 'apellidomaterno', 'placeholder' => 'Ingrese apellido materno')) !!}
+			</div>
 
-<div class="form-group">
-	{!! Form::label('apellidopaterno', 'Apellido Paterno:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('apellidopaterno', null, array('class' => 'form-control input-xs', 'id' => 'apellidopaterno', 'placeholder' => 'Ingrese apellido paterno')) !!}
-	</div>
-</div>
+			<div class="form-group col-xs-6">
+				{!! Form::label('dni', 'DNI:', array('class' => '')) !!}
+				{!! Form::text('dni', null, array('class' => 'form-control input-xs input-number', 'id' => 'dni', 'placeholder' => 'Ingrese dni','maxlength' => '8')) !!}
+			</div>
 
-<div class="form-group">
-	{!! Form::label('apellidomaterno', 'Apellido Materno:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('apellidomaterno', null, array('class' => 'form-control input-xs', 'id' => 'apellidomaterno', 'placeholder' => 'Ingrese apellido materno')) !!}
-	</div>
-</div>
+			<div class="form-group col-xs-6" style="margin-left: 10px;">
+				{!! Form::label('fechanacimiento', 'Fecha de Nacimiento:', array('class' => '')) !!}
+				{!! Form::date('fechanacimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechanacimiento', 'placeholder' => 'fecha nacimiento')) !!}
+			</div>
+			<?php
+				if($alumno != null){
+					echo "<input type='hidden' id='fechaNac' value='".Date::parse($alumno->fechanacimiento )->format('d/m/Y')."'>";
 
-<div class="form-group">
-	{!! Form::label('dni', 'DNI:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('dni', null, array('class' => 'form-control input-xs input-number', 'id' => 'dni', 'placeholder' => 'Ingrese dni')) !!}
-	</div>
-</div>
+				}else{
+				echo "<input type='hidden' id='fechaNac' value=''>";
+					
+				}
+			?>
 
-<div class="form-group">
-	{!! Form::label('fechanacimiento', 'Fecha de Nacimiento:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::date('fechanacimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechanacimiento', 'placeholder' => 'fecha nacimiento')) !!}
-	</div>
-	<?php
-	if($alumno != null){
-		echo "<input type='hidden' id='fechaNac' value='".Date::parse($alumno->fechanacimiento )->format('d/m/Y')."'>";
+			<div class="form-group col-xs-6">
+				{!! Form::label('direccion', 'Direccion:', array('class' => '')) !!}
+				{!! Form::text('direccion', null, array('class' => 'form-control input-xs', 'id' => 'direccion', 'placeholder' => 'Ingrese direccion')) !!}
+			</div>
 
-	}else{
-	echo "<input type='hidden' id='fechaNac' value=''>";
-		
-	}
-	?>
-</div>
+			<div class="form-group col-xs-6" style="margin-left: 10px;">
+				{!! Form::label('telefono', 'Telefono:', array('class' => '')) !!}
+				{!! Form::text('telefono', null, array('class' => 'form-control input-xs input-number', 'id' => 'telefono', 'placeholder' => 'Ingrese telefono','maxlength' => '11')) !!}
+			</div>
 
-<div class="form-group">
-	{!! Form::label('direccion', 'Direccion:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('direccion', null, array('class' => 'form-control input-xs', 'id' => 'direccion', 'placeholder' => 'Ingrese direccion')) !!}
-	</div>
-</div>
+			<div class="form-group col-xs-6">
+				{!! Form::label('email', 'E-Mail:', array('class' => '')) !!}
+				{!! Form::text('email', null, array('class' => 'form-control input-xs', 'id' => 'email', 'placeholder' => 'email@ejemplo.com')) !!}
+			</div>
 
-<div class="form-group">
-	{!! Form::label('telefono', 'Telefono:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('telefono', null, array('class' => 'form-control input-xs input-number', 'id' => 'telefono', 'placeholder' => 'Ingrese telefono')) !!}
-	</div>
-</div>
+			<div class="form-group col-xs-6" style="margin-left: 10px;">
+				{!! Form::label('escuela_id', 'Escuela:', array('class' => '')) !!}
+				{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-xs', 'id' => 'escuela_id', 'onchange' => 'cargarselect("especialidad")')) !!}
+			</div>
 
-<div class="form-group">
-	{!! Form::label('email', 'E-Mail:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::text('email', null, array('class' => 'form-control input-xs', 'id' => 'email', 'placeholder' => 'email@ejemplo.com')) !!}
-	</div>
-</div>
+			<div class="form-group col-xs-6">
+				{!! Form::label('especialidad_id', 'Especialidad:', array('class' => '')) !!}
+				<div id="selectespecialidad">
+					{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control input-xs', 'id' => 'especialidad_id')) !!}
+				</div>
+			</div>
 
-<div class="form-group">
-	{!! Form::label('escuela_id', 'Escuela:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-xs', 'id' => 'escuela_id')) !!}
-	</div>
-</div>
-<div class="form-group">
-	{!! Form::label('especialidad_id', 'Especialidad:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-	<div class="col-lg-9 col-md-9 col-sm-9">
-		{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control input-xs', 'id' => 'especialidad_id')) !!}
-	</div>
-</div>
+			<div class="form-group col-xs-6" style="margin-left: 10px;">
+				{!! Form::label('situacion', 'Situacion:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+				{!! Form::select('situacion', $cboSituacion, null, array('class' => 'form-control input-xs', 'id' => 'situacion')) !!}
+			</div>
 
-<div class="form-group">
-	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-		{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
-		{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
-	</div>
-</div>
+		</div>
+		<div class="col-12">
+			<div class="form-group text-right">
+				{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+				{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
+			</div>
+		</div>
 {!! Form::close() !!}
 <script type="text/javascript">
 	$(document).ready(function() {
-		configurarAnchoModal('450');
+		configurarAnchoModal('650');
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 	}); 
 
