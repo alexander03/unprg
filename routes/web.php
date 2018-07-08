@@ -42,21 +42,25 @@ Route::get('/', function(){
 
 Route::group(['middleware' => 'auth'], function () {
 
-        Route::get('/seguimiento', function(){
-            if(Auth::user()->usertype_id == "2" || Auth::user()->usertype_id == "5"|| Auth::user()->usertype_id == "1"){
-                return View::make('seguimiento.home');
-            }else{
-                return redirect('/bolsa');
-            }
-        });
+    Route::get('/seguimiento', function(){
+        if(Auth::user()->usertype_id == "2" || Auth::user()->usertype_id == "5"|| Auth::user()->usertype_id == "1"){
+            return View::make('seguimiento.home');
+        }else{
+            return redirect('/bolsa');
+        }
+    });
 
-        Route::get('/bolsa', function(){
-            if(Auth::user()->usertype_id == "3" || Auth::user()->usertype_id == "4"|| Auth::user()->usertype_id == "1"){
-                return View::make('bolsa.home');
-            }else{
-                return redirect('/seguimiento');
-            }
-        });
+    Route::get('/bolsa', function(){
+        if(Auth::user()->usertype_id == "3" || Auth::user()->usertype_id == "4"|| Auth::user()->usertype_id == "1"){
+            return View::make('bolsa.home');
+        }else{
+            return redirect('/seguimiento');
+        }
+    });
+
+    /* CAMBIAR CONTRASEÑA*/
+    Route::get('updatePassword','Auth\UpdatePasswordController@showUpdatePasswordForm');
+    Route::post('updatePassword','Auth\UpdatePasswordController@updatePassword')->name('updatePassword');
 
     /*ACTUALIZAR DATOS*/
     Route::resource('actualizardatos', 'ActualizarDatosController', array('except' => array('show')));
