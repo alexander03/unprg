@@ -32,6 +32,19 @@
 		});
 	}
 
+	function correcto(alternativa_id, pregunta_id) {
+		var route = 'encuesta/alternativacorrecta?alternativa_id=' + alternativa_id + '&pregunta_id=' + pregunta_id;
+		$.ajax({
+			url: route,
+			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+			type: 'GET',
+	        success: function(res){
+	        	$('.respuesta').html('<div class="glyphicon glyphicon-remove"></div>').removeClass('btn-success').addClass('btn-danger');
+				$('#respuesta' + alternativa_id).html('<div class="glyphicon glyphicon-ok"></div>').removeClass('btn-danger').addClass('btn-success');
+	        }
+		});
+	}
+
 	$('.carousel').carousel({
   		pause: true,
     	interval: false,    	
