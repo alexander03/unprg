@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class LoginController extends Controller
+class LoginBolsaController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected $redirectTo = '/bolsa';
 
     /**
      * Create a new controller instance.
@@ -37,8 +38,29 @@ class LoginController extends Controller
         $this->middleware('guest', ['except' => 'logout']);
     }
 
+    public function showLoginForm()
+    {
+        return view('auth.bolsa.login'); //tambien cambie de dir la carp auth
+    }
+
     public function username()
     {
         return 'login';
+    }
+
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+
+        return redirect('/bolsa/login');
+    }
+
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'password','usertype_id');
     }
 }

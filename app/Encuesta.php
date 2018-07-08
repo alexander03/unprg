@@ -43,37 +43,39 @@ class Encuesta extends Model
     public function scopelistar($query, $nombre, $tipoencuesta_id, $facultad_id, $escuela_id, $especialidad_id)
     {
         $c = false;
+        $direccion = null;
         if($facultad_id != '' || $escuela_id != '' || $especialidad_id != '') {
             $direccion = Direccion::select('encuesta_id')->where('facultad_id', '=', $facultad_id)->where('escuela_id', '=', $escuela_id)->where('especialidad_id', '=', $especialidad_id)->get();
 
-            if (count($direccion) != 0) {
-                $c = true;
-            } 
-        } else {
             $c = true;
-        }
+            if (count($direccion) == 0) {
+                $direccion = null;
+            } 
+        } 
 
-        return $query->where(function($subquery) use($c, $direccion, $facultad_id, $escuela_id, $especialidad_id)
+        return $query->orwhere(function($subquery) use($c, $direccion, $facultad_id, $escuela_id, $especialidad_id)
         {
-            if ($c) {
+            if ($c == true && $direccion != null) {
                 foreach ($direccion as $row) {
                     $subquery->orWhere('id', '=', $row['encuesta_id']);
                 }
             } else {
-                $subquery->where('nombre', '=', '----------');
+                if ($c == true && $direccion == null) {
+                    $subquery->where('nombre', '=', '%%%%%%%');
+                } else {
+                    $subquery->where('nombre', 'LIKE', '%%');
+                }
             }
         })
         ->where(function($subquery) use($c, $nombre, $tipoencuesta_id){
-            if($c){
+            if (!is_null($nombre)) {
                 $subquery->where('nombre', 'LIKE', '%'.$nombre.'%');
-                if (!is_null($tipoencuesta_id)) {
-                    $subquery->where('tipoencuesta_id', '=', $tipoencuesta_id);
-                } 
-            } else {
-                $subquery->where('nombre', '=', '----------');
+            }
+            if (!is_null($tipoencuesta_id)) {
+                $subquery->where('tipoencuesta_id', '=', $tipoencuesta_id);
             }
         })
-		->orderBy('tipoencuesta_id', 'ASC')
-		->orderBy('nombre', 'ASC');
+        ->orderBy('tipoencuesta_id', 'ASC')
+        ->orderBy('nombre', 'ASC');
     }
 }

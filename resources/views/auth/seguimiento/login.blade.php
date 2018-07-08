@@ -1,10 +1,10 @@
-@include('auth.header')
+@include('auth.seguimiento.header')
 <div class="wrapper-page">
     <div class="card-box">
         <div class="text-center">
             <a href="index.php" class="logo-lg"><i class="md md-equalizer"></i> <span>Seguimiento - UNPRG</span> </a>
         </div>
-        <form action="{{ url('/login') }}" method="post" class="form-horizontal m-t-20">
+        <form action="{{ url('/seguimiento/login') }}" method="post" class="form-horizontal m-t-20">
             {{ csrf_field() }}
             @if (count($errors) > 0)
             <div class="form-group has-error has-feedback">
@@ -25,6 +25,16 @@
                 <div class="col-xs-12">
                     <input name="password" class="form-control" type="password" required="" placeholder="Password">
                     <i class="md md-vpn-key form-control-feedback l-h-34"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <i class="md md-group form-control-feedback l-h-34"></i>
+                    <select name="usertype_id" class="form-control" required="" >
+                        <option value="1" selected>Tipo de Usuario</option>
+                        <option value="2">ALUMNO</option>
+                        <option value="5">UNPRG</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
@@ -55,4 +65,4 @@
         </form>
     </div>
 </div>
-@include('auth.footer')
+@include('auth.seguimiento.footer')

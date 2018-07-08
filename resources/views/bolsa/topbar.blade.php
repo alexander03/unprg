@@ -19,7 +19,7 @@ $person                = Alumno::find($user->alumno_id);
                 <!-- LOGO -->
                 <div class="topbar-left">
                     <div class="text-center">
-                        <a href="index.html" class="logo"><i class="md md-equalizer"></i> <span>Seguimiento UNPRG</span> </a>
+                        <a href="bolsa" class="logo"><i class="md md-equalizer"></i> <span>Bolsa UNPRG</span> </a>
                     </div>
                 </div>
 
@@ -147,7 +147,7 @@ $person                = Alumno::find($user->alumno_id);
 
 
             <!-- ========== Left Sidebar Start ========== -->
-            @include('dashboard.left_sidebar')
+            @include('bolsa.left_sidebar')
             <!-- Left Sidebar End -->
 
 

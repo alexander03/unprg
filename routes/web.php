@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,22 +17,62 @@
 // Route::get('auth/login', 'Auth\AuthController@getLogin');
 // Route::post('auth/login', ['as' =>'auth/login', 'uses' => 'Auth\AuthController@postLogin']);
 // Route::get('auth/logout', ['as' => 'auth/logout', 'uses' => 'Auth\AuthController@getLogout']);
- 
+
 // Registration routes...
 // Route::get('auth/register', 'Auth\AuthController@getRegister');
 // Route::post('auth/register', ['as' => 'auth/register', 'uses' => 'Auth\AuthController@postRegister']);
 
-Auth::routes();
-Route::get('logout', 'Auth\LoginController@logout');
+//Auth::routes();
 
+Route::get('seguimiento/login', 'Auth\LoginSeguimientoController@showLoginForm')->name('login');
+Route::post('seguimiento/login', 'Auth\LoginSeguimientoController@login');
+Route::get('seguimiento/logout', 'Auth\LoginSeguimientoController@logout');
+Route::post('seguimiento/logout', 'Auth\LoginSeguimientoController@logout');
+
+Route::get('bolsa/login', 'Auth\LoginBolsaController@showLoginForm')->name('login');
+Route::post('bolsa/login', 'Auth\LoginBolsaController@login');
+Route::get('bolsa/logout', 'Auth\LoginBolsaController@logout');
+Route::post('bolsa/logout', 'Auth\LoginBolsaController@logout');
+
+/*
 Route::get('/', function(){
-    return redirect('/dashboard');
+    return redirect('/bolsa');
 });
+*/
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', function(){
-        return View::make('dashboard.home');
-    });
+
+    /*
+    if(Auth::user()->usertype_id == "2" || Auth::user()->usertype_id == "5"){
+      
+        Route::get('/seguimiento', function(){
+            return View::make('seguimiento.home');
+        });
+
+    }else if(Auth::user()->usertype_id == "3" || Auth::user()->usertype_id == "4"){
+        Route::get('/bolsa', function(){
+            return View::make('bolsa.home');
+        });
+    }else{*/
+
+        Route::get('/seguimiento', function(){
+            if(Auth::user()->usertype_id == "2" || Auth::user()->usertype_id == "5"|| Auth::user()->usertype_id == "1"){
+            return View::make('seguimiento.home');
+            }
+        });
+
+        Route::get('/bolsa', function(){
+            if(Auth::user()->usertype_id == "3" || Auth::user()->usertype_id == "4"|| Auth::user()->usertype_id == "1"){
+            return View::make('bolsa.home');
+            }
+        });
+
+    //}
+
+
+    /*ACTUALIZAR DATOS*/
+    Route::resource('actualizardatos', 'ActualizarDatosController', array('except' => array('show')));
+
 
     Route::post('encuesta/buscar', 'EncuestaController@buscar')->name('encuesta.buscar');
     Route::get('encuesta/eliminar/{id}/{listarluego}', 'EncuestaController@eliminar')->name('encuesta.eliminar');
@@ -122,11 +164,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('encuesta/nuevaalternativa/{pregunta_id}', 'EncuestaController@nuevaalternativa')->name('encuesta.nuevaalternativa');
     Route::get('encuesta/eliminaralternativa/{id}/{pregunta_id}', 'EncuestaController@eliminaralternativa')->name('encuesta.eliminaralternativa');
 
+    /* RESPUESTAS */
+    Route::get('encuesta/alternativacorrecta', 'EncuestaController@alternativacorrecta')->name('encuesta.alternativacorrecta');
+
     /* DIRECCIONES */
     Route::get('encuesta/listardirecciones/{encuesta_id}', 'EncuestaController@listardirecciones')->name('encuesta.listardirecciones');
     Route::get('encuesta/nuevadireccion/{encuesta_id}', 'EncuestaController@nuevadireccion')->name('encuesta.nuevadireccion');
     Route::get('encuesta/eliminardireccion/{id}/{encuesta_id}', 'EncuestaController@eliminardireccion')->name('encuesta.eliminardireccion');
     Route::get('encuesta/cargarselect/{idselect}', 'EncuestaController@cargarselect')->name('encuesta.cargarselect');
+
+    /* ALUMNO-ENCUESTAS */
+    Route::post('alumnoencuesta/buscar', 'AlumnoEncuestaController@buscar')->name('alumnoencuesta.buscar');
+    Route::resource('alumnoencuesta', 'AlumnoEncuestaController', array('except' => array('show')));
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
