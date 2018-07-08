@@ -7,6 +7,31 @@ if ($experienciaslaborales != null) {
     $fechafinp = Date::parse($experienciaslaborales->fechafin)->format('Y-m-d');
 }
 ?>
+<style>
+	 fieldset 
+	{
+		border: 1px solid #ddd !important;
+		margin: 0;
+		xmin-width: 0;
+		padding: 10px;       
+		position: relative;
+		border-radius:4px;
+		background-color:#f5f5f5;
+		padding-left:10px!important;
+	}	
+	
+		legend
+		{
+			font-size:14px;
+			font-weight:bold;
+			margin-bottom: 0px; 
+			width: 35%; 
+			border: 1px solid #ddd;
+			border-radius: 4px; 
+			padding: 5px 5px 5px 10px; 
+			background-color: #ffffff;
+		}
+</style>
 {!! Form::model($experienciaslaborales, $formData) !!}
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 	<fieldset class="col-12">
@@ -54,16 +79,38 @@ if ($experienciaslaborales != null) {
 	<div class="col-12">
 		<br>
 		<div class="form-group text-right">
+			<!--button type="button" class="btn btn-success" id="btnabrirSubModal">ABRIR SUBMODAL</button-->
 			{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
 			{!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar'.$entidad, 'onclick' => 'cerrarModal();')) !!}
 		</div>
 	</div>
 {!! Form::close() !!}
+<!--div class="modal fade" id="submodal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		  <h4 class="modal-title">Modal title</h4>
+		</div>
+		<div class="modal-body">
+		  <p>One fine body&hellip;</p>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		  <button type="button" class="btn btn-primary">Save changes</button>
+		</div>
+	  </div>
+	</div>
+  </div-->
 <script type="text/javascript">
 $(document).ready(function() {
 	configurarAnchoModal('750');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 
-
+/*
+	$('#btnabrirSubModal').click(function(){
+		$('#submodal').modal('show');
+	});
+	*/
 });
 </script>
