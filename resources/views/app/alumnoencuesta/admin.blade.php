@@ -29,7 +29,7 @@
 						{!! Form::label('filas', 'Filas:', array('class' => 'input-sm'))!!}
 						{!! Form::selectRange('filas', 1, 30, 10, array('class' => 'form-control input-sm', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 					</div>
-					{!! Form::button('<i class="glyphicon glyphicon-search"></i>', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-sm input-sm', 'id' => 'btnBuscar', 'onclick' => '#')) !!}
+					{!! Form::button('<i class="glyphicon glyphicon-search"></i>', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-sm input-sm', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 					{!! Form::close() !!}
 				</div>
             </div>
