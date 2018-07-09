@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Usuario;
+use App\Http\Controllers\Auth\UpdatePasswordController;
 
 class UpdatePasswordController extends Controller
 {
@@ -35,8 +38,7 @@ class UpdatePasswordController extends Controller
             'current-password' => 'required',
             'new-password' => 'required|string|min:6|confirmed',
         ]);
- 
-        //Change Password
+
         $user = Auth::user();
         $user->password = bcrypt($request->get('new-password'));
         $user->save();
