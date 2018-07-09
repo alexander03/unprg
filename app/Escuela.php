@@ -30,4 +30,8 @@ class Escuela extends Model
 	{
 		return $this->hasMany('App\Especialidad');
     }
+
+    public static function escuelas($id){
+        return  Escuela::where('facultad_id','=',$id)->get();
+    }
 }
