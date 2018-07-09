@@ -97,6 +97,24 @@ use App\Alternativa;
 
 </style>
 
+<script>
+    function recorrermarcadas(){
+        var completo = true;
+        $(".alternativa").each(function(){
+            if($(this).val() == '') {
+                completo = false;
+            }
+        });
+        if(completo){
+            //código para enviar y guardar los datos, generar alumno encuesta y respuestas
+        } 
+    };
+
+    function marcarcorrecto(idpregunta, idalternativa) {
+        $('#alternativa' + idpregunta).val(idalternativa);
+    };
+</script>
+
 <form action="#">
     <fieldset class="col-md-12"  style="margin-bottom: 10px;">
         <legend>{!! Form::button('<div class="glyphicon glyphicon-chevron-left"></div> Regresar', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-sm', 'onclick' => 'cargarRuta(\'http://localhost/unprg/alumnoencuesta\', \'container\');')) !!}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLENADO DE ENCUESTA: {{ $titulo }}</legend>
@@ -114,10 +132,12 @@ use App\Alternativa;
                             @foreach($alternativas as $alternativa)
                                 <div class="form-check">
                                     <label>
-                                        <input type="radio" name="radio{{ $pregunta->id }}"> <span class="label-text">{{ $alternativa->nombre }}</span>
+                                        <input type="radio" name="radio{{ $pregunta->id }}" id="radio{{ $pregunta->id }}" class="alternativacorrecta" onclick="marcarcorrecto({{ $pregunta->id }}, {{ $alternativa->id }});"> <span class="label-text">{{ $alternativa->nombre }}</span>
                                     </label>
-                                </div>
+                                </div>                                
                             @endforeach
+                            {!! Form::hidden('alternativa' . $pregunta->id, '', array('id' => 'alternativa' . $pregunta->id, 'class' => 'alternativa')) !!}
+                            {!! Form::hidden('pregunta' . $pregunta->id, $pregunta->id, array('id' => 'pregunta' . $pregunta->id)) !!}
                         </form>
                     </div>
                 </div>
@@ -127,7 +147,7 @@ use App\Alternativa;
     </fieldset>
     <div class="col-12">
         <div class="form-group text-right">
-            {!! Form::button('<i class="fa fa-check fa-lg"></i> Guardar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => '#')) !!}
+            {!! Form::button('<i class="fa fa-check fa-lg"></i> Guardar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'recorrermarcadas();')) !!}
             {!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar', 'onclick' => 'cargarRuta(\'http://localhost/unprg/alumnoencuesta\', \'container\');')) !!}
         </div>
     </div>
