@@ -48,8 +48,8 @@
                 <div class="col-sm-7">
                     <a href="{{ url('/password/reset') }}" class="text-muted"><i class="fa fa-lock m-r-5"></i> ¿Olvidó su contraseña?</a>
                 </div>
-                <div class="col-sm-5 text-right" style = "display:none;">
-                    <a href="pages-register.php" class="text-muted">Crear una cuenta</a>
+                <div class="col-sm-5 text-right">
+                    <a href="pages-register.php" class="text-muted">Registrar empresa</a>
                 </div>
             </div>
         </form>
