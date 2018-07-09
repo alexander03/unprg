@@ -19,11 +19,10 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->nombre }}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Preguntas', array('onclick' => '#', 'class' => 'btn btn-default btn-xs')) !!}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Direcciones', array('onclick' => '#', 'class' => 'btn btn-default btn-xs')) !!}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => '#', 'class' => 'btn btn-xs btn-warning')) !!}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => '#', 'class' => 'btn btn-xs btn-danger')) !!}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => '#', 'class' => 'btn btn-xs btn-danger')) !!}</td>
+			<td>{{ $value->objetivo }}</td>
+			<td>{{ $value->tipoencuesta->nombre or '-' }}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Preguntas', array('onclick' => 'cargarRutaMenu(\'http://localhost/unprg/alumnoencuesta/llenarencuesta?encuesta_id=' . $value->id . '\', \'container\', \'\');', 'class' => 'btn btn-default btn-xs')) !!}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Estado', array('onclick' => '#', 'class' => 'btn btn-xs btn-warning')) !!}</td>
 		</tr>
 		<?php
 		$contador = $contador + 1;
