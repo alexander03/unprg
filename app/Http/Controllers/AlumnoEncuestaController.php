@@ -28,6 +28,7 @@ class AlumnoEncuestaController extends Controller
     protected $rutas           = array(
             'search' => 'alumnoencuesta.buscar',
             'index'  => 'alumnoencuesta.index',
+            'llenarencuesta'  => 'alumnoencuesta.llenarencuesta',
         );
 
     /**
@@ -49,7 +50,7 @@ class AlumnoEncuestaController extends Controller
     {
     	$pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Encuesta';
+        $entidad          = 'AlumnoEncuesta';
         $user             = Auth::user();
         $alumno_id        = $user->alumno_id;
         $alumno           = Alumno::find($alumno_id);        
@@ -64,17 +65,30 @@ class AlumnoEncuestaController extends Controller
                             ->distinct()
                             ->get();
 
-        $resultado        = DB::table('encuesta'); 
+        $resultado        = Encuesta::select('*');
 
         if(count($encuestas) != 0) {
-            foreach ($encuestas as $encuesta) {
-                $resultado->orWhere('id', '=', $encuesta->encuesta_id);
+            $resultado->orWhere(function($query) use ($encuestas){
+                foreach ($encuestas as $encuesta) {
+                    $query->orWhere('id', '=', $encuesta->encuesta_id);
+                }
+            });                
+
+            $tipoencuesta_id = $request->input('tipoencuesta_id');
+            $nombre          = $request->input('nombre');
+
+            if (!is_null($tipoencuesta_id)) {
+                $resultado->where('tipoencuesta_id', '=', $tipoencuesta_id);
             }
+
+            if (!is_null($nombre)) {
+                $resultado->where('nombre', 'LIKE', '%' . $nombre . '%');
+            }
+
         } else {
             $resultado->where('nombre', '=', '%%%%%%%');
         }
 
-        $entidad          = 'Encuesta';
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -82,8 +96,7 @@ class AlumnoEncuestaController extends Controller
         $cabecera[]       = array('valor' => 'Objetivo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Preguntas', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Direcciones', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Estado', 'numero' => '1');
 
         $ruta             = $this->rutas;
         if (count($lista) > 0) {
@@ -102,11 +115,48 @@ class AlumnoEncuestaController extends Controller
 
     public function index()
     {
-        $entidad          = 'Encuesta';
+        $entidad          = 'AlumnoEncuesta';
         $title            = $this->tituloAdmin;
         $ruta             = $this->rutas;
         $cboTipoEncuesta  = [''=>'Todos'] + Tipoencuesta::pluck('nombre', 'id')->all();
 
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'ruta', 'cboTipoEncuesta'));
+    }
+
+    public function llenarencuesta(Request $request) 
+    {
+        $existe           = false;
+        $encuesta_id      = $request->get('encuesta_id');
+        $user             = Auth::user();
+        $alumno_id        = $user->alumno_id;
+        $alumno           = Alumno::find($alumno_id);        
+        $escuela_id       = $alumno->escuela_id;
+        $especialidad_id  = $alumno->especialidad_id;
+        $escuela          = Escuela::find($escuela_id);     
+        $facultad_id      = $escuela->facultad_id;
+        $encuestas        = Direccion::select('encuesta_id')
+                            ->orWhere('escuela_id', '=', $escuela_id)
+                            ->orWhere('especialidad_id', '=', $especialidad_id)
+                            ->orWhere('facultad_id', '=', $facultad_id)
+                            ->distinct()
+                            ->get();
+
+        $resultado        = Encuesta::select('id')->orWhere(function($query) use ($encuestas){
+            foreach ($encuestas as $encuesta) {
+                $query->orWhere('id', '=', $encuesta->encuesta_id);
+            }
+        })->get(); 
+
+        $id_array = array();
+
+        foreach ($resultado as $res) {
+            $id_array[] = $res->id;
+        }
+
+        if (in_array($encuesta_id, $id_array)) {
+            $existe = true;
+        }
+
+        return view($this->folderview.'.llenarencuesta')->with(compact('existe'));
     }
 }

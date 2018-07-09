@@ -3,7 +3,6 @@
 @else
 {!! $paginacion or '' !!}
 <table id="example1" class="table table-bordered table-striped table-condensed table-hover">
-
 	<thead>
 		<tr>
 			@foreach($cabecera as $key => $value)
@@ -19,10 +18,9 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->nombre }}</td>
-			<td>{{ $value->objetivo }}</td>
-			<td>{{ $value->tipoencuesta->nombre or '-' }}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Preguntas', array('onclick' => 'cargarRutaMenu(\'http://localhost/unprg/alumnoencuesta/llenarencuesta?encuesta_id=' . $value->id . '\', \'container\', \'\');', 'class' => 'btn btn-default btn-xs')) !!}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Estado', array('onclick' => '#', 'class' => 'btn btn-xs btn-warning')) !!}</td>
+			<td>{{ $value->nombre_certificadora }}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 		</tr>
 		<?php
 		$contador = $contador + 1;
@@ -30,5 +28,4 @@
 		@endforeach
 	</tbody>
 </table>
-{!! $paginacion or '' !!}
 @endif
