@@ -21,7 +21,7 @@
 			<td>{{ $value->nombre }}</td>
 			<td>{{ $value->objetivo }}</td>
 			<td>{{ $value->tipoencuesta->nombre or '-' }}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Preguntas', array('onclick' => 'cargarRutaMenu(\'http://localhost/unprg/alumnoencuesta/llenarencuesta?encuesta_id=' . $value->id . '\', \'container\', \'\');', 'class' => 'btn btn-default btn-xs')) !!}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Preguntas', array('onclick' => 'cargarRuta(\'http://localhost/unprg/alumnoencuesta/llenarencuesta?encuesta_id=' . $value->id . '\', \'container\');', 'class' => 'btn btn-default btn-xs')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Estado', array('onclick' => '#', 'class' => 'btn btn-xs btn-warning')) !!}</td>
 		</tr>
 		<?php
