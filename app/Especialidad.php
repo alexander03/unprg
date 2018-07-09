@@ -20,6 +20,10 @@ class Especialidad extends Model
 		return $this->hasMany('App\Alumno');
     }
 
+    public static function especialidades($id){
+        return  Especialidad::where('escuela_id','=',$id)->get();
+    }
+
     /**
      * Método para listar
      * @param  model $query modelo

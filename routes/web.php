@@ -183,6 +183,7 @@ Route::group(['middleware' => 'auth'], function () {
     
     /* LLENAR ENCUESTA */ 
     Route::get('alumnoencuesta/llenarencuesta', 'AlumnoEncuestaController@llenarencuesta')->name('alumnoencuesta.llenarencuesta');
+    Route::post('alumnoencuesta/guardarencuesta', 'AlumnoEncuestaController@guardarencuesta')->name('alumnoencuesta.guardarencuesta');
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
@@ -226,7 +227,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certificado/eliminar/{id}/{listarluego}', 'CertificadoController@eliminar')->name('certificado.eliminar');
     Route::resource('certificado', 'CertificadoController', array('except' => array('show')));    
 });
-
+//********** */
+Route::get('escuelas/{id}','EventoController@getEscuelas');
+Route::get('especialidades/{id}','EventoController@getEspecialidades');
+///******** */
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
 Route::get('distrito/cbodistrito/{id?}', array('as' => 'distrito.cbodistrito', 'uses' => 'DistritoController@cbodistrito'));
 
