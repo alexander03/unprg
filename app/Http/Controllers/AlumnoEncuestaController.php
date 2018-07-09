@@ -157,6 +157,11 @@ class AlumnoEncuestaController extends Controller
             $existe = true;
         }
 
-        return view($this->folderview.'.llenarencuesta')->with(compact('existe'));
+        $encuestaallenar = Encuesta::find($encuesta_id);
+        $titulo = $encuestaallenar->nombre;
+
+        $preguntas = Pregunta::select('id', 'nombre')->where('encuesta_id', '=', $encuesta_id)->get();
+
+        return view($this->folderview.'.llenarencuesta')->with(compact('existe', 'titulo', 'preguntas'));
     }
 }
