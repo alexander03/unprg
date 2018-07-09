@@ -106,8 +106,27 @@ use App\Alternativa;
             }
         });
         if(completo){
-            //código para enviar y guardar los datos, generar alumno encuesta y respuestas
-        } 
+            $('#btnAviso').addClass('hidden');
+            $.ajax({
+                url: 'alumnoencuesta/guardarencuesta',
+                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                type: 'POST',
+                data: $('#formLlenadoEncuesta').serialize(),
+                beforeSend: function(){
+                    $('#btnGuardar').html('Cargando...');
+                    $('#btnGuardar').attr('disabled', 'disabled');
+                },
+                success: function(res){
+                    $('#btnGuardar').hide();
+                    $('#btnCancelar').hide();
+                    $('.panel-body').html('<div class="col-sm-12"><h3 class="text-success">Encuesta Llenada Satisfactoriamente.</h3></div>');                    
+                }
+            }).fail(function() {
+                $('.panel-body').html('<div class="col-sm-12"><h3 class="text-danger">No se pudo llenar la Encuesta.</h3></div>');
+            });
+        } else {
+            $('#btnAviso').removeClass('hidden');
+        }
     };
 
     function marcarcorrecto(idpregunta, idalternativa) {
@@ -115,42 +134,42 @@ use App\Alternativa;
     };
 </script>
 
-<form action="#">
+<form action="#" id="formLlenadoEncuesta">
     <fieldset class="col-md-12"  style="margin-bottom: 10px;">
         <legend>{!! Form::button('<div class="glyphicon glyphicon-chevron-left"></div> Regresar', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-sm', 'onclick' => 'cargarRuta(\'http://localhost/unprg/alumnoencuesta\', \'container\');')) !!}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LLENADO DE ENCUESTA: {{ $titulo }}</legend>
         <div class="panel panel-default" style="margin-bottom: 10px;">
             <div class="panel-body">
+            <?php $i = 1; ?>
                 @foreach($preguntas as $pregunta)
                 <div class="row" style="margin-top: 10px">
                     <div class="col-md-12">
-                        <form>
-                            <h3>{{ $pregunta->nombre }}</h3>
-                            <?php 
-                                $alternativas = Alternativa::select('id', 'nombre')->where('pregunta_id', '=', $pregunta->id)->get();
-
-                            ?>
-                            @foreach($alternativas as $alternativa)
-                                <div class="form-check">
-                                    <label>
-                                        <input type="radio" name="radio{{ $pregunta->id }}" id="radio{{ $pregunta->id }}" class="alternativacorrecta" onclick="marcarcorrecto({{ $pregunta->id }}, {{ $alternativa->id }});"> <span class="label-text">{{ $alternativa->nombre }}</span>
-                                    </label>
-                                </div>                                
-                            @endforeach
-                            {!! Form::hidden('alternativa' . $pregunta->id, '', array('id' => 'alternativa' . $pregunta->id, 'class' => 'alternativa')) !!}
-                            {!! Form::hidden('pregunta' . $pregunta->id, $pregunta->id, array('id' => 'pregunta' . $pregunta->id)) !!}
-                        </form>
+                        <h3>{{ $i }}. {{ $pregunta->nombre }}</h3>
+                        <?php 
+                            $alternativas = Alternativa::select('id', 'nombre')->where('pregunta_id', '=', $pregunta->id)->get();
+                        ?>
+                        @foreach($alternativas as $alternativa)
+                            <div class="form-check">
+                                <label>
+                                    <input type="radio" name="radio{{ $pregunta->id }}" id="radio{{ $pregunta->id }}" class="alternativacorrecta" onclick="marcarcorrecto({{ $pregunta->id }}, {{ $alternativa->id }});"> <span class="label-text">{{ $alternativa->nombre }}</span>
+                                </label>
+                            </div>                                
+                        @endforeach
+                        {!! Form::hidden('alternativa' . $i, '', array('id' => 'alternativa' . $pregunta->id, 'class' => 'alternativa')) !!}
                     </div>
                 </div>
+                <?php $i++; ?>
                 @endforeach
+                {!! Form::hidden('cantpreguntas', count($preguntas), array('id' => 'cantpreguntas')) !!}
+                {!! Form::hidden('encuesta_id', $encuesta_id, array('id' => 'encuesta_id')) !!}
             </div>
         </div>
     </fieldset>
     <div class="col-12">
         <div class="form-group text-right">
+            {!! Form::button('<i class="fa fa-remove fa-lg"></i> Contesta todas las preguntas', array('class' => 'btn btn-danger btn-sm hidden', 'id' => 'btnAviso')) !!}
             {!! Form::button('<i class="fa fa-check fa-lg"></i> Guardar', array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'recorrermarcadas();')) !!}
             {!! Form::button('<i class="fa fa-exclamation fa-lg"></i> Cancelar', array('class' => 'btn btn-warning btn-sm', 'id' => 'btnCancelar', 'onclick' => 'cargarRuta(\'http://localhost/unprg/alumnoencuesta\', \'container\');')) !!}
         </div>
     </div>
-
-{!! Form::close() !!}
+</form>
 @endif
