@@ -199,13 +199,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('experienciaslaborales/buscar', 'Experiencias_LaboralesController@buscar')->name('experienciaslaborales.buscar');
     Route::get('experienciaslaborales/eliminar/{id}/{listarluego}', 'Experiencias_LaboralesController@eliminar')->name('experienciaslaborales.eliminar');
     Route::resource('experienciaslaborales', 'Experiencias_LaboralesController', array('except' => array('show')));
+    Route::get('experienciaslaborales/obtenercompetencias/{listar}/{id}', 'Experiencias_LaboralesController@obtenerpermisos')->name('experienciaslaborales.obtenercompetencias');
 
     /*COMPETENCIAS ALUMNO */
     Route::post('competencia_alumno/buscar', 'CompetenciaAlumnoController@buscar')->name('competencia_alumno.buscar');
     Route::get('competencia_alumno/eliminar/{id}/{listarluego}', 'CompetenciaAlumnoController@eliminar')->name('competencia_alumno.eliminar');
     Route::resource('competencia_alumno', 'CompetenciaAlumnoController', array('except' => array('show')));
 
-
+    /*CERTIFICADOS */
+    Route::post('certificado/buscar', 'CertificadoController@buscar')->name('certificado.buscar');
+    Route::get('certificado/eliminar/{id}/{listarluego}', 'CertificadoController@eliminar')->name('certificado.eliminar');
+    Route::resource('certificado', 'CertificadoController', array('except' => array('show')));    
 });
 
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));

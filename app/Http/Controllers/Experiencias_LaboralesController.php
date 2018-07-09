@@ -22,6 +22,7 @@ class Experiencias_LaboralesController extends Controller
         'delete' => 'experienciaslaborales.eliminar',
         'search' => 'experienciaslaborales.buscar',
         'index' => 'experienciaslaborales.index',
+        'competencias' => 'experienciaslaborales.obtenercompetencias',
     );
 
     public function __construct()
@@ -248,6 +249,21 @@ class Experiencias_LaboralesController extends Controller
         $formData = array('route' => array('experienciaslaborales.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento' . $entidad, 'autocomplete' => 'off');
         $boton = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
+    }
+
+    public function obtenercompetencias($listarParam, $id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'experiencias_laborales');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar = "NO";
+        $entidad = 'Permiso';
+        if (isset($listarParam)) {
+            $listar = $listarParam;
+        }
+        $tipousuario = Usertype::find($id);
+        return view($this->folderview.'.competencias')->with(compact('tipousuario', 'listar', 'entidad'));
     }
 
 }
