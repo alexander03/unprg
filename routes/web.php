@@ -168,6 +168,9 @@ Route::group(['middleware' => 'auth'], function () {
     /* ALUMNO-ENCUESTAS */
     Route::post('alumnoencuesta/buscar', 'AlumnoEncuestaController@buscar')->name('alumnoencuesta.buscar');
     Route::resource('alumnoencuesta', 'AlumnoEncuestaController', array('except' => array('show')));
+    
+    /* LLENAR ENCUESTA */ 
+    Route::get('alumnoencuesta/llenarencuesta', 'AlumnoEncuestaController@llenarencuesta')->name('alumnoencuesta.llenarencuesta');
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
