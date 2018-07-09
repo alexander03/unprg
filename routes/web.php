@@ -40,6 +40,18 @@ Route::get('/', function(){
 });
 */
 
+//other routes
+
+Route::group(['middleware' => 'guest'], function() {    
+    //Password reset routes
+    Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+    Route::get('password','Auth\ResetPasswordController@showPasswordReset');
+    //other routes
+});
+
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/seguimiento', function(){
