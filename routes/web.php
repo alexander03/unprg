@@ -40,6 +40,18 @@ Route::get('/', function(){
 });
 */
 
+//other routes
+
+Route::group(['middleware' => 'guest'], function() {    
+    //Password reset routes
+    Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
+    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
+    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+    Route::get('password','Auth\ResetPasswordController@showPasswordReset');
+    //other routes
+});
+
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/seguimiento', function(){
@@ -168,6 +180,10 @@ Route::group(['middleware' => 'auth'], function () {
     /* ALUMNO-ENCUESTAS */
     Route::post('alumnoencuesta/buscar', 'AlumnoEncuestaController@buscar')->name('alumnoencuesta.buscar');
     Route::resource('alumnoencuesta', 'AlumnoEncuestaController', array('except' => array('show')));
+    
+    /* LLENAR ENCUESTA */ 
+    Route::get('alumnoencuesta/llenarencuesta', 'AlumnoEncuestaController@llenarencuesta')->name('alumnoencuesta.llenarencuesta');
+    Route::post('alumnoencuesta/guardarencuesta', 'AlumnoEncuestaController@guardarencuesta')->name('alumnoencuesta.guardarencuesta');
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
@@ -218,7 +234,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('experiencia_competencia/listarCompetenciasAlumno', 'Experiencia_CompetenciaController@listarCompetenciasAlumno');
     
 });
-
+//********** */
+Route::get('escuelas/{id}','EventoController@getEscuelas');
+Route::get('especialidades/{id}','EventoController@getEspecialidades');
+///******** */
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
 Route::get('distrito/cbodistrito/{id?}', array('as' => 'distrito.cbodistrito', 'uses' => 'DistritoController@cbodistrito'));
 
