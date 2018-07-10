@@ -13,12 +13,9 @@
         </div>
     </div>
 </div>
-
-
 <div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
-
             <div class="row m-b-30">
                 <div class="col-sm-12">
 					{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
@@ -42,14 +39,13 @@
 					{!! Form::close() !!}
 		 		</div>
             </div>
-
 			<div id="listado{{ $entidad }}"></div>
-			
             <table id="datatable" class="table table-striped table-bordered">
-            </table>
+			</table>
         </div>
     </div>
 </div>
+
 <script>
 var fechaActual = new Date();
 	var day = ("0" + fechaActual.getDate()).slice(-2);

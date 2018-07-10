@@ -262,8 +262,8 @@ class Experiencias_LaboralesController extends Controller
         if (isset($listarParam)) {
             $listar = $listarParam;
         }
-        $tipousuario = Usertype::find($id);
-        return view($this->folderview.'.competencias')->with(compact('tipousuario', 'listar', 'entidad'));
+        //$modelo = Experiencias_Laborales::find($id);
+        return view($this->folderview.'.competencias')->with(compact('id', 'listar', 'entidad'));
     }
 
 }
