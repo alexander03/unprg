@@ -3,7 +3,6 @@
 @else
 {!! $paginacion or '' !!}
 <table id="example1" class="table table-bordered table-striped table-condensed table-hover">
-
 	<thead>
 		<tr>
 			@foreach($cabecera as $key => $value)
@@ -23,7 +22,7 @@
 			<td>{{ $value->cargo }}</td>
 			<td>{{ Date::parse($value->fechainicio)->format('d/m/y') }}</td>
 			<td>{{ Date::parse($value->fechafin)->format('d/m/Y') }}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Competencias', array('onclick' => 'modal (\''.URL::route($ruta["competencias"], array('SI',$value->id)).'\', \'Competencias:\', this);', 'class' => 'btn btn-xs btn-default')) !!}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Competencias', array('onclick' => 'modal (\''.URL::route($ruta["competencias"], array('SI',$value->id)).'\', \'<h5>EXP. LABORAL [ '.$value->cargo.' ]</h5>\', this);', 'class' => 'btn btn-xs btn-default')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 		</tr>
@@ -33,4 +32,5 @@
 		@endforeach
 	</tbody>
 </table>
+{!! $paginacion or '' !!}
 @endif

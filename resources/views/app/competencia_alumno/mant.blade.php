@@ -91,7 +91,7 @@ $(document).ready(function() {
 
 	if($('#calificacion').val()!==""){
 		$('.iestrella').each(function(index, value){
-			console.log('COMPARANDO ' + $(this).val() + " - " +$('#calificacion').val());
+			//console.log('COMPARANDO ' + $(this).val() + " - " +$('#calificacion').val());
 			if($(this).val() === $('#calificacion').val()){
 				$(this).prop('checked', true);
 				return false;
