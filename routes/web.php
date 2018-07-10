@@ -107,6 +107,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('evento/buscarasistente', 'EventoController@buscarasistente')->name('evento.buscarasistente');
     Route::post('evento/cargarasistente', 'EventoController@cargarasistente')->name('evento.cargarasistente');
 
+
+    /*EVENTO ALUMNO*/
+    Route::post('eventoalumno/buscar', 'EventoAlumnoController@buscar')->name('eventoalumno.buscar');
+    Route::get('eventoalumno/eliminar/{id}/{listarluego}', 'EventoAlumnoController@eliminar')->name('eventoalumno.eliminar');
+    Route::resource('eventoalumno', 'EventoAlumnoController', array('except' => array('show')));
+    //Route::get('socio/asistente', 'EventoController@asistente')->name('evento.asistente');
+
     /*SOCIO*/
     Route::post('socio/buscar', 'SocioController@buscar')->name('socio.buscar');
     Route::get('socio/eliminar/{id}/{listarluego}', 'SocioController@eliminar')->name('socio.eliminar');
