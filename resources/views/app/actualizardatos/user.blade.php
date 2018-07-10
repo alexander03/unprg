@@ -164,16 +164,3 @@ $user = Auth::user();
         </div>
     </div>
 </div>
-
-<script>
-	$(document).ready(function () {
-		buscar('{{ $entidad }}');
-		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
-		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="name"]').keyup(function (e) {
-			var key = window.event ? e.keyCode : e.which;
-			if (key == '13') {
-				buscar('{{ $entidad }}');
-			}
-		});
-	});
-</script>

@@ -8,6 +8,7 @@ use Validator;
 use App\Http\Requests;
 use App\Alumno;
 use App\Encuesta;
+use App\AlumnoEncuesta;
 use App\Tipoencuesta;
 use App\Pregunta;
 use App\Alternativa;
@@ -15,6 +16,7 @@ use App\Direccion;
 use App\Facultad;
 use App\Escuela;
 use App\Especialidad;
+use App\Respuesta;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +31,7 @@ class AlumnoEncuestaController extends Controller
             'search' => 'alumnoencuesta.buscar',
             'index'  => 'alumnoencuesta.index',
             'llenarencuesta'  => 'alumnoencuesta.llenarencuesta',
+            'guardarencuesta'  => 'alumnoencuesta.guardarencuesta',
         );
 
     /**
@@ -162,6 +165,27 @@ class AlumnoEncuestaController extends Controller
 
         $preguntas = Pregunta::select('id', 'nombre')->where('encuesta_id', '=', $encuesta_id)->get();
 
-        return view($this->folderview.'.llenarencuesta')->with(compact('existe', 'titulo', 'preguntas'));
+        return view($this->folderview.'.llenarencuesta')->with(compact('existe', 'titulo', 'preguntas', 'encuesta_id'));
+    }
+
+    public function guardarencuesta(Request $request) 
+    {
+        $user                        = Auth::user();
+        $alumno_id                   = $user->alumno_id;
+        $encuesta_id                 = $request->get('encuesta_id');
+        $cantpreguntas               = $request->get('cantpreguntas');
+
+        $alumnoencuesta              = new AlumnoEncuesta();
+        $alumnoencuesta->encuesta_id = $encuesta_id;
+        $alumnoencuesta->alumno_id   = $alumno_id;
+        $alumnoencuesta->save();
+
+        for ($i = 1; $i <= $cantpreguntas; $i++) { 
+            $alternativa_id = $request->get('alternativa' . $i);
+            $respuesta = new Respuesta();
+            $respuesta->alumno_id = $alumno_id;
+            $respuesta->alternativa_id = $alternativa_id;
+            $respuesta->save();
+        }
     }
 }
