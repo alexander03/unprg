@@ -17,7 +17,7 @@ class CertificadoController extends Controller
 {
     //
     protected $folderview      = 'app.certificado';
-    protected $tituloAdmin     = 'Certificados';
+    protected $tituloAdmin     = 'Certificados / Estudios';
     protected $tituloRegistrar = 'Registrar Certificado';
     protected $tituloModificar = 'Modificar Certificado';
     protected $tituloEliminar  = 'Eliminar Certificado';
