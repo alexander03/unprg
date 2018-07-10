@@ -28,79 +28,54 @@ $('#escuela_id').change(function(event){
 	});
 });
 
-var contador=0;
+var cadena="";
 $('#btnAgregar').click(function(){
 	if($('#facultad_id').val()!==''||$('#escuela_id').val()!==''||$('#especialidad_id').val()!==''){
-		$('#tablaDirecciones').append("<tr><td>"+contador+"</td><td idFacultad='"+$('#facultad_id').val()+
+		$('#tablaDirecciones').append("<tr><td>"+$("#tablaDir tr").length+"</td><td idFacultad='"+$('#facultad_id').val()+
 		"' idEscuela='"+$('#escuela_id').val()+
 		"' idEspecialidad='"+$('#especialidad_id').val()+
-		"'>"+(($('#facultad_id').val()==='')?"":$("#facultad_id option:selected").text()) +""+
-		(($('#escuela_id').val()==='')?"":" ->"+$("#escuela_id option:selected").text())+""+
-		(($('#especialidad_id').val()==='')?"":" ->"+$("#especialidad_id option:selected").text())+"</td></tr>");
+		"' class='direciones'>"+(($('#facultad_id').val()==='')?"":"->"+$("#facultad_id option:selected").text()) +""+
+		(($('#escuela_id').val()==='')?"":"->"+$("#escuela_id option:selected").text())+""+
+		(($('#especialidad_id').val()==='')?"":"->"+$("#especialidad_id option:selected").text())+"</td>"+
+		"<td><button class='btn btn-danger btn-xs borrar'><div class='glyphicon glyphicon-remove'></div>Eliminar</button></td></tr>");
 		$('#facultad_id').val('');
-		$('#escuela_id').val('');
-		$('#especialidad_id').val('');
-		contador ++;
+		$('#escuela_id').empty();
+		$('#especialidad_id').empty();
+		$('#escuela_id').append("<option value=''>Seleccione</option>");
+		$('#especialidad_id').append("<option value=''>Seleccione</option>");
+		// $("#tablaDir tr").length;
 	}
-	
+	$('#cadenaDirecciones').val(getCadenaTablaDetalles);
 });
 
 
-/*
-	function gestionpa(evento_id, id, num){
-		if(num == 1){
-			if($('#facultad_id').val() == '') {
-				return false;
+
+function getCadenaTablaDetalles() {
+    var cadenaDir = "";
+    
+    var botones = document.getElementsByClassName("direciones");
+	if(botones.length !== 0){
+		for (var i = 0; i < botones.length; i++) {
+			if (i === botones.length - 1) {
+				cadenaDir += ($(botones[i]).attr("idFacultad")===''?"-1":$(botones[i]).attr("idFacultad"))+":"+($(botones[i]).attr("idEscuela")===''?"-1":$(botones[i]).attr("idEscuela"))+
+				":"+($(botones[i]).attr("idEspecialidad")===''?"-1":$(botones[i]).attr("idEspecialidad"));
+			} else {
+				cadenaDir += ($(botones[i]).attr("idFacultad")===''?"-1":$(botones[i]).attr("idFacultad"))+":"+($(botones[i]).attr("idEscuela")===''?"-1":$(botones[i]).attr("idEscuela"))+
+				":"+($(botones[i]).attr("idEspecialidad")===''?"-1":$(botones[i]).attr("idEspecialidad"))+",";
 			}
-			route = 'evento/nuevadireccion/' + evento_id;
-		} else if(num == 2){
-			route = 'evento/eliminardireccion/' + id + '/' + evento_id;
-		} 
-
-		$.ajax({
-			url: route,
-			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-			type: 'GET',
-			data: $('#formnuevadireccion').serialize(),
-			beforeSend: function(){
-				$('#tabladirecciones').html(imgCargando());
-				$('.correcto').addClass('hidden');
-				$('.incorrecto').addClass('hidden');
-	        },
-	        success: function(res){
-	        	$('#tabladirecciones').html(res);
-				$('.correcto').removeClass('hidden');
-				$('.incorrecto').addClass('hidden');
-				$('#facultad_id').val('');
-				$('#evento_id').val('');
-				$('#especialidad_id').val('');
-	        }
-		}).fail(function(){
-			$('.incorrecto').removeClass('hidden');
-			$('.correcto').addClass('hidden');
-		});
-	}
-
-	function cargarselect(entidad){
-		padre = 'evento';
-		if(entidad == 'escuela'){
-			padre = 'facultad';
 		}
-		var select = $('#' + padre + '_id').val();
-		route = 'eventi/cargarselect/' + select + '?entidad=' + entidad + '&t=no';
+	}else{
+		cadenaDir = "";
+	}
+    console.log(cadenaDir);
+    return cadenaDir;
+}
 
-		$.ajax({
-			url: route,
-			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-			type: 'GET',
-	        success: function(res){
-	        	$('#select' + entidad).html(res);
-	        	if(padre == 'facultad'){
-					$('#selectespecialidad').html('<select class="form-control input-sm" id="especialidad_id" name="especialidad_id"><option value="" selected="selected">Seleccione</option></select>');
-	        	}
-	        }
-		});
-	}*/
+$(document).on('click', '.borrar', function (event) {
+    event.preventDefault();
+    $(this).closest('tr').remove();
+});
+
 </script>
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($evento, $formData) !!}	
@@ -119,8 +94,15 @@ $('#btnAgregar').click(function(){
 	</div>
 </fieldset>
 	<legend>Datos dirección</legend>
+	
 	<div class="panel panel-default" style="margin-bottom: 10px;">
 		<div class="panel-body">
+			<div class="form-group">
+				{!! Form::label('opcionevento', 'Opcion de Evento:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
+				<div class="col-lg-10 col-md-10 col-sm-10">
+					{!! Form::select('opcionevento', $cboOpcionEvento, null, array('class' => 'form-control input-sm', 'id' => 'opcionevento')) !!}
+				</div>
+			</div>
 			<div class="form-group">
 				{!! Form::label('facultad_id', 'Facultad:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
 				<div class="col-lg-10 col-md-10 col-sm-10">
@@ -151,17 +133,19 @@ $('#btnAgregar').click(function(){
 				</div>
 			</div>
 			<!-- //************************************************* -->
-<table id="example1" class="table table-bordered table-striped table-condensed table-hover">
+<table id="tablaDir" class="table table-bordered table-striped table-condensed table-hover">
 	<thead>
 		<tr>
-			<th>#</th>
+			<th width='7%'>#</th>
 			<th>Ruta</th>
+			<th width='20%'>Operacion</th>
 		</tr>
 	</thead>
 	<tbody id="tablaDirecciones">
 		
 		
 	</tbody>
+	<input type="hidden" id="cadenaDirecciones" name="cadenaDirecciones" value="">
 </table>
 <!-- //************************************************* -->
 
@@ -177,7 +161,7 @@ $('#btnAgregar').click(function(){
 {!! Form::close() !!}
 <script type="text/javascript">
 $(document).ready(function() {
-	configurarAnchoModal('750');
+	configurarAnchoModal('650');
 	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 }); 
 </script>
