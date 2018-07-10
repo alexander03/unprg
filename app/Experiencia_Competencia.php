@@ -15,6 +15,7 @@ class Experiencia_Competencia extends Model
             ->join("competencia",'competencia.id','=','competencia_alumno.competencia_id')
             ->select(
                 'experiencia_competencia.id as idexperiencia_competencia',
+                'experiencia_competencia.calificacion as calificacion_experiencia',
                 'experiencia_competencia.competencia_alumno_id as idcompetencia_alumno',
                 'competencia.nombre as nombre_competencia'
                 )

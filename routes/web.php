@@ -228,10 +228,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('certificado', 'CertificadoController', array('except' => array('show')));    
 
     /*EXPERIENCIA_COMPETENCIA*/
+    //IMPLEMENTACION USUARIO ALUMNO
     Route::get('experiencia_competencia/listarCompetencias', 'Experiencia_CompetenciaController@listarCompetencias');
     Route::get('experiencia_competencia/eliminarCompetencia', 'Experiencia_CompetenciaController@eliminarCompetencia');
     Route::get('experiencia_competencia/agregarCompetencia', 'Experiencia_CompetenciaController@agregarCompetencia');
     Route::get('experiencia_competencia/listarCompetenciasAlumno', 'Experiencia_CompetenciaController@listarCompetenciasAlumno');
+    //IMPLEMENTACION USUARIO UNPRG
+    Route::get('experiencia_competencia/editarCompetencia', 'Experiencia_CompetenciaController@editarCompetencia');
+    Route::get('experiencia_competencia/listarExperienciasLaborales', 'Experiencia_CompetenciaController@listarExperienciasLaborales');
+    Route::post('experiencia_competencia/buscar', 'Experiencia_CompetenciaController@buscar')->name('experienciacompetencia.buscar');
+    Route::get('experiencia_competencia/obtenerexperienciaslaborales/{listar}/{id}', 'Experiencia_CompetenciaController@obtenerexperienciaslaborales')->name('experienciacompetencia.obtenerexperienciaslaborales');
+    Route::resource('experiencia_competencia', 'Experiencia_CompetenciaController', array('except' => array('show')));    
     
 });
 //********** */

@@ -85,8 +85,6 @@
             </div>
         </div>
 </div>
-
-
 <script type="text/javascript">
     $(document).ready(function() {   
         $('.modal-body').css('padding-top','10px');
