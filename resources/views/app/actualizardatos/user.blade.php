@@ -106,14 +106,8 @@ $user = Auth::user();
 							</div>
 						</div>
 						<div class="form-group">
-							{!! Form::label('image', 'Imagen de perfil:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-							<div class="col-lg-9 col-md-9 col-sm-9">
-								<input type="file" name="image" class ="form-control input-xs" id="image" >
-							</div>
-						</div>
-						<div class="form-group">
 							<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-								{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+								{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'actualizardatos(\''.$entidad.'\', this)')) !!}
 							</div>
 						</div>
 				{!! Form::close() !!}
@@ -157,14 +151,8 @@ $user = Auth::user();
 						</div>
 					</div>
 					<div class="form-group">
-						{!! Form::label('image', 'Imagen de perfil:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
-						<div class="col-lg-9 col-md-9 col-sm-9">
-							<input type="file" name="image" class ="form-control input-xs" id="image" >
-						</div>
-					</div>
-					<div class="form-group">
 						<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-							{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+							{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'actualizardatos(\''.$entidad.'\', this)')) !!}
 						</div>
 					</div>
 				</div>
@@ -173,3 +161,47 @@ $user = Auth::user();
         </div>
     </div>
 </div>
+
+<script>
+	function actualizardatos (entidad, idboton) {
+		var idformulario = IDFORMMANTENIMIENTO + entidad;
+		var data         = submitForm(idformulario);
+		var respuesta    = '';
+		var listar       = 'NO';
+		if ($(idformulario + ' :input[id = "listar"]').length) {
+			var listar = $(idformulario + ' :input[id = "listar"]').val()
+		};
+		var btn = $(idboton);
+		btn.button('loading');
+		data.done(function(msg) {
+			respuesta = msg;
+		}).fail(function(xhr, textStatus, errorThrown) {
+			respuesta = 'ERROR';
+		}).always(function() {
+			btn.button('reset');
+			var divError ='#divMensajeError' + entidad;
+			var divMensaje = $(divError);
+			if(respuesta === 'ERROR'){
+				var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Fallo al actualizar sus datos!!</strong></div>';
+				divMensaje.html(cadenaError);
+				divMensaje.show('slow');
+			}else{
+				if (respuesta === 'OK') {
+					var cadenaExito = '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Sus datos han sido actualizados correctamente!!</strong></div>';
+					divMensaje.html(cadenaExito);
+					divMensaje.show('slow');
+					var grilla ="#";
+					$(idformulario).find(':input').each(function() {
+						var elemento         = this;
+						var cadena           = idformulario + " :input[id='" + elemento.id + "']";
+						var elementoValidado = $(cadena);
+						elementoValidado.parent().removeClass('has-error');
+					});
+
+				} else {
+					mostrarErrores(respuesta, idformulario, entidad);
+				}
+			}
+		});
+	}
+</script>

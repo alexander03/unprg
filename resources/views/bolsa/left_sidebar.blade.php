@@ -36,9 +36,8 @@ $menu                  = generarMenu($tipousuario_id);
                 </span>
             </a>
             <ul class="dropdown-menu">
-                <li><a href="javascript:void(0)"><i class="md md-face-unlock"></i> Profile</a></li>
-                <li><a href="javascript:void(0)"><i class="md md-settings"></i> Settings</a></li>
-                <li><a href="javascript:void(0)"><i class="md md-lock"></i> Lock screen</a></li>
+                <li><a href="#" onclick="cargarRuta('/unprg/actualizardatos', 'container');"><i class="md md-face-unlock"></i> Perfil</a></li>
+                <li><a href="#" onclick="cargarRuta('/unprg/updatepassword', 'container');"><i class="md md-vpn-key"></i> Cambiar Contraseña</a></li>
                 <li><a href="bolsa/logout"><i class="md md-settings-power"></i> Cerrar Sesión</a></li>
             </ul>
 
