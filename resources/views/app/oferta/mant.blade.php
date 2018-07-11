@@ -84,7 +84,7 @@ use App\Especialidad;
 </script>
 
 <div id="divMensajeError{!! $entidad !!}"></div>
-{!! Form::model($evento, $formData) !!}	
+{!! Form::model($oferta, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 	<fieldset class="col-12">
 		<legend>Datos Oferta</legend>
@@ -105,9 +105,9 @@ use App\Especialidad;
 	<div class="panel panel-default" style="margin-bottom: 10px;">
 		<div class="panel-body">
 			<div class="form-group">
-				{!! Form::label('opcionevento', 'Opcion de evento:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
+				{!! Form::label('opcionoferta', 'Opcion de Oferta:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
 				<div class="col-lg-10 col-md-10 col-sm-10">
-					{!! Form::select('opcionevento', $cboOpcionEvento, null, array('class' => 'form-control input-sm opOferte', 'id' => 'opcionevento')) !!}
+					{!! Form::select('opcionoferta', $cboOpcionOferta, null, array('class' => 'form-control input-sm opOferte', 'id' => 'opcionoferta')) !!}
 				</div>
 			</div>
 			<div class="form-group ">

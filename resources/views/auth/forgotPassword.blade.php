@@ -1,4 +1,4 @@
-@include('auth.bolsa.header')
+@include('auth.header')
 <div class="wrapper-page">
     <div class="card-box">
         <div class="text-center">

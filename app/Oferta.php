@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Evento extends Model
+class Oferta extends Model
 {
     protected $table = 'evento';
     protected $dates = ['deleted_at'];
@@ -53,7 +53,7 @@ class Evento extends Model
         			
     }
 
-    public static function listarDetalleEvento($evento_id){
+    public static function listarDetalleOferta($evento_id){
         $results = Direccion_evento::leftjoin('FACULTAD','FACULTAD.ID','DIRECCION_EVENTO.FACULTAD_ID')
         ->leftjoin('ESCUELA','ESCUELA.ID','DIRECCION_EVENTO.ESCUELA_ID')
         ->leftjoin('ESPECIALIDAD','ESPECIALIDAD.ID','DIRECCION_EVENTO.ESPECIALIDAD_ID')

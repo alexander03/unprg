@@ -21,9 +21,8 @@ class ActualizarDatosController extends Controller
 
     protected $folderview      = 'app.actualizardatos';
     protected $tituloAdmin     = 'Actualizar Datos';
-    protected $tituloModificar = 'Modificar datos';
     protected $rutas           = array(
-            'edit'   => 'actualizardatos.edit',
+            'update'   => 'actualizardatos.update',
             'index'  => 'actualizardatos.index',
         );
 

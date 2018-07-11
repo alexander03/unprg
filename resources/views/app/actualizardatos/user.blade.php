@@ -108,7 +108,7 @@ $user = Auth::user();
 
 						<div class="form-group">
 							<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-								{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+								{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
 							</div>
 						</div>
 				{!! Form::close() !!}
@@ -153,14 +153,12 @@ $user = Auth::user();
 					</div>
 					<div class="form-group">
 						<div class="col-lg-12 col-md-12 col-sm-12 text-right">
-							{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-success btn-sm', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
+							{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
 						</div>
 					</div>
 					</div>
 				{!! Form::close() !!}
-
 			@endif
-
         </div>
     </div>
 </div>
