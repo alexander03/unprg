@@ -126,6 +126,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('eventoalumno', 'EventoAlumnoController', array('except' => array('show')));
     //Route::get('socio/asistente', 'EventoController@asistente')->name('evento.asistente');
 
+    /*OFERTA ALUMNO*/
+    Route::post('ofertaalumno/buscar', 'OfertaAlumnoController@buscar')->name('ofertaalumno.buscar');
+    Route::get('ofertaalumno/eliminar/{id}/{listarluego}', 'OfertaAlumnoController@eliminar')->name('ofertaalumno.eliminar');
+    Route::resource('ofertaalumno', 'OfertaAlumnoController', array('except' => array('show')));
+
     /*SOCIO*/
     Route::post('socio/buscar', 'SocioController@buscar')->name('socio.buscar');
     Route::get('socio/eliminar/{id}/{listarluego}', 'SocioController@eliminar')->name('socio.eliminar');

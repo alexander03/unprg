@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-class EventoAlumno extends Model
+class OfertaAlumno extends Model
 {
     use SoftDeletes;
     protected $table = 'evento_alumno';
@@ -53,5 +53,4 @@ class EventoAlumno extends Model
                         ->orWhere('OPCIONEVENTO','=',0)
                         ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%');   			
     }
-   
 }

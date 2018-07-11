@@ -24,11 +24,6 @@
 					{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
-					
-					<div class="form-group">
-						{!! Form::label('codigo', 'Codigo:') !!}
-						{!! Form::text('codigo', '', array('class' => 'form-control input-xs', 'id' => 'codigo')) !!}
-					</div>
 
 					<div class="form-group">
 						{!! Form::label('nombre', 'Nombre:') !!}
@@ -36,16 +31,10 @@
 					</div>
 
 					<div class="form-group">
-						{!! Form::label('escuela1_id', 'Escuela:') !!}
-						{!! Form::select('escuela1_id', $cboEscuela, null, array('class' => 'form-control input-xs', 'id' => 'escuela1_id')) !!}
-					</div>
-
-					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
 						{!! Form::selectRange('filas', 1, 30, 10, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 					</div>
 					{!! Form::button('<i class="glyphicon glyphicon-search"></i> Buscar', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-md', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
-					{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
 					{!! Form::close() !!}
 				</div>
             </div>
