@@ -20,7 +20,7 @@ class OfertaAlumno extends Model
     public function empresa(){
         return $this->belongsTo('App\Alumno', 'alumno_id');
     }
-     
+     //----
 	public function evento(){
         return $this->belongsTo('App\Evento', 'evento_id');
 	}

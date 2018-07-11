@@ -107,7 +107,7 @@ use App\Especialidad;
 			<div class="form-group">
 				{!! Form::label('opcionoferta', 'Opcion de Oferta:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
 				<div class="col-lg-10 col-md-10 col-sm-10">
-					{!! Form::select('opcionoferta', $cboOpcionOferta, null, array('class' => 'form-control input-sm opOferte', 'id' => 'opcionoferta')) !!}
+					{!! Form::select('opcionOferta', $cboOpcionOferta, null, array('class' => 'form-control input-sm opOferte', 'id' => 'opcionOferta')) !!}
 				</div>
 			</div>
 			<div class="form-group ">
@@ -150,7 +150,6 @@ use App\Especialidad;
 
 				<tbody id="tablaDirecciones">
 					@if ($boton == "Modificar")
-						
 						@foreach ($listaDet as $key => $value)
 						<tr>
 							<td><script>$("#tablaDir tr").length;</script></td>

@@ -23,6 +23,9 @@ class Especialidad extends Model
     public static function especialidades($id){
         return  Especialidad::where('escuela_id','=',$id)->get();
     }
+    public static function especialidades2($id){
+        return  Especialidad::where('escuela_id','=',$id)->get();
+    }
 
     /**
      * Método para listar

@@ -261,6 +261,9 @@ Route::group(['middleware' => 'auth'], function () {
 //********** */
 Route::get('escuelas/{id}','EventoController@getEscuelas');
 Route::get('especialidades/{id}','EventoController@getEspecialidades');
+
+Route::get('escuelas2/{id}','OfertaController@getEscuelas2');
+Route::get('especialidades2/{id}','OfertaController@getEspecialidades2');
 ///******** */
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
 Route::get('distrito/cbodistrito/{id?}', array('as' => 'distrito.cbodistrito', 'uses' => 'DistritoController@cbodistrito'));

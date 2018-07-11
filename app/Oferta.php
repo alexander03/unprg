@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\OfertaAlumno;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
@@ -54,7 +55,7 @@ class Oferta extends Model
     }
 
     public static function listarDetalleOferta($evento_id){
-        $results = Direccion_evento::leftjoin('FACULTAD','FACULTAD.ID','DIRECCION_EVENTO.FACULTAD_ID')
+        $results = Direccion_oferta::leftjoin('FACULTAD','FACULTAD.ID','DIRECCION_EVENTO.FACULTAD_ID')
         ->leftjoin('ESCUELA','ESCUELA.ID','DIRECCION_EVENTO.ESCUELA_ID')
         ->leftjoin('ESPECIALIDAD','ESPECIALIDAD.ID','DIRECCION_EVENTO.ESPECIALIDAD_ID')
         ->select(
@@ -64,6 +65,12 @@ class Oferta extends Model
             'ESPECIALIDAD.NOMBRE AS NOMBRE_ESPECIALIDAD'
         )->where('DIRECCION_EVENTO.EVENTO_ID', '=', $evento_id);
         return $results;
+    }
+    public static function eliminarDetalle($evento_id){
+        Direccion_oferta::where('EVENTO_ID','=',$evento_id)->delete();
+    }
+    public static function eliminarSuscriptores($evento_id){
+        OfertaAlumno::where('EVENTO_ID','=',$evento_id)->delete();
     }
 
 }

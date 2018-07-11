@@ -34,4 +34,7 @@ class Escuela extends Model
     public static function escuelas($id){
         return  Escuela::where('facultad_id','=',$id)->get();
     }
+    public static function escuelas2($id){
+        return  Escuela::where('facultad_id','=',$id)->get();
+    }
 }

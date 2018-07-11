@@ -6,7 +6,6 @@ use App\Http\Requests;
 use App\Oferta;
 use App\Direccion_oferta;
 use App\Empresa;
-use App\Tipoevento;
 use App\Facultad;
 use App\Escuela;
 use App\Especialidad;
@@ -34,7 +33,7 @@ class OfertaController extends Controller
      *
      * @return void
      */
-
+//..
     public function __construct()
     {
         $this->middleware('auth');
@@ -58,7 +57,7 @@ class OfertaController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Empresa', 'numero' => '1');
+        //$cabecera[]       = array('valor' => 'Empresa', 'numero' => '1');
         // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
@@ -91,22 +90,22 @@ class OfertaController extends Controller
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         $cboFacultad = [''=>'Todos'];// + Facultad::pluck('nombre', 'id')->all();
-        $cboEscuela = [''=>'Todos']; //+ Escuela::pluck('nombre', 'id')->all();
-        $cboEspecialidad = [''=>'Todos']; //+ Especialidad::pluck('nombre', 'id')->all();
+        $cboEscuela = array('' => 'Seleccione'); //+ Escuela::pluck('nombre', 'id')->all();
+        $cboEspecialidad = array('' => 'Seleccione'); //+ Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionOferta    = array('0'=>'Libre','1' => 'Con restricciones');
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad','cboEscuela','cboEspecialidad','cboOpcionOferta'));
     }
 
-    public function getEscuelas(Request $request, $id){
+    public function getEscuelas2(Request $request, $id){
         if($request->ajax()){
-            $escuelas = Escuela::escuelas($id);
+            $escuelas = Escuela::escuelas2($id);
             return response()->json($escuelas);
         }
     }
-    public function getEspecialidades(Request $request, $id){
+    public function getEspecialidades2(Request $request, $id){
         if($request->ajax()){
-            $especialidades = Especialidad::especialidades($id);
-            return response()->json($especialidades);
+            $especialidades2 = Especialidad::especialidades2($id);
+            return response()->json($especialidades2);
         }
     }
     /**
@@ -215,8 +214,8 @@ class OfertaController extends Controller
         $oferta       = Oferta::find($id);
         $entidad        = 'Oferta';
         $cboFacultad = array('' => 'Seleccione') + Facultad::pluck('nombre', 'id')->all();
-        $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
-        $cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
+        $cboEscuela = array('' => 'Seleccione') ;//+ Escuela::pluck('nombre', 'id')->all();
+        $cboEspecialidad = array('' => 'Seleccione');// + Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionOferta = array('0'=>'Libre','1' => 'Con restricciones');
         $formData       = array('oferta.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
@@ -251,9 +250,32 @@ class OfertaController extends Controller
             $oferta                 = Oferta::find($id);
             $oferta->nombre = $request->input('nombre');
             $oferta->empresa_id = Oferta::getIdEmpresa();
-            $oferta->opcionevento = $request->input('opcionoferta');
+            $oferta->opcionevento = $request->input('opcionOferta');
             //$evento->tipoevento_id = $request->input('tipoevento_id');
             $oferta->save();
+            Oferta::eliminarDetalle($id);
+            if($request->input('cadenaDirecciones') != ''){
+                $direcciones = explode(",", $request->input('cadenaDirecciones'));
+                for( $i=0; $i< count($direcciones); $i++){
+                    $direccion_oferta = new  Direccion_oferta();
+
+                    $direc =  explode(":", $direcciones[$i]);
+                    $direccion_oferta->evento_id = $id;
+                    if((int)$direc[0]!=-1){
+                    $direccion_oferta->facultad_id = (int)$direc[0];
+                    }
+                    if((int)$direc[1]!=-1){
+                        $direccion_oferta->facultad_id = null;
+                    $direccion_oferta->escuela_id = (int)$direc[1];
+                    }
+                    if((int)$direc[2]!=-1){
+                        $direccion_oferta->escuela_id =null;
+                    $direccion_oferta->especialidad_id = (int) $direc[2];
+                    }
+                    $direccion_oferta->save();
+                }
+            }
+
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -273,6 +295,8 @@ class OfertaController extends Controller
         $error = DB::transaction(function() use($id){
             $oferta = Oferta::find($id);
             $oferta->delete();
+            Oferta::eliminarDetalle($id);
+            Oferta::eliminarSuscriptores($id);
         });
         return is_null($error) ? "OK" : $error;
     }
