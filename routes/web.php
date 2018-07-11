@@ -49,8 +49,6 @@ Route::group(['middleware' => 'guest'], function() {
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
     Route::get('password','Auth\ResetPasswordController@showPasswordReset');
-    Route::get('registro','Auth\RegisterController@showRegistrationForm');
-    Route::post('registro', 'Auth\RegisterController@register');
     //other routes
 });
 
@@ -73,9 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     /* CAMBIAR CONTRASEÑA*/
-    //Route::get('updatePassword','Auth\UpdatePasswordController@showUpdatePasswordForm');
-    //Route::post('updatepassword/{id}','Auth\UpdatePasswordController@updatePassword')->name('updatepassword.update');
-    Route::resource('updatepassword', 'UpdatePasswordController', array('except' => array('show')));
+    Route::get('updatePassword','Auth\UpdatePasswordController@showUpdatePasswordForm');
+    Route::post('updatePassword','Auth\UpdatePasswordController@updatePassword')->name('updatePassword');
 
     /*ACTUALIZAR DATOS*/
     Route::resource('actualizardatos', 'ActualizarDatosController', array('except' => array('show')));
@@ -121,6 +118,23 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('socio/asistente', 'EventoController@asistente')->name('evento.asistente');
     Route::post('evento/buscarasistente', 'EventoController@buscarasistente')->name('evento.buscarasistente');
     Route::post('evento/cargarasistente', 'EventoController@cargarasistente')->name('evento.cargarasistente');
+
+
+    /*EVENTO ALUMNO*/
+    Route::post('eventoalumno/buscar', 'EventoAlumnoController@buscar')->name('eventoalumno.buscar');
+    Route::get('eventoalumno/eliminar/{id}/{listarluego}', 'EventoAlumnoController@eliminar')->name('eventoalumno.eliminar');
+    Route::resource('eventoalumno', 'EventoAlumnoController', array('except' => array('show')));
+    //Route::get('socio/asistente', 'EventoController@asistente')->name('evento.asistente');
+
+    /*OFERTA ALUMNO*/
+    Route::post('ofertaalumno/buscar', 'OfertaAlumnoController@buscar')->name('ofertaalumno.buscar');
+    Route::get('ofertaalumno/eliminar/{id}/{listarluego}', 'OfertaAlumnoController@eliminar')->name('ofertaalumno.eliminar');
+    Route::resource('ofertaalumno', 'OfertaAlumnoController', array('except' => array('show')));
+
+    /*OFERTA*/
+    Route::post('oferta/buscar', 'OfertaController@buscar')->name('oferta.buscar');
+    Route::get('oferta/eliminar/{id}/{listarluego}', 'OfertaController@eliminar')->name('oferta.eliminar');
+    Route::resource('oferta', 'OfertaController', array('except' => array('show')));
 
     /*SOCIO*/
     Route::post('socio/buscar', 'SocioController@buscar')->name('socio.buscar');

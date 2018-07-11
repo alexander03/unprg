@@ -3,8 +3,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
-use App\Evento;
-use App\Direccion_evento;
+use App\Oferta;
+use App\Direccion_oferta;
 use App\Empresa;
 use App\Tipoevento;
 use App\Facultad;
@@ -15,18 +15,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 
-class EventoController extends Controller
+class OfertaController extends Controller
 {
-    protected $folderview      = 'app.evento';
-    protected $tituloAdmin     = 'Evento';
-    protected $tituloRegistrar = 'Registrar evento';
-    protected $tituloModificar = 'Modificar evento';
-    protected $tituloEliminar  = 'Eliminar evento';
-    protected $rutas           = array('create' => 'evento.create', 
-            'edit'   => 'evento.edit',
-            'delete' => 'evento.eliminar',
-            'search' => 'evento.buscar',
-            'index'  => 'evento.index',
+    protected $folderview      = 'app.oferta';
+    protected $tituloAdmin     = 'Oferta';
+    protected $tituloRegistrar = 'Registrar Oferta';
+    protected $tituloModificar = 'Modificar Oferta';
+    protected $tituloEliminar  = 'Eliminar Oferta';
+    protected $rutas           = array('create' => 'oferta.create', 
+            'edit'   => 'oferta.edit',
+            'delete' => 'oferta.eliminar',
+            'search' => 'oferta.buscar',
+            'index'  => 'oferta.index',
         );
 
     /**
@@ -49,11 +49,11 @@ class EventoController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Evento';
+        $entidad          = 'Oferta';
         $nombre      = Libreria::getParam($request->input('nombre'));
-        $empresa_id      = Evento::getIdEmpresa();
+        $empresa_id      = Oferta::getIdEmpresa();
         //$tipoevento_id      = Libreria::getParam($request->input('tipoevento_id'));
-        $resultado        = Evento::listar($nombre, $empresa_id);
+        $resultado        = Oferta::listar($nombre, $empresa_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -86,15 +86,15 @@ class EventoController extends Controller
      */
     public function index()
     {
-        $entidad          = 'Evento';
+        $entidad          = 'Oferta';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         $cboFacultad = [''=>'Todos'];// + Facultad::pluck('nombre', 'id')->all();
         $cboEscuela = [''=>'Todos']; //+ Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = [''=>'Todos']; //+ Especialidad::pluck('nombre', 'id')->all();
-        $cboOpcionEvento    = array('0'=>'Libre','1' => 'Con restricciones');
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        $cboOpcionOferta    = array('0'=>'Libre','1' => 'Con restricciones');
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad','cboEscuela','cboEspecialidad','cboOpcionOferta'));
     }
 
     public function getEscuelas(Request $request, $id){
@@ -118,16 +118,16 @@ class EventoController extends Controller
     {
         
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
-        $entidad        = 'Evento';
-        $evento        = null;
+        $entidad        = 'Oferta';
+        $oferta        = null;
         $cboFacultad = array('' => 'Seleccione') + Facultad::pluck('nombre', 'id')->all();
         $cboEscuela = array('' => 'Seleccione');// + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') ;//+ Especialidad::pluck('nombre', 'id')->all();
-        $cboOpcionEvento = array('0'=>'Libre','1' => 'Con restricciones');
-        $formData  = array('evento.store');
+        $cboOpcionOferta = array('0'=>'Libre','1' => 'Con restricciones');
+        $formData  = array('oferta.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        return view($this->folderview.'.mant')->with(compact('oferta', 'formData', 'entidad', 'boton', 'listar','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionOferta'));
     }
 
     /**
@@ -152,31 +152,31 @@ class EventoController extends Controller
         }
 
         $error = DB::transaction(function() use($request){
-            $evento               = new Evento();
-            $evento->nombre = $request->input('nombre');
-            $evento->empresa_id = Evento::getIdEmpresa();
-            $evento->opcionevento =$request->input('opcionevento');
-            $evento->save();
+            $oferta               = new Oferta();
+            $oferta->nombre = $request->input('nombre');
+            $oferta->empresa_id = Oferta::getIdEmpresa();
+            $oferta->opcionevento =$request->input('opcionoferta');
+            $oferta->save();
 
             if($request->input('cadenaDirecciones') != ''){
                 $direcciones = explode(",", $request->input('cadenaDirecciones'));
                 for( $i=0; $i< count($direcciones); $i++){
-                    $direccion_evento = new  Direccion_evento();
+                    $direccion_oferta = new  Direccion_oferta();
 
                     $direc =  explode(":", $direcciones[$i]);
-                    $direccion_evento->evento_id = (int)$evento->id;
+                    $direccion_oferta->evento_id = (int)$oferta->id;
                     if((int)$direc[0]!=-1){
-                    $direccion_evento->facultad_id = (int)$direc[0];
+                    $direccion_oferta->facultad_id = (int)$direc[0];
                     }
                     if((int)$direc[1]!=-1){
-                        $direccion_evento->facultad_id = null;
-                    $direccion_evento->escuela_id = (int)$direc[1];
+                        $direccion_oferta->facultad_id = null;
+                    $direccion_oferta->escuela_id = (int)$direc[1];
                     }
                     if((int)$direc[2]!=-1){
-                        $direccion_evento->escuela_id =null;
-                    $direccion_evento->especialidad_id = (int) $direc[2];
+                        $direccion_oferta->escuela_id =null;
+                    $direccion_oferta->especialidad_id = (int) $direc[2];
                     }
-                    $direccion_evento->save();
+                    $direccion_oferta->save();
                 }
             }
         });
@@ -208,20 +208,20 @@ class EventoController extends Controller
             return $existe;
         }
    
-        $listaDetalle        = Evento::listarDetalleEvento( $id);
+        $listaDetalle        = Oferta::listarDetalleOferta( $id);
         $listaDet           = $listaDetalle->get();
 
         $listar = Libreria::getParam($request->input('listar'), 'NO');
-        $evento       = Evento::find($id);
-        $entidad        = 'Evento';
+        $oferta       = Oferta::find($id);
+        $entidad        = 'Oferta';
         $cboFacultad = array('' => 'Seleccione') + Facultad::pluck('nombre', 'id')->all();
         $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
-        $cboOpcionEvento = array('0'=>'Libre','1' => 'Con restricciones');
-        $formData       = array('evento.update', $id);
+        $cboOpcionOferta = array('0'=>'Libre','1' => 'Con restricciones');
+        $formData       = array('oferta.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','listaDet','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        return view($this->folderview.'.mant')->with(compact('oferta', 'formData', 'entidad', 'boton', 'listar','listaDet','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionOferta'));
     }
 
     /**
@@ -248,12 +248,12 @@ class EventoController extends Controller
             return $validacion->messages()->toJson();
         } 
         $error = DB::transaction(function() use($request, $id){
-            $evento                 = Evento::find($id);
-            $evento->nombre = $request->input('nombre');
-            $evento->empresa_id = Evento::getIdEmpresa();
-            $evento->opcionevento = $request->input('opcionevento');
+            $oferta                 = Oferta::find($id);
+            $oferta->nombre = $request->input('nombre');
+            $oferta->empresa_id = Oferta::getIdEmpresa();
+            $oferta->opcionevento = $request->input('opcionoferta');
             //$evento->tipoevento_id = $request->input('tipoevento_id');
-            $evento->save();
+            $oferta->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -271,8 +271,8 @@ class EventoController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $evento = Evento::find($id);
-            $evento->delete();
+            $oferta = Oferta::find($id);
+            $oferta->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -294,9 +294,9 @@ class EventoController extends Controller
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;
         }
-        $modelo   = Evento::find($id);
-        $entidad  = 'Evento';
-        $formData = array('route' => array('evento.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $modelo   = Oferta::find($id);
+        $entidad  = 'Oferta';
+        $formData = array('route' => array('oferta.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
     }
