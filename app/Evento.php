@@ -14,6 +14,9 @@ class Evento extends Model
     public function empresa(){
         return $this->belongsTo('App\Empresa', 'empresa_id');
     } 
+    public function especialidad(){
+        return $this->belongsTo('App\Especialidad', 'especialidad_id');
+    } 
     // public function tipoevento(){
     //     return $this->belongsTo('App\Tipoevento', 'tipoevento_id');
     // } 
@@ -48,6 +51,19 @@ class Evento extends Model
                     })
         			->orderBy('nombre', 'ASC');
         			
+    }
+
+    public static function listarDetalleEvento($evento_id){
+        $results = Direccion_evento::leftjoin('FACULTAD','FACULTAD.ID','DIRECCION_EVENTO.FACULTAD_ID')
+        ->leftjoin('ESCUELA','ESCUELA.ID','DIRECCION_EVENTO.ESCUELA_ID')
+        ->leftjoin('ESPECIALIDAD','ESPECIALIDAD.ID','DIRECCION_EVENTO.ESPECIALIDAD_ID')
+        ->select(
+            'DIRECCION_EVENTO.ID',
+            'FACULTAD.NOMBRE AS NOMBRE_FACULTAD',
+            'ESCUELA.NOMBRE AS NOMBRE_ESCUELA',
+            'ESPECIALIDAD.NOMBRE AS NOMBRE_ESPECIALIDAD'
+        )->where('DIRECCION_EVENTO.EVENTO_ID', '=', $evento_id);
+        return $results;
     }
 
 }

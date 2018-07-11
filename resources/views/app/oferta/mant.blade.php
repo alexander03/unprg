@@ -10,7 +10,6 @@ use App\Especialidad;
 
 	$('#facultad_id').change(function(event){
 		$.get("escuelas/"+event.target.value+"",function(response, facultad){
-			console.log(response);
 			$('#escuela_id').empty();
 			$("#escuela_id").append("<option value=''>Seleccione</option>");
 			for(i=0; i<response.length; i++){
@@ -21,7 +20,6 @@ use App\Especialidad;
 
 	$('#escuela_id').change(function(event){
 		$.get("especialidades/"+event.target.value+"",function(response, escuela){
-			console.log(response);
 			$('#especialidad_id').empty();
 			$("#especialidad_id").append("<option value=''>Seleccione</option>");
 			for(i=0; i<response.length; i++){
@@ -30,7 +28,15 @@ use App\Especialidad;
 		});
 	});
 
-	var cadena="";
+	$('.opOferte').change(function(event){
+		if(event.target.value == 0){
+			$('.visualisar').attr('disabled','disabled');
+			$('#tablaDirecciones').empty();
+		}else{
+			$('.visualisar').removeAttr('disabled');
+		}
+	});
+
 	$('#btnAgregar').click(function(){
 		if($('#facultad_id').val()!==''||$('#escuela_id').val()!==''||$('#especialidad_id').val()!==''){
 			$('#tablaDirecciones').append("<tr><td>"+$("#tablaDir tr").length+"</td><td idFacultad='"+$('#facultad_id').val()+
@@ -101,36 +107,36 @@ use App\Especialidad;
 			<div class="form-group">
 				{!! Form::label('opcionoferta', 'Opcion de Oferta:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
 				<div class="col-lg-10 col-md-10 col-sm-10">
-					{!! Form::select('opcionoferta', $cboOpcionOferta, null, array('class' => 'form-control input-sm', 'id' => 'opcionoferta')) !!}
+					{!! Form::select('opcionoferta', $cboOpcionOferta, null, array('class' => 'form-control input-sm opOferte', 'id' => 'opcionoferta')) !!}
 				</div>
 			</div>
-			<div class="form-group">
-				{!! Form::label('facultad_id', 'Facultad:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
+			<div class="form-group ">
+				{!! Form::label('facultad_id', 'Facultad:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm visualisar')) !!}
 				<div class="col-lg-10 col-md-10 col-sm-10">
-					{!! Form::select('facultad_id', $cboFacultad, null, array('class' => 'form-control input-sm', 'id' => 'facultad_id')) !!}
+					{!! Form::select('facultad_id', $cboFacultad, null, array('class' => 'form-control input-sm visualisar', 'id' => 'facultad_id')) !!}
 				</div>
 			</div>
-			<div class="form-group">
-				{!! Form::label('escuela_id', 'Escuela:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
+			<div class="form-group ">
+				{!! Form::label('escuela_id', 'Escuela:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm visualisar')) !!}
 				<div class="col-lg-10 col-md-10 col-sm-10">
 					<div id="selectescuela">
-						{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-sm', 'id' => 'escuela_id')) !!}
+						{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-sm visualisar', 'id' => 'escuela_id')) !!}
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
-				{!! Form::label('especialidad_id', 'Especialidad:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm')) !!}
+			<div class="form-group ">
+				{!! Form::label('especialidad_id', 'Especialidad:', array('class' => 'col-lg-2 col-md-2 col-sm-2 control-label input-sm visualisar')) !!}
 				<div class="col-lg-10 col-md-10 col-sm-10">
 					<div id="selectespecialidad">
-						{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control input-sm', 'id' => 'especialidad_id')) !!}
+						{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control input-sm visualisar', 'id' => 'especialidad_id')) !!}
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group ">
 				<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 					{!! Form::button('<i class="glyphicon glyphicon-check"></i> ¡Correcto!', array('class' => 'correcto btn btn-success waves-effect waves-light m-l-10 btn-md hidden input-sm', 'onclick' => '#')) !!}
 					{!! Form::button('<i class="glyphicon glyphicon-remove-circle"></i> ¡Incorrecto!', array('class' => 'incorrecto btn btn-danger waves-effect waves-light m-l-10 btn-md hidden input-sm', 'onclick' => '#')) !!}
-					{!! Form::button('<i class="glyphicon glyphicon-plus"></i>', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir input-sm','id' => 'btnAgregar')) !!}
+					{!! Form::button('<i class="glyphicon glyphicon-plus visualisar"></i>', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md btnAnadir input-sm visualisar','id' => 'btnAgregar')) !!}
 				</div>
 			</div>
 			<table id="tablaDir" class="table table-bordered table-striped table-condensed table-hover">
@@ -145,17 +151,17 @@ use App\Especialidad;
 				<tbody id="tablaDirecciones">
 					@if ($boton == "Modificar")
 						
-						@foreach ($arrayDirec as $key => $value)
+						@foreach ($listaDet as $key => $value)
 						<tr>
-							<td><script> $("#tablaDir tr").length;</script></td>
-							<td>{{ $value->facultad_id}} -> {{$value->escuela_id}} -> {{$value->especialidad_id }}</td>
-							<td>eliminar</td>
+							<td><script>$("#tablaDir tr").length;</script></td>
+							<td>{{ $value->nombre_facultad}} {{$value->nombre_escuela}} {{$value->nombre_especialidad }}</td>
+							<td><button class='btn btn-danger btn-xs borrar'><div class='glyphicon glyphicon-remove'></div>Eliminar</button></td>
 						</tr>
 						
 						@endforeach
 					@endif
 				</tbody>
-				
+
 				<input type="hidden" id="cadenaDirecciones" name="cadenaDirecciones" value="">
 			</table>
 		</div>

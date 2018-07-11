@@ -14,7 +14,6 @@
     </div>
 </div>
 
-
 <div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
@@ -25,8 +24,8 @@
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 					<div class="form-group">
-						{!! Form::label('nombre1', 'Nombre:') !!}
-						{!! Form::text('nombre1', '', array('class' => 'form-control input-xs', 'id' => 'nombre1')) !!}
+						{!! Form::label('nombre', 'Nombre:') !!}
+						{!! Form::text('nombre', '', array('class' => 'form-control input-xs', 'id' => 'nombre')) !!}
 					</div>
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
@@ -45,6 +44,7 @@
         </div>
     </div>
 </div>
+
 <script>
 	$(document).ready(function () {
 		buscar('{{ $entidad }}');

@@ -53,4 +53,17 @@ class Oferta extends Model
         			
     }
 
+    public static function listarDetalleOferta($evento_id){
+        $results = Direccion_evento::leftjoin('FACULTAD','FACULTAD.ID','DIRECCION_EVENTO.FACULTAD_ID')
+        ->leftjoin('ESCUELA','ESCUELA.ID','DIRECCION_EVENTO.ESCUELA_ID')
+        ->leftjoin('ESPECIALIDAD','ESPECIALIDAD.ID','DIRECCION_EVENTO.ESPECIALIDAD_ID')
+        ->select(
+            'DIRECCION_EVENTO.ID',
+            'FACULTAD.NOMBRE AS NOMBRE_FACULTAD',
+            'ESCUELA.NOMBRE AS NOMBRE_ESCUELA',
+            'ESPECIALIDAD.NOMBRE AS NOMBRE_ESPECIALIDAD'
+        )->where('DIRECCION_EVENTO.EVENTO_ID', '=', $evento_id);
+        return $results;
+    }
+
 }
