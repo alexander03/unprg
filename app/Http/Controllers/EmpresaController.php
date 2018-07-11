@@ -116,9 +116,9 @@ class EmpresaController extends Controller
         $reglas = array(
             'ruc'       => 'required|numeric|digits:11|unique:empresa',
             'razonsocial'    => 'required|string|max:200|unique:empresa',
-            'direccion' => 'required|string|max:120',
+            'direccion' => 'required|string|max:255',
             'telefono'   => 'required|numeric|digits:9',
-            'email'   => 'required|max:30|unique:empresa',
+            'email'   => 'required|email|max:255|unique:usuario',
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {

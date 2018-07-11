@@ -49,6 +49,8 @@ Route::group(['middleware' => 'guest'], function() {
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
     Route::get('password','Auth\ResetPasswordController@showPasswordReset');
+    Route::get('registro','Auth\RegisterController@showRegistrationForm');
+    Route::post('registro', 'Auth\RegisterController@register');
     //other routes
 });
 
@@ -71,8 +73,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     /* CAMBIAR CONTRASEÑA*/
-    Route::get('updatePassword','Auth\UpdatePasswordController@showUpdatePasswordForm');
-    Route::post('updatePassword','Auth\UpdatePasswordController@updatePassword')->name('updatePassword');
+    //Route::get('updatePassword','Auth\UpdatePasswordController@showUpdatePasswordForm');
+    //Route::post('updatepassword/{id}','Auth\UpdatePasswordController@updatePassword')->name('updatepassword.update');
+    Route::resource('updatepassword', 'UpdatePasswordController', array('except' => array('show')));
 
     /*ACTUALIZAR DATOS*/
     Route::resource('actualizardatos', 'ActualizarDatosController', array('except' => array('show')));
