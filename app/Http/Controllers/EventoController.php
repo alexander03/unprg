@@ -58,7 +58,7 @@ class EventoController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Empresa', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
@@ -120,6 +120,7 @@ class EventoController extends Controller
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
         $entidad        = 'Evento';
         $evento        = null;
+        $cboTipoevento = array('' => 'Seleccione') + Tipoevento::pluck('nombre', 'id')->all();
         $cboFacultad = array('' => 'Seleccione') + Facultad::pluck('nombre', 'id')->all();
         $cboEscuela = array('' => 'Seleccione');// + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') ;//+ Especialidad::pluck('nombre', 'id')->all();
@@ -127,7 +128,7 @@ class EventoController extends Controller
         $formData  = array('evento.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','cboTipoevento','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
     }
 
     /**
@@ -155,6 +156,7 @@ class EventoController extends Controller
             $evento               = new Evento();
             $evento->nombre = $request->input('nombre');
             $evento->empresa_id = Evento::getIdEmpresa();
+            $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento =$request->input('opcionevento');
             $evento->save();
 
@@ -214,6 +216,7 @@ class EventoController extends Controller
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $evento       = Evento::find($id);
         $entidad        = 'Evento';
+        $cboTipoevento = array('' => 'Seleccione') + Tipoevento::pluck('nombre', 'id')->all();
         $cboFacultad = array('' => 'Seleccione') + Facultad::pluck('nombre', 'id')->all();
         $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
@@ -221,7 +224,7 @@ class EventoController extends Controller
         $formData       = array('evento.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','listaDet','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','listaDet','cboTipoevento','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
     }
 
     /**
@@ -251,6 +254,7 @@ class EventoController extends Controller
             $evento                 = Evento::find($id);
             $evento->nombre = $request->input('nombre');
             $evento->empresa_id = Evento::getIdEmpresa();
+            $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento = $request->input('opcionevento');
             //$evento->tipoevento_id = $request->input('tipoevento_id');
             $evento->save();

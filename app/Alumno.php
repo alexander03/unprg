@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Escuela;
 
 class Alumno extends Model
 {
@@ -17,23 +18,39 @@ class Alumno extends Model
      * @param  string $name  nombre
      * @return sql        sql
      */
-    public function scopelistar($query, $codigo, $nombre, $escuela_id)
+    public function scopelistar($query, $codigo, $nombre, $escuela_id, $facultad_id)
     {
+        $like = '=';
+        $escuelas = array();
+        if(is_null($escuela_id)) {
+            if (!is_null($facultad_id)) {
+                $esc = Escuela::select('id')->where('facultad_id', '=', $facultad_id)->get();
+                foreach ($esc as $es) {
+                    $escuelas[] = $es->id;
+                }
+            } else {
+                $escuelas[] = '%%';
+                $like = 'LIKE';
+            }               
+        } else {
+            $escuelas[] = $escuela_id;
+        }
+
         return $query->where(function($subquery) use($codigo)
 		            {
 		            	if (!is_null($codigo)) {
 		            		$subquery->where('codigo', 'LIKE', '%'.$codigo.'%');
 		            	}
-		            })
-        			->where(function($subquery) use($nombre)
+		            })->where(function($subquery) use($nombre)
 		            {
 		            	if (!is_null($nombre)) {
 		            		$subquery->where('nombres', 'LIKE', '%'.$nombre.'%');
 		            	}
-		            })->where(function($subquery) use($escuela_id){
-                        if (!is_null($escuela_id)) {
-		            		$subquery->where('escuela_id', '=', $escuela_id);
-		            	}
+		            })->where(function($subquery) use($escuelas, $like)
+                    {
+                        for ($i=0; $i < count($escuelas); $i++) { 
+                            $subquery->orWhere('escuela_id', $like, $escuelas[$i]);
+                        }
                     })
         			->orderBy('codigo', 'ASC')
         			->orderBy('nombres', 'ASC');

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Hash;
 use Validator;
 use App\Alumno;
+use App\Facultad;
 use App\Escuela;
 use App\Especialidad;
 use App\Librerias\Libreria;
@@ -53,15 +54,17 @@ class AlumnoController extends Controller
         $codigo             = Libreria::getParam($request->input('codigo'));
         $nombre             = Libreria::getParam($request->input('nombre'));
         $escuela_id         = Libreria::getParam($request->input('escuela1_id'));
-        $resultado          = Alumno::listar($codigo, $nombre, $escuela_id);
+        $facultad_id        = Libreria::getParam($request->input('facultad_id'));
+        $resultado          = Alumno::listar($codigo, $nombre, $escuela_id, $facultad_id);
         $lista              = $resultado->get();
         $cabecera           = array();
         $cabecera[]         = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'DNI', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Codigo', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Código', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Alumno', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Escuela', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Especialidad', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Situación', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -92,8 +95,9 @@ class AlumnoController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        $cboEscuela     = [''=>'Todos'] + Escuela::pluck('nombre', 'id')->all();
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta','cboEscuela'));
+        $cboFacultad      = [''=>'Todas'] + Facultad::pluck('nombre', 'id')->all();
+        $cboEscuela       = [''=>'Todas'];
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad', 'cboEscuela'));
     }
 
     /**
@@ -108,7 +112,7 @@ class AlumnoController extends Controller
         $alumno        = null;
         $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione');
-        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado');
+        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado', 'GR' => 'Graduado');
         $formData       = array('alumno.store');
         $formData       = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Registrar'; 

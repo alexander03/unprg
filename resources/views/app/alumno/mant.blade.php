@@ -13,7 +13,7 @@ function cargarselect(entidad){
 		headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
 		type: 'GET',
 		success: function(res){
-			console.log("select "+res);
+			$('#especialidad_id').removeClass('input-sm');
         	$('#select' + entidad).html(res);
         }
 	});
@@ -28,7 +28,7 @@ function cargarselect(entidad){
 		<div class="panel-body">
 			<div class="form-group col-xs-6">
 				{!! Form::label('codigo', 'Codigo:', array('class' => '')) !!}
-				{!! Form::text('codigo', null, array('class' => 'form-control input-xs', 'id' => 'codigo', 'placeholder' => 'Ingrese codigo')) !!}
+				{!! Form::text('codigo', null, array('class' => 'form-control input-xs', 'id' => 'codigo', 'placeholder' => 'Ingrese codigo', 'maxlength' => '9')) !!}
 			</div>
 			<div class="form-group col-xs-6" style="margin-left: 10px;">
 				{!! Form::label('nombres', 'Nombres:', array('class' => '')) !!}
