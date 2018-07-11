@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Experiencias_Laborales;
+use App\CompetenciaAlumno;
 use App\Http\Controllers\Controller;
 use App\Librerias\Libreria;
 use Illuminate\Http\Request;
@@ -37,7 +38,8 @@ class Experiencias_LaboralesController extends Controller
         $entidad = 'experiencias_laborales';
         $fechai = Libreria::getParam($request->input('fechai'));
         $fechaf = Libreria::getParam($request->input('fechaf'));
-        $resultado = Experiencias_Laborales::listar($fechai, $fechaf);
+        $alumno_id = CompetenciaAlumno::getIdAlumno();
+        $resultado = Experiencias_Laborales::listar($fechai, $fechaf, $alumno_id);
         $lista = $resultado->get();
         $cabecera = array();
         $cabecera[] = array('valor' => '#', 'numero' => '1');
@@ -262,8 +264,8 @@ class Experiencias_LaboralesController extends Controller
         if (isset($listarParam)) {
             $listar = $listarParam;
         }
-        $tipousuario = Usertype::find($id);
-        return view($this->folderview.'.competencias')->with(compact('tipousuario', 'listar', 'entidad'));
+        //$modelo = Experiencias_Laborales::find($id);
+        return view($this->folderview.'.competencias')->with(compact('id', 'listar', 'entidad'));
     }
 
 }

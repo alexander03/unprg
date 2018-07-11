@@ -28,4 +28,5 @@
 		@endforeach
 	</tbody>
 </table>
+{!! $paginacion or '' !!}
 @endif
