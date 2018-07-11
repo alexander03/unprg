@@ -131,6 +131,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('ofertaalumno/eliminar/{id}/{listarluego}', 'OfertaAlumnoController@eliminar')->name('ofertaalumno.eliminar');
     Route::resource('ofertaalumno', 'OfertaAlumnoController', array('except' => array('show')));
 
+    /*OFERTA*/
+    Route::post('oferta/buscar', 'OfertaController@buscar')->name('oferta.buscar');
+    Route::get('oferta/eliminar/{id}/{listarluego}', 'OfertaController@eliminar')->name('oferta.eliminar');
+    Route::resource('oferta', 'OfertaController', array('except' => array('show')));
+
     /*SOCIO*/
     Route::post('socio/buscar', 'SocioController@buscar')->name('socio.buscar');
     Route::get('socio/eliminar/{id}/{listarluego}', 'SocioController@eliminar')->name('socio.eliminar');
