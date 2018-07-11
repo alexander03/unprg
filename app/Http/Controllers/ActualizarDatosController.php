@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Hash;
 use Validator;
 use App\Alumno;
+use App\Usuario;
 use App\Empresa;
 use App\Escuela;
 use App\Especialidad;
@@ -65,7 +66,7 @@ class ActualizarDatosController extends Controller
             $cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
 
             $formData       = array('actualizardatos.update', $user->alumno_id);
-            $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+            $formData       = array('route' => $formData, 'method' => 'PATCH','files'=>"true", 'enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
             $boton          = 'Modificar';
 
             return view($this->folderview.'.user')->with(compact('alumno', 'title', 'ruta', 'formData', 'entidad', 'boton', 'listar', 'cboEscuela','cboEspecialidad'));
@@ -80,7 +81,7 @@ class ActualizarDatosController extends Controller
             }
             $listar         = Libreria::getParam($request->input('listar'), 'NO');
             $formData       = array('actualizardatos.update', $user->empresa_id);
-            $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+            $formData       = array('route' => $formData, 'method' => 'PATCH','files'=>"true",'enctype' => 'multipart/form-data', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
             $boton          = 'Modificar';
             return view($this->folderview.'.user')->with(compact('empresa','title', 'ruta','formData', 'entidad', 'boton', 'listar'));
         }
@@ -108,6 +109,7 @@ class ActualizarDatosController extends Controller
                 'direccion' => 'required|max:50',
                 'telefono' => 'required|max:12',
                 'especialidad_id' => 'required|integer|exists:especialidad,id,deleted_at,NULL',
+                'image' => 'image|max:1024*1024*1',
                 );
             $validacion = Validator::make($request->all(),$reglas);
             if ($validacion->fails()) {
@@ -123,6 +125,19 @@ class ActualizarDatosController extends Controller
                 $alumno->especialidad_id    = $request->input('especialidad_id');
                 $alumno->save();
             });
+
+            if ($request->file('image')->isValid()) {
+                
+                $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
+                $request->image->move(public_path('uploads/images'), $filename);
+            
+                $user = Auth::user();
+                $usuario = Usuario::find($user->id);
+                $usuario->avatar = $filename;
+                $usuario->save();
+            }
+
+
             return is_null($error) ? "OK" : $error;
 
         }else if($user->empresa_id !== null){
@@ -136,6 +151,7 @@ class ActualizarDatosController extends Controller
                 'razonsocial'    => 'required|max:200',
                 'direccion' => 'required|max:120',
                 'telefono'   => 'required|numeric|digits:9',
+                'image' => 'image|max:1024*1024*1',
                 );
             $validacion = Validator::make($request->all(),$reglas);
             if ($validacion->fails()) {
@@ -148,6 +164,18 @@ class ActualizarDatosController extends Controller
                 $empresa->telefono     = $request->input('telefono');
                 $empresa->save();
             });
+
+            if ($request->image->isValid()) {
+                
+                $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
+                $request->image->move(public_path('uploads/images'), $filename);
+            
+                $user = Auth::user();
+                $usuario = Usuario::find($user->id);
+                $usuario->avatar = $filename;
+                $usuario->save();
+            }
+            
             return is_null($error) ? "OK" : $error;
 
         }

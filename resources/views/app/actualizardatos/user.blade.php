@@ -105,7 +105,12 @@ $user = Auth::user();
 								{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control input-xs', 'id' => 'especialidad_id')) !!}
 							</div>
 						</div>
-
+						<div class="form-group">
+							{!! Form::label('image', 'Imagen de perfil:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<input type="file" name="image" class ="form-control input-xs" id="image" >
+							</div>
+						</div>
 						<div class="form-group">
 							<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 								{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
@@ -152,11 +157,17 @@ $user = Auth::user();
 						</div>
 					</div>
 					<div class="form-group">
+						{!! Form::label('image', 'Imagen de perfil:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+						<div class="col-lg-9 col-md-9 col-sm-9">
+							<input type="file" name="image" class ="form-control input-xs" id="image" >
+						</div>
+					</div>
+					<div class="form-group">
 						<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 							{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'guardar(\''.$entidad.'\', this)')) !!}
 						</div>
 					</div>
-					</div>
+				</div>
 				{!! Form::close() !!}
 			@endif
         </div>
