@@ -98,8 +98,8 @@ class UpdatePasswordController extends Controller
         ];
         
         $messages = [
-            'mypassword.required' => 'El campo es requerido!!',
-            'password.required' => 'El campo es requerido!!',
+            'mypassword.required' => 'El campo contraseña actual es requerido!!',
+            'password.required' => 'El campo nueva contraseña es requerido!!',
             'password.confirmed' => 'Las contraseñas no coinciden!!',
             'password.min' => 'El mínimo permitido son 6 caracteres!!',
             'password.max' => 'El máximo permitido son 18 caracteres!!',
@@ -110,17 +110,22 @@ class UpdatePasswordController extends Controller
             return $validator->messages()->toJson();
         }
         else{
-            if (Hash::check($request->mypassword, Auth::user()->password)){
+            if (Hash::check($request->mypassword, Auth::user()->password) && !Hash::check($request->password, Auth::user()->password) ){
                 $error = DB::transaction(function() use($request, $id){
                     $usuario           = Usuario::find($id);
                     $usuario->password = bcrypt($request->get('new-password'));
                     $usuario->save();
                 });
-                return is_null($error) ? "Contraseña cambiada satisfactoriamente!!" : $error;
+                return is_null($error) ? "OK" : $error;
+            }
+            else if(Hash::check($request->password, Auth::user()->password))
+            {
+                $error =  'IGUAL';
+                return $error;
             }
             else
             {
-                $error =  'La contraseña actual ingresada no es la correcta!!';
+                $error =  'ERROR';
                 return $error;
             }
         }
