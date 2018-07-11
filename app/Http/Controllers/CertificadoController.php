@@ -12,6 +12,7 @@ use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Image;
 
 class CertificadoController extends Controller
 {
@@ -80,13 +81,14 @@ class CertificadoController extends Controller
      */
     public function create(Request $request)
     {
+        $operacion = "store";
         $listar       = Libreria::getParam($request->input('listar'), 'NO');
         $entidad      = 'certificado';
         $certificado  = null;
         $formData     = array('certificado.store');
         $formData     = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton        = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('certificado', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('operacion','certificado', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -112,7 +114,15 @@ class CertificadoController extends Controller
             $certificado->nombre = $request->input('nombre');
             $certificado->nombre_certificadora = $request->input('nombre_certificadora');
             $certificado->alumno_id = CompetenciaAlumno::getIdAlumno();
-            $certificado->save();
+            /*CODIGO PARA LA IMAGEN*/
+            $file = $request->file('archivo');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = $certificado->nombre. '.' . $extension;
+            $path = public_path('images/files/'.$fileName);
+            Image::make($file)->fit(144, 144)->save($path);
+            /* ASGINAMOS EL PATH AL OBJETO*/
+            $certificado->url_archivo = $extension;
+            //$certificado->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -140,13 +150,14 @@ class CertificadoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
+        $operacion = "update";
         $listar       = Libreria::getParam($request->input('listar'), 'NO');
         $certificado  = Certificado::find($id);
         $entidad      = 'certificado';
         $formData     = array('certificado.update', $id);
         $formData     = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton        = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('certificado', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('operacion','certificado', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**

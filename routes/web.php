@@ -243,6 +243,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     /*CERTIFICADOS */
     Route::post('certificado/buscar', 'CertificadoController@buscar')->name('certificado.buscar');
+    Route::post('certificado/store', 'CertificadoController@store');
+    Route::post('certificado/update', 'CertificadoController@update');
     Route::get('certificado/eliminar/{id}/{listarluego}', 'CertificadoController@eliminar')->name('certificado.eliminar');
     Route::resource('certificado', 'CertificadoController', array('except' => array('show')));    
 
