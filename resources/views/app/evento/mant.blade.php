@@ -87,13 +87,19 @@ use App\Especialidad;
 {!! Form::model($evento, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 	<fieldset class="col-12">
-		<legend>Datos Oferta</legend>
+		<legend>Datos Evento</legend>
 		<div class="panel panel-default" style="margin-bottom: 10px;">
 			<div class="panel-body">
 				<div class="form-group">
 					{!! Form::label('nombre', 'Nombre:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
 					<div class="col-lg-9 col-md-9 col-sm-9">
 						{!! Form::text('nombre', null, array('class' => 'form-control input-xs', 'id' => 'nombre', 'placeholder' => 'Ingrese nombre')) !!}
+					</div>
+				</div>
+				<div class="form-group">
+					{!! Form::label('tipoevento_id', 'Tipo evento:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+					<div class="col-lg-9 col-md-9 col-sm-9">
+						{!! Form::select('tipoevento_id', $cboTipoevento, null, array('class' => 'form-control input-sm opOferte', 'id' => 'tipoevento_id')) !!}
 					</div>
 				</div>
 			</div>

@@ -17,9 +17,11 @@ class Evento extends Model
     public function especialidad(){
         return $this->belongsTo('App\Especialidad', 'especialidad_id');
     } 
-    // public function tipoevento(){
-    //     return $this->belongsTo('App\Tipoevento', 'tipoevento_id');
-    // } 
+
+    public function tipoevento(){
+        return $this->belongsTo('App\Tipoevento', 'tipoevento_id');
+    } 
+
     public static function getIdEmpresa()
     {
         $empresa_id = null;
@@ -48,6 +50,8 @@ class Evento extends Model
                         if (!is_null($empresa_id)) {
 		            		$subquery->where('empresa_id', '=', $empresa_id);
 		            	}
+                    })->where(function($subquery) {
+		            	$subquery->where('tipoevento_id', '!=', null);
                     })
         			->orderBy('nombre', 'ASC');
         			
