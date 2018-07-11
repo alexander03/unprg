@@ -49,7 +49,7 @@
                     <a href="{{ url('/password/reset') }}" class="text-muted"><i class="fa fa-lock m-r-5"></i> ¿Olvidó su contraseña?</a>
                 </div>
                 <div class="col-sm-5 text-right">
-                    <a href="{{ url('/registro') }}" class="text-muted">Registrar Empresa</a>
+                    <a href="{{ url('/registro') }}" class="text-muted">¿Nueva Empresa?</a>
                 </div>
             </div>
         </form>

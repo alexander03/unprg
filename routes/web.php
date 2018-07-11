@@ -49,6 +49,8 @@ Route::group(['middleware' => 'guest'], function() {
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
     Route::post('password/reset', 'Auth\ResetPasswordController@reset');
     Route::get('password','Auth\ResetPasswordController@showPasswordReset');
+    Route::get('registro','Auth\RegisterController@showRegistrationForm');
+    Route::post('registro', 'Auth\RegisterController@register');
     //other routes
 });
 
