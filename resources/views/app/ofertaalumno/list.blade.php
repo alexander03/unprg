@@ -1,3 +1,6 @@
+<?php
+use App\OfertaAlumno;
+?>
 @if(count($lista) == 0)
 <h3 class="text-warning">No se encontraron resultados.</h3>
 @else
@@ -13,14 +16,26 @@
 	</thead>
 	<tbody>
 		<?php
+		$idAlumno = OfertaAlumno::getIdAlumno();
 		$contador = $inicio + 1;
 		?>
 		@foreach ($lista as $key => $value)
 		<tr 'idEvento'= {{ $value->id }} >
 			<td>{{ $contador }}</td>
 			<td>{{ $value->nombre }}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Suscribirse', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
+			<?php
+			$estaRegistrado  =  DB::table('evento_alumno')->where('alumno_id','=', $idAlumno)->where('evento_id','=', $value->evento_id)->count();
+			echo $estaRegistrado;
+			if($estaRegistrado > 0 ){
+			?>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Desuscribirse', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
+			<?php
+			}else{
+			?>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Suscribirse', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
+			<?php
+			}
+			?>
 		</tr>
 		<?php
 		$contador = $contador + 1;

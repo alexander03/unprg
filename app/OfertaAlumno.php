@@ -37,20 +37,30 @@ class OfertaAlumno extends Model
         return $alumno_id;
     }
 
+    // public static function suscrito($evento_id, $alumno_id)
+    // {
+
+    //     $id  =  DB::table('evento_alumno')->where('alumno_id','=', $alumno_id)->where('evento_id','=', $evento_id)->get();
+    //     return $id;
+    // }
+
     public function scopelistar($query, $nombre)
     {
-        $alumno_id        = EventoALumno::getIdALumno();
+        $alumno_id        = OfertaALumno::getIdALumno();
         $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
         $facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
-        return Evento::leftjoin("DIRECCION_EVENTO","DIRECCION_EVENTO.EVENTO_ID","=","EVENTO.ID")
+
+        return Oferta::leftjoin("DIRECCION_EVENTO","DIRECCION_EVENTO.EVENTO_ID","=","EVENTO.ID")
                         ->where('DIRECCION_EVENTO.facultad_id','=',$facultad_id)
                         ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%')
+                        ->where('Evento.tipoevento_id', '=', null)
                         ->orWhere('DIRECCION_EVENTO.escuela_id','=',$escuela_id)
                         ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%')
+                        ->where('Evento.tipoevento_id', '=', null)
                         ->orWhere('DIRECCION_EVENTO.especialidad_id','=',$especialidad_id)
                         ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%')
-                        ->orWhere('OPCIONEVENTO','=',0)
-                        ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%');   			
+                        ->where('Evento.tipoevento_id', '=', null)
+                        ->orWhere('OPCIONEVENTO','=',0);
     }
 }

@@ -69,6 +69,7 @@ class Oferta extends Model
     public static function eliminarDetalle($evento_id){
         Direccion_oferta::where('EVENTO_ID','=',$evento_id)->delete();
     }
+    
     public static function eliminarSuscriptores($evento_id){
         OfertaAlumno::where('EVENTO_ID','=',$evento_id)->delete();
     }

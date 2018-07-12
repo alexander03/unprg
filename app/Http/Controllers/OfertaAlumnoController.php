@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use Validator;
 use App\Http\Requests;
-use App\Evento;
+use App\Oferta;
 use App\OfertaAlumno;
 use App\Tipoevento;
 use App\Facultad;
@@ -49,14 +49,15 @@ class OfertaAlumnoController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Evento';
+        $entidad          = 'Oferta';
         $nombre           = Libreria::getParam($request->input('nombre'));
         $resultado          = OfertaAlumno::listar($nombre);
         $lista              = $resultado->get();
+        echo $lista;
         $cabecera       = array();
         $cabecera[]     = array('valor' => '#', 'numero' => '1');
         $cabecera[]     = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]     = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]     = array('valor' => 'Operaciones', 'numero' => '1');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
@@ -82,7 +83,7 @@ class OfertaAlumnoController extends Controller
      */
     public function index()
     {
-        $entidad          = 'Evento';
+        $entidad          = 'Oferta';
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
@@ -111,9 +112,9 @@ class OfertaAlumnoController extends Controller
     public function edit($id, Request $request)
     {
         $title1 = "¿Esta seguro de  Suscribirse a la oferta?";
-        $listar = "NO";
-        $modelo   = 'Evento Alumno';
-        $entidad  = 'EventoAlumno';
+        $listar = "SI";
+        $modelo   = 'OfertaAlumno';
+        $entidad  = 'OfertaAlumno';
         $formData       = array('ofertaalumno.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Suscribirse';
@@ -138,10 +139,10 @@ class OfertaAlumnoController extends Controller
         } 
         
         $error = DB::transaction(function() use($request, $id){
-            $eventoalumno = new EventoAlumno();
-            $eventoalumno->alumno_id = OfertaALumno::getIdALumno();
-            $eventoalumno->evento_id = $id;
-            $eventoalumno->save();
+            $ofertaalumno = new OfertaALumno();
+            $ofertaalumno->alumno_id = OfertaALumno::getIdALumno();
+            $ofertaalumno->evento_id = $id;
+            $ofertaalumno->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -154,10 +155,10 @@ class OfertaAlumnoController extends Controller
      */
     public function destroy($id)
     {
-        $eventoalumno_id = DB::table('Evento_ALumno')->where('evento_id', $id)->value('id');
-        $error = DB::transaction(function() use($eventoalumno_id){
-            $eventoalumno = OfertaAlumno::find($eventoalumno_id);
-            $eventoalumno->delete();
+        $ofertaalumno_id = DB::table('Evento_ALumno')->where('evento_id', $id)->value('id');
+        $error = DB::transaction(function() use($ofertaalumno_id){
+            $ofertaalumno = OfertaAlumno::find($ofertaalumno_id);
+            $ofertaalumno->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -170,9 +171,9 @@ class OfertaAlumnoController extends Controller
      */
     public function eliminar($id, $listarLuego)
     {
-        $listar = "NO";
+        $listar = "SI";
         $title1 ="¿Esta seguro de  Desuscribirse a la oferta?";
-        $modelo   = 'Oferta Alumno';
+        $modelo   = 'OfertaAlumno';
         $entidad  = 'OfertaAlumno';
         $formData       = array('ofertaalumno.destroy', $id);
         $formData = array('route' => $formData, 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
