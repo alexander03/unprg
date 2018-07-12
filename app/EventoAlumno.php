@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Evento;
+
 class EventoAlumno extends Model
 {
     use SoftDeletes;
@@ -57,6 +59,34 @@ class EventoAlumno extends Model
                         ->orWhere('OPCIONEVENTO','=',0)
                         ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%');   			
     }
+
+    public static function listarEventos($nombre){
+        $alumno_id        = EventoALumno::getIdALumno();
+        $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
+        $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
+        $facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
+        $SQLNULL = '';
+        $SQLVAL = '';
+        if($especialidad_id != null){
+            $SQLNULL = '=';
+            $SQLVAL = $especialidad_id;
+        }else{
+            $SQLNULL = "IS";
+            $SQLVAL = "NULL";
+        }
+        $results = Evento::leftjoin('DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
+        ->leftjoin('FACULTAD.ID','=','DIRECCION_EVENTO.FACULTAD_ID')
+        ->leftjoin('ESCUELA.ID','=','DIRECCION_EVENTO.ESCUELA_ID')
+        ->leftjoin('ESPECIALIDAD.ID','=','DIRECCION_EVENTO.ESPECIALIDAD_ID')
+        ->where('EVENTO.OPCIONEVENTO','=','0')
+        ->orwhere('FACULTAD.ID','=',$facultad_id)
+        ->orwhere('ESCUELA.ID','=',$escuela_id)
+        ->orwhere('ESPECIALIDAD.ID',$SQLNULL,$SQLVAL)
+        ->where('EVENTO.NOMBRE','LIKE','%'.$nombre+'%');
+        return $results;
+    }
+
+    
 
     public function scopelistarSuscriptores($query, $id)
     {
