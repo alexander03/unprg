@@ -51,7 +51,7 @@ class OfertaAlumnoController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Oferta';
         $nombre           = Libreria::getParam($request->input('nombre'));
-        $resultado          = OfertaAlumno::listar($nombre);
+        $resultado          = OfertaAlumno::listarOfertas($nombre);
         $lista              = $resultado->get();
         echo $lista;
         $cabecera       = array();

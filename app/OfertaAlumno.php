@@ -43,24 +43,35 @@ class OfertaAlumno extends Model
     //     $id  =  DB::table('evento_alumno')->where('alumno_id','=', $alumno_id)->where('evento_id','=', $evento_id)->get();
     //     return $id;
     // }
-
-    public function scopelistar($query, $nombre)
-    {
+    
+    public static function listarOfertas($nombre){
         $alumno_id        = OfertaALumno::getIdALumno();
         $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
         $facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
-
-        return Oferta::leftjoin("DIRECCION_EVENTO","DIRECCION_EVENTO.EVENTO_ID","=","EVENTO.ID")
-                        ->where('DIRECCION_EVENTO.facultad_id','=',$facultad_id)
-                        ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%')
-                        ->where('Evento.tipoevento_id', '=', null)
-                        ->orWhere('DIRECCION_EVENTO.escuela_id','=',$escuela_id)
-                        ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%')
-                        ->where('Evento.tipoevento_id', '=', null)
-                        ->orWhere('DIRECCION_EVENTO.especialidad_id','=',$especialidad_id)
-                        ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%')
-                        ->where('Evento.tipoevento_id', '=', null)
-                        ->orWhere('OPCIONEVENTO','=',0);
+        $SQLNULL = '';
+        $SQLVAL = '';
+        if($especialidad_id != null){
+            $SQLNULL = '=';
+            $SQLVAL = $especialidad_id;
+        }else{
+            $SQLNULL = "IS";
+            $SQLVAL = "NULL";
+        }
+        $results = Evento::leftjoin('DIRECCION_EVENTO','DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
+        ->leftjoin('FACULTAD','FACULTAD.ID','=','DIRECCION_EVENTO.FACULTAD_ID')
+        ->leftjoin('ESCUELA','ESCUELA.ID','=','DIRECCION_EVENTO.ESCUELA_ID')
+        ->leftjoin('ESPECIALIDAD','ESPECIALIDAD.ID','=','DIRECCION_EVENTO.ESPECIALIDAD_ID')
+        ->select(
+            'EVENTO.ID AS IDEVENTO',
+            'EVENTO.NOMBRE AS NOMBRE_EVENTO'
+        )
+        ->where('EVENTO.OPCIONEVENTO','=','0')
+        ->orwhere('FACULTAD.ID','=',$facultad_id)
+        ->orwhere('ESCUELA.ID','=',$escuela_id)
+        ->orwhere('ESPECIALIDAD.ID',$SQLNULL,$SQLVAL)
+        ->where('EVENTO.NOMBRE','LIKE','%'.$nombre.'%')
+        ->where('EVENTO.TIPOEVENTO_ID','=','NULL');
+        return $results;
     }
 }
