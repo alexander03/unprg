@@ -39,7 +39,7 @@ class Evento extends Model
         return $empresa_id;
     }
 
-    public function scopelistar($query, $nombre, $empresa_id)
+    public function scopelistar($query, $nombre, $empresa_id, $fechai, $fechaf)
     {
         return $query->where(function($subquery) use($nombre)
 		            {
@@ -52,7 +52,9 @@ class Evento extends Model
 		            	}
                     })->where(function($subquery) {
 		            	$subquery->where('tipoevento_id', '!=', null);
-                    })
+                    })->where(function($subquery) use($fechai, $fechaf){
+                        $subquery->whereBetween('fechaf', array($fechai, $fechaf));
+		            })
         			->orderBy('nombre', 'ASC');
         			
     }
@@ -64,6 +66,9 @@ class Evento extends Model
         ->select(
             'DIRECCION_EVENTO.ID',
             'FACULTAD.NOMBRE AS NOMBRE_FACULTAD',
+            'DIRECCION_EVENTO.FACULTAD_ID AS ID_FACULTAD',
+            'DIRECCION_EVENTO.ESCUELA_ID AS ID_ESCUELA',
+            'DIRECCION_EVENTO.ESPECIALIDAD_ID AS ID_ESPECIALIDAD',
             'ESCUELA.NOMBRE AS NOMBRE_ESCUELA',
             'ESPECIALIDAD.NOMBRE AS NOMBRE_ESPECIALIDAD'
         )->where('DIRECCION_EVENTO.EVENTO_ID', '=', $evento_id);
@@ -74,6 +79,13 @@ class Evento extends Model
       //  $results = DB::table('Evento_Alumno')->where('evento_id', $id);
        // return $results;
     //}
+    public static function eliminarDetalle($evento_id){
+        Direccion_evento::where('EVENTO_ID','=',$evento_id)->delete();
+    }
+    
+    public static function eliminarSuscriptores($evento_id){
+        EventoAlumno::where('EVENTO_ID','=',$evento_id)->delete();
+    }
 
 
 }
