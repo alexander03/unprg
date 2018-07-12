@@ -111,7 +111,7 @@ class ActualizarDatosController extends Controller
                 'direccion' => 'required|max:50',
                 'telefono' => 'required|max:12',
                 'especialidad_id' => 'required|integer|exists:especialidad,id,deleted_at,NULL',
-             /*   'image' => 'image|max:1024*1024*1',*/
+                'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:1024',
                 );
             $validacion = Validator::make($request->all(),$reglas);
             if ($validacion->fails()) {
@@ -127,18 +127,22 @@ class ActualizarDatosController extends Controller
                 $alumno->especialidad_id    = $request->input('especialidad_id');
                 $alumno->save();
             });
-/*
-            if ($request->file('image')->isValid()) {
-                
-                $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
-                $request->image->move(public_path('uploads/images'), $filename);
+
+            $path = '';
             
-                $user = Auth::user();
-                $usuario = Usuario::find($user->id);
-                $usuario->avatar = $filename;
-                $usuario->save();
+            if ($request->hasFile('image')){
+                if ($request->file('image')->isValid()){
+                    
+                    $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
+                    $path = public_path('avatar/'.$filename);
+                    //$request->file('image')->move(public_path('avatar'), $filename);
+                    $request->file('image')->move('avatar', $filename);
+                    $user = Auth::user();
+                    $usuario = Usuario::find($user->id);
+                    $usuario->avatar = $path;
+                    $usuario->save();
+                }
             }
-*/
 
             return is_null($error) ? "OK" : $error;
 
@@ -153,7 +157,7 @@ class ActualizarDatosController extends Controller
                 'razonsocial'    => 'required|max:200',
                 'direccion' => 'required|max:120',
                 'telefono'   => 'required|numeric|digits:9',
-             /*   'image' => 'image|max:1024*1024*1',*/
+                'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:1024',
                 );
             $validacion = Validator::make($request->all(),$reglas);
             if ($validacion->fails()) {
@@ -166,18 +170,23 @@ class ActualizarDatosController extends Controller
                 $empresa->telefono     = $request->input('telefono');
                 $empresa->save();
             });
-/*
-            if ($request->image->isValid()) {
-                
-                $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
-                $request->image->move(public_path('uploads/images'), $filename);
+
+            $path = '';
             
-                $user = Auth::user();
-                $usuario = Usuario::find($user->id);
-                $usuario->avatar = $filename;
-                $usuario->save();
-            }*/
-            
+            if ($request->hasFile('image')){
+                if ($request->file('image')->isValid()){
+                    
+                    $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
+                    $path = public_path('avatar/'.$filename);
+                    //$request->file('image')->move(public_path('avatar'), $filename);
+                    $request->file('image')->move('avatar', $filename);
+                    $user = Auth::user();
+                    $usuario = Usuario::find($user->id);
+                    $usuario->avatar = $path;
+                    $usuario->save();
+                }
+            }
+
             return is_null($error) ? "OK" : $error;
 
         }
