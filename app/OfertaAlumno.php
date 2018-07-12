@@ -63,4 +63,5 @@ class OfertaAlumno extends Model
                         ->where('Evento.tipoevento_id', '=', null)
                         ->orWhere('OPCIONEVENTO','=',0);
     }
+    
 }

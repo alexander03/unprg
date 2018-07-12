@@ -25,7 +25,6 @@ use App\OfertaAlumno;
 			<td>{{ $value->nombre }}</td>
 			<?php
 			$estaRegistrado  =  DB::table('evento_alumno')->where('alumno_id','=', $idAlumno)->where('evento_id','=', $value->evento_id)->count();
-			echo $estaRegistrado;
 			if($estaRegistrado > 0 ){
 			?>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Desuscribirse', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
