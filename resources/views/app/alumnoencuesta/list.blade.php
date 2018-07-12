@@ -32,7 +32,7 @@
 			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Preguntas', array('onclick' => 'cargarRuta(\'http://localhost/unprg/alumnoencuesta/llenarencuesta?encuesta_id=' . $value->id . '\', \'container\');', 'class' => 'btn btn-default btn-xs')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Pendiente', array('onclick' => '#', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 			@else
-			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Completo', array('class' => 'btn btn-default btn-xs')) !!}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Ver', array('class' => 'btn btn-default btn-xs')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-ok"></div> Completo', array('onclick' => '#', 'class' => 'btn btn-xs btn-success')) !!}</td>
 			@endif
 			
