@@ -13,7 +13,7 @@ use App\Especialidad;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-
+use Jenssegers\Date\Date;
 
 class EventoController extends Controller
 {
@@ -52,14 +52,16 @@ class EventoController extends Controller
         $entidad          = 'Evento';
         $nombre      = Libreria::getParam($request->input('nombre'));
         $empresa_id      = Evento::getIdEmpresa();
-        //$tipoevento_id      = Libreria::getParam($request->input('tipoevento_id'));
-        $resultado        = Evento::listar($nombre, $empresa_id);
+        $fechai = Libreria::getParam($request->input('fechai'));
+        $fechaf = Libreria::getParam($request->input('fechaf'));
+        $resultado        = Evento::listar($nombre, $empresa_id, $fechai, $fechaf);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
-        // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Fecha Inicio', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Fecha Fin', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -144,7 +146,10 @@ class EventoController extends Controller
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $validacion = Validator::make($request->all(),
         array(
-            'nombre'            => 'required|max:200',
+                'nombre'       => 'required|max:120|unique:evento,nombre,NULL,id,deleted_at,NULL',
+                'tipoevento_id' => 'required',
+                'fechaInicio' => 'required',
+                'fechaFin' => 'required',
             )
         );
         
@@ -158,6 +163,8 @@ class EventoController extends Controller
             $evento->empresa_id = Evento::getIdEmpresa();
             $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento =$request->input('opcionevento');
+            $evento->fechai     = $request->input('fechaInicio');
+            $evento->fechaf     = $request->input('fechaFin');
             $evento->save();
 
             if($request->input('cadenaDirecciones') != ''){
@@ -243,10 +250,13 @@ class EventoController extends Controller
         }
         $validacion = Validator::make($request->all(),
         array(
-            'nombre'            => 'required|max:200',
+                'nombre'       => 'required|max:120|unique:evento,nombre,'.$id.',id,deleted_at,NULL',
+                'tipoevento_id' => 'required',
+                'fechaInicio' => 'required',
+                'fechaFin' => 'required',
             )
         );
-
+//
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
@@ -256,8 +266,32 @@ class EventoController extends Controller
             $evento->empresa_id = Evento::getIdEmpresa();
             $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento = $request->input('opcionevento');
-            //$evento->tipoevento_id = $request->input('tipoevento_id');
+            $evento->fechai     = $request->input('fechaInicio');
+            $evento->fechaf     = $request->input('fechaFin');
             $evento->save();
+            //*************** */
+            Evento::eliminarDetalle($id);
+            if($request->input('cadenaDirecciones') != ''){
+                $direcciones = explode(",", $request->input('cadenaDirecciones'));
+                for( $i=0; $i< count($direcciones); $i++){
+                    $direccion_evento = new  Direccion_evento();
+
+                    $direc =  explode(":", $direcciones[$i]);
+                    $direccion_evento->evento_id = $id;
+                    if((int)$direc[0]!=-1){
+                    $direccion_evento->facultad_id = (int)$direc[0];
+                    }
+                    if((int)$direc[1]!=-1){
+                        $direccion_evento->facultad_id = null;
+                    $direccion_evento->escuela_id = (int)$direc[1];
+                    }
+                    if((int)$direc[2]!=-1){
+                        $direccion_evento->escuela_id =null;
+                    $direccion_evento->especialidad_id = (int) $direc[2];
+                    }
+                    $direccion_evento->save();
+                }
+            }
         });
         return is_null($error) ? "OK" : $error;
     }
