@@ -70,4 +70,10 @@ class Evento extends Model
         return $results;
     }
 
+    //public static function listarSuscriptores($id){
+      //  $results = DB::table('Evento_Alumno')->where('evento_id', $id);
+       // return $results;
+    //}
+
+
 }
