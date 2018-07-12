@@ -23,6 +23,10 @@ class EventoAlumno extends Model
      
 	public function evento(){
         return $this->belongsTo('App\Evento', 'evento_id');
+    }
+    
+    public function alumno(){
+        return $this->belongsTo('App\Alumno', 'alumno_id');
 	}
 	 
     public static function getIdAlumno()
@@ -52,6 +56,16 @@ class EventoAlumno extends Model
                         ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%')
                         ->orWhere('OPCIONEVENTO','=',0)
                         ->where('Evento.nombre', 'LIKE', '%'.$nombre.'%');   			
+    }
+
+    public function scopelistarSuscriptores($query, $id)
+    {
+        return $query->where(function($subquery) use($id)
+		            {
+		            	if (!is_null($id)) {
+		            		$subquery->where('evento_id', '=', $id);
+		            	}
+		            });
     }
    
 }

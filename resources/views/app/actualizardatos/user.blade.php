@@ -14,7 +14,7 @@ $user = Auth::user();
 <div class="row">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
-			@if($user->usertype_id == "2" || $user->usertype_id == "3")
+			@if($user->usertype_id == "2"  || $user->usertype_id == "1"|| $user->usertype_id == "3")
 			<div id="divMensajeError{!! $entidad !!}"></div>
 				{!! Form::model($alumno, $formData) !!}	
 				{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
@@ -106,13 +106,19 @@ $user = Auth::user();
 							</div>
 						</div>
 						<div class="form-group">
+							{!! Form::label('image', 'Imagen de perfil:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<input type="file" name="image" class ="form-control input-xs" id="image" >
+							</div>
+						</div>
+						<div class="form-group">
 							<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 								{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'actualizardatos(\''.$entidad.'\', this)')) !!}
 							</div>
 						</div>
 				{!! Form::close() !!}
 				
-			@elseif($user->usertype_id == "4" || $user->usertype_id == "1" || $user->usertype_id == "5")
+			@elseif($user->usertype_id == "4" || $user->usertype_id == "5")
 
 				<div id="divMensajeError{!! $entidad !!}"></div>
 				{!! Form::model($empresa, $formData) !!}	
@@ -151,6 +157,12 @@ $user = Auth::user();
 						</div>
 					</div>
 					<div class="form-group">
+						{!! Form::label('image', 'Imagen de perfil:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+						<div class="col-lg-9 col-md-9 col-sm-9">
+							<input type="file" name="image" class ="form-control input-xs" id="image" >
+						</div>
+					</div>
+					<div class="form-group">
 						<div class="col-lg-12 col-md-12 col-sm-12 text-right">
 							{!! Form::button('<i class="fa fa-check fa-lg"></i> '.$boton, array('class' => 'btn btn-primary', 'id' => 'btnGuardar', 'onclick' => 'actualizardatos(\''.$entidad.'\', this)')) !!}
 						</div>
@@ -163,6 +175,88 @@ $user = Auth::user();
 </div>
 
 <script>
+	/*$('#btnGuardar').click(function(){
+		var form = $('#formMantenimientoAlumno')[0];
+		// Create an FormData object
+		var formulario = new FormData(form);
+		var data  = procesarAjax(formulario);
+	});*/
+
+	function actualizardatos (entidad, idboton) {
+		var idformulario = IDFORMMANTENIMIENTO + entidad;
+		//FORM
+		console.log("1");
+		console.log(entidad);
+		if(entidad === "Alumno"){
+			var form = $('#formMantenimientoAlumno')[0];
+		}else if(entidad === "Empresa"){
+			var form = $('#formMantenimientoEmpresa')[0];
+		}
+		// Create an FormData object
+		var formulario = new FormData(form);
+		console.log("2");
+		console.log(entidad);
+		var data  = procesarAjax(formulario,entidad);
+		//FIN FORM
+		var respuesta    = '';
+		var listar       = 'NO';
+		if ($(idformulario + ' :input[id = "listar"]').length) {
+			var listar = $(idformulario + ' :input[id = "listar"]').val()
+		};
+		var btn = $(idboton);
+		btn.button('loading');
+		data.done(function(msg) {
+			respuesta = msg;
+		}).fail(function(xhr, textStatus, errorThrown) {
+			respuesta = 'ERROR';
+		}).always(function() {
+			btn.button('reset');
+			var divError ='#divMensajeError' + entidad;
+			var divMensaje = $(divError);
+			if(respuesta === 'ERROR'){
+				var cadenaError = '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Fallo al actualizar sus datos!!</strong></div>';
+				divMensaje.html(cadenaError);
+				divMensaje.show('slow');
+			}else{
+				if (respuesta === 'OK') {
+					var cadenaExito = '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Sus datos han sido actualizados correctamente!!</strong></div>';
+					divMensaje.html(cadenaExito);
+					divMensaje.show('slow');
+					var grilla ="#";
+					$(idformulario).find(':input').each(function() {
+						var elemento         = this;
+						var cadena           = idformulario + " :input[id='" + elemento.id + "']";
+						var elementoValidado = $(cadena);
+						elementoValidado.parent().removeClass('has-error');
+					});
+				} else {
+					mostrarErrores(respuesta, idformulario, entidad);
+				}
+			}
+		});
+	}
+
+	function procesarAjax(DATA,entidad){
+		if(entidad === "Alumno"){
+			var url     = $('#formMantenimientoAlumno').attr('action').toLowerCase();
+		}else if(entidad === "Empresa"){
+			var url     = $('#formMantenimientoEmpresa').attr('action').toLowerCase();
+		}
+		var respuesta  = $.ajax({
+			url: url,
+			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+			type: 'POST',
+			enctype: 'multipart/form-data',
+			data: DATA,
+			processData: false,
+			contentType: false,
+			cache: false,
+			timeout: 600000
+		});
+		return respuesta;
+	}
+
+	/*
 	function actualizardatos (entidad, idboton) {
 		var idformulario = IDFORMMANTENIMIENTO + entidad;
 		var data         = submitForm(idformulario);
@@ -197,11 +291,10 @@ $user = Auth::user();
 						var elementoValidado = $(cadena);
 						elementoValidado.parent().removeClass('has-error');
 					});
-
 				} else {
 					mostrarErrores(respuesta, idformulario, entidad);
 				}
 			}
 		});
-	}
+	}*/
 </script>
