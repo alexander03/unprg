@@ -32,6 +32,7 @@ class AlumnoEncuestaController extends Controller
             'index'  => 'alumnoencuesta.index',
             'llenarencuesta'  => 'alumnoencuesta.llenarencuesta',
             'guardarencuesta'  => 'alumnoencuesta.guardarencuesta',
+            'respuestasencuesta' => 'alumnoencuesta.respuestasencuesta',
         );
 
     /**
@@ -187,5 +188,15 @@ class AlumnoEncuestaController extends Controller
             $respuesta->alternativa_id = $alternativa_id;
             $respuesta->save();
         }
+    }
+
+    public function respuestasencuesta(Request $request) {
+        $encuesta_id = $request->get('encuesta_id');
+        $user        = Auth::user();
+        $alumno_id   = $user->alumno_id;
+
+        $preguntas   = Pregunta::select('id', 'nombre')->where('encuesta_id', '=', $encuesta_id)->get();
+
+        return view($this->folderview.'.respuestasencuesta')->with(compact('preguntas'));
     }
 }

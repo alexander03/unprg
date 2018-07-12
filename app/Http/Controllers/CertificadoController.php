@@ -12,6 +12,8 @@ use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Image;
+use Illuminate\Support\Facades\Storage;
 
 class CertificadoController extends Controller
 {
@@ -80,13 +82,14 @@ class CertificadoController extends Controller
      */
     public function create(Request $request)
     {
+        $operacion = "store";
         $listar       = Libreria::getParam($request->input('listar'), 'NO');
         $entidad      = 'certificado';
         $certificado  = null;
         $formData     = array('certificado.store');
         $formData     = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton        = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('certificado', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('operacion','certificado', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -112,6 +115,14 @@ class CertificadoController extends Controller
             $certificado->nombre = $request->input('nombre');
             $certificado->nombre_certificadora = $request->input('nombre_certificadora');
             $certificado->alumno_id = CompetenciaAlumno::getIdAlumno();
+            /*CODIGO PARA LA IMAGEN*/
+            $namefile = '';
+            if($request->file('archivo') != null){
+                $namefile = str_random(30) . '-' . $request->file('archivo')->getClientOriginalName();
+                $request->file('archivo')->move('files_certificado', $namefile);
+            }
+            /* ASGINAMOS EL PATH AL OBJETO*/
+            $certificado->url_archivo = "files_certificado/".$namefile;
             $certificado->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -140,13 +151,14 @@ class CertificadoController extends Controller
         if ($existe !== true) {
             return $existe;
         }
+        $operacion = "update";
         $listar       = Libreria::getParam($request->input('listar'), 'NO');
         $certificado  = Certificado::find($id);
         $entidad      = 'certificado';
         $formData     = array('certificado.update', $id);
         $formData     = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton        = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('certificado', 'formData', 'entidad', 'boton', 'listar'));
+        return view($this->folderview.'.mant')->with(compact('operacion','certificado', 'formData', 'entidad', 'boton', 'listar'));
     }
 
     /**
@@ -156,8 +168,9 @@ class CertificadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $id = $request->input('id');
         $existe = Libreria::verificarExistencia($id, 'certificado');
         if ($existe !== true) {
             return $existe;
@@ -176,6 +189,15 @@ class CertificadoController extends Controller
             $certificado->nombre = $request->input('nombre');
             $certificado->nombre_certificadora = $request->input('nombre_certificadora');
             $certificado->alumno_id = CompetenciaAlumno::getIdAlumno();
+            /*CODIGO PARA LA IMAGEN*/
+            if($request->file('archivo') != null){
+                /*ELIMINAR ARCHIVO GUARDADO*/
+                /*VOLVER A GUARDAR */
+                $namefile = str_random(30) . '-' . $request->file('archivo')->getClientOriginalName();
+                $request->file('archivo')->move('files_certificado', $namefile);
+                /* ASGINAMOS EL PATH AL OBJETO*/
+                $certificado->url_archivo = "files_certificado/".$namefile;
+            }           
             $certificado->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -194,8 +216,11 @@ class CertificadoController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $facultad = Certificado::find($id);
-            $facultad->delete();
+            $certificado = Certificado::find($id);
+            //Storage::delete(public_path ('../'.$certificado->url_archivo));
+            //unlink('../../../../htdocs/unprg/'.$certificado->url_archivo);
+            //unlink(public_path('/'.$certificado->url_archivo));
+            $certificado->delete();
         });
         return is_null($error) ? "OK" : $error;
     }

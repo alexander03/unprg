@@ -212,6 +212,9 @@ Route::group(['middleware' => 'auth'], function () {
     /* LLENAR ENCUESTA */ 
     Route::get('alumnoencuesta/llenarencuesta', 'AlumnoEncuestaController@llenarencuesta')->name('alumnoencuesta.llenarencuesta');
     Route::post('alumnoencuesta/guardarencuesta', 'AlumnoEncuestaController@guardarencuesta')->name('alumnoencuesta.guardarencuesta');
+    
+    /* VER RESPUESTAS DE ENCUESTA */
+    Route::get('alumnoencuesta/respuestasencuesta', 'AlumnoEncuestaController@respuestasencuesta')->name('alumnoencuesta.respuestasencuesta');
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
@@ -252,6 +255,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     /*CERTIFICADOS */
     Route::post('certificado/buscar', 'CertificadoController@buscar')->name('certificado.buscar');
+    Route::post('certificado/store', 'CertificadoController@store');
+    Route::post('certificado/update', 'CertificadoController@update');
     Route::get('certificado/eliminar/{id}/{listarluego}', 'CertificadoController@eliminar')->name('certificado.eliminar');
     Route::resource('certificado', 'CertificadoController', array('except' => array('show')));    
 
