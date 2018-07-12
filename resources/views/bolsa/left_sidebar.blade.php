@@ -3,12 +3,22 @@ use App\Menuoptioncategory;
 use App\Menuoption;
 use App\Permission;
 use App\User;
-use App\Persona;
+use App\Usuario;
+use App\Alumno;
+use App\Empresa;
 $user                  = Auth::user();
 session(['usertype_id' => $user->usertype_id]);
 $tipousuario_id        = session('usertype_id');
 $menu                  = generarMenu($tipousuario_id);
 //$person                = Person::find($user->person_id);
+$usuario = Usuario::find($user->id);
+if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3  ){ //admin - bolsa - seguimiento -> funcionan como alumno
+    $alumno = Alumno::find($user->alumno_id);
+    $nombrecompleto = $alumno->nombres." ".$alumno->apellidopaterno;
+}else if($user->usertype_id == 4 || $user->usertype_id == 5){
+    $empresa = Empresa::find($user->empresa_id);
+    $razonsocial = $empresa->razonsocial;
+}
 ?>
 
 <div class="left side-menu">
@@ -27,9 +37,13 @@ $menu                  = generarMenu($tipousuario_id);
     <div class="user-detail">
         <div class="dropup">
             <a href="" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
-                <img  src="assets/images/users/avatar-2.jpg" alt="user-img" class="img-circle">
+                <img  src="{!! $usuario->avatar !!}" alt="user-img" class="img-circle">
                 <span class="user-info-span">
-                    <h5 class="m-t-0 m-b-0">Luis Acuña</h5>
+                    @if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3 )
+                        <h5 class="m-t-0 m-b-0">{!! $nombrecompleto !!}</h5>
+                    @elseif($user->usertype_id == 4 || $user->usertype_id == 5)
+                        <h5 class="m-t-0 m-b-0">{!! $razonsocial !!}</h5>
+                    @endif
                     <p class="text-muted m-b-0">
                         <small><i class="fa fa-circle text-success"></i> <span>Online</span></small>
                     </p>

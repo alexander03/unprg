@@ -212,6 +212,9 @@ Route::group(['middleware' => 'auth'], function () {
     /* LLENAR ENCUESTA */ 
     Route::get('alumnoencuesta/llenarencuesta', 'AlumnoEncuestaController@llenarencuesta')->name('alumnoencuesta.llenarencuesta');
     Route::post('alumnoencuesta/guardarencuesta', 'AlumnoEncuestaController@guardarencuesta')->name('alumnoencuesta.guardarencuesta');
+    
+    /* VER RESPUESTAS DE ENCUESTA */
+    Route::get('alumnoencuesta/respuestasencuesta', 'AlumnoEncuestaController@respuestasencuesta')->name('alumnoencuesta.respuestasencuesta');
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
