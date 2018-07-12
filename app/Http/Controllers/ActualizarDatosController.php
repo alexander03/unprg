@@ -135,8 +135,8 @@ class ActualizarDatosController extends Controller
                     
                     $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
                     $path = public_path('avatar/'.$filename);
-                    //$request->file('image')->move(public_path('avatar'), $filename);
-                    $request->file('image')->move('avatar', $filename);
+                    $request->file('image')->move(public_path('avatar'), $filename);
+                    //$request->file('image')->move('avatar', $filename);
                     $user = Auth::user();
                     $usuario = Usuario::find($user->id);
                     $usuario->avatar = $path;
@@ -178,8 +178,8 @@ class ActualizarDatosController extends Controller
                     
                     $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
                     $path = public_path('avatar/'.$filename);
-                    //$request->file('image')->move(public_path('avatar'), $filename);
-                    $request->file('image')->move('avatar', $filename);
+                    $request->file('image')->move(public_path('avatar'), $filename);
+                    //$request->file('image')->move('avatar', $filename);
                     $user = Auth::user();
                     $usuario = Usuario::find($user->id);
                     $usuario->avatar = $path;
