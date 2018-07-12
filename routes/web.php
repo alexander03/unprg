@@ -73,8 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     /* CAMBIAR CONTRASEÑA*/
-    Route::get('updatePassword','Auth\UpdatePasswordController@showUpdatePasswordForm');
-    Route::post('updatePassword','Auth\UpdatePasswordController@updatePassword')->name('updatePassword');
+    Route::resource('updatepassword', 'UpdatePasswordController', array('except' => array('show')));
 
     /*ACTUALIZAR DATOS*/
     Route::resource('actualizardatos', 'ActualizarDatosController', array('except' => array('show')));
