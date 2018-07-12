@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Image;
+use Illuminate\Support\Facades\Storage;
 
 class CertificadoController extends Controller
 {
@@ -115,14 +116,14 @@ class CertificadoController extends Controller
             $certificado->nombre_certificadora = $request->input('nombre_certificadora');
             $certificado->alumno_id = CompetenciaAlumno::getIdAlumno();
             /*CODIGO PARA LA IMAGEN*/
-            $file = $request->file('archivo');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = $certificado->nombre. '.' . $extension;
-            $path = public_path('images/files/'.$fileName);
-            Image::make($file)->fit(144, 144)->save($path);
+            $namefile = '';
+            if($request->file('archivo') != null){
+                $namefile = str_random(30) . '-' . $request->file('archivo')->getClientOriginalName();
+                $request->file('archivo')->move('files_certificado', $namefile);
+            }
             /* ASGINAMOS EL PATH AL OBJETO*/
-            $certificado->url_archivo = $extension;
-            //$certificado->save();
+            $certificado->url_archivo = "files_certificado/".$namefile;
+            $certificado->save();
         });
         return is_null($error) ? "OK" : $error;
     }
@@ -167,8 +168,9 @@ class CertificadoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $id = $request->input('id');
         $existe = Libreria::verificarExistencia($id, 'certificado');
         if ($existe !== true) {
             return $existe;
@@ -187,6 +189,15 @@ class CertificadoController extends Controller
             $certificado->nombre = $request->input('nombre');
             $certificado->nombre_certificadora = $request->input('nombre_certificadora');
             $certificado->alumno_id = CompetenciaAlumno::getIdAlumno();
+            /*CODIGO PARA LA IMAGEN*/
+            if($request->file('archivo') != null){
+                /*ELIMINAR ARCHIVO GUARDADO*/
+                /*VOLVER A GUARDAR */
+                $namefile = str_random(30) . '-' . $request->file('archivo')->getClientOriginalName();
+                $request->file('archivo')->move('files_certificado', $namefile);
+                /* ASGINAMOS EL PATH AL OBJETO*/
+                $certificado->url_archivo = "files_certificado/".$namefile;
+            }           
             $certificado->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -205,8 +216,11 @@ class CertificadoController extends Controller
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $facultad = Certificado::find($id);
-            $facultad->delete();
+            $certificado = Certificado::find($id);
+            //Storage::delete(public_path ('../'.$certificado->url_archivo));
+            //unlink('../../../../htdocs/unprg/'.$certificado->url_archivo);
+            //unlink(public_path('/'.$certificado->url_archivo));
+            $certificado->delete();
         });
         return is_null($error) ? "OK" : $error;
     }
