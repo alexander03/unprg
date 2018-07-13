@@ -24,12 +24,18 @@
 					{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
-
 					<div class="form-group">
 						{!! Form::label('nombre', 'Nombre:') !!}
 						{!! Form::text('nombre', '', array('class' => 'form-control input-xs', 'id' => 'nombre')) !!}
 					</div>
-
+					<div class="form-group">
+						{!! Form::label('fechai', 'Desde:') !!}
+						{!! Form::date('fechai', '', array('class' => 'form-control input-xs', 'id' => 'fechai')) !!}
+					</div>
+					<div class="form-group">
+						{!! Form::label('fechaf', 'Hasta:') !!}
+						{!! Form::date('fechaf', '', array('class' => 'form-control input-xs', 'id' => 'fechaf')) !!}
+					</div>
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
 						{!! Form::selectRange('filas', 1, 30, 10, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
@@ -49,7 +55,16 @@
 
 <script>
 	$(document).ready(function () {
-		buscar('{{ $entidad }}');
+		var fechaActual = new Date();
+		var day = ("0" + fechaActual.getDate()).slice(-2);
+		var month = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
+		var fechai = (fechaActual.getFullYear()) +"-"+month+"-01";
+		var fechaf = fechaActual.getFullYear() + "-"+month+"-"+day;
+		$('#fechai').val(fechai);
+		$('#fechaf').val(fechaf);
+		
+		buscar('{{ $entidad }}');		
+
 		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
 		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="name"]').keyup(function (e) {
 			var key = window.event ? e.keyCode : e.which;
