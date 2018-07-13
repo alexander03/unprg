@@ -19,6 +19,7 @@ if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3
     $empresa = Empresa::find($user->empresa_id);
     $razonsocial = $empresa->razonsocial;
 }
+
 ?>
 
 <div class="left side-menu">
@@ -35,18 +36,17 @@ if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3
     </div>
 
     <div class="user-detail">
-        <div class="dropup">
+        <div class="dropup" style ="text-align : center">
             <a href="" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
-                <img  src="{!! $usuario->avatar !!}" alt="user-img" class="img-circle">
-                <span class="user-info-span">
+                <div id="avatar">
+                <img src="avatar\{!! $usuario->avatar !!}" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">
+                </div>
+                <span class="user-info-span" style ="padding-top: 10px;">
                     @if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3 )
                         <h5 class="m-t-0 m-b-0">{!! $nombrecompleto !!}</h5>
                     @elseif($user->usertype_id == 4 || $user->usertype_id == 5)
                         <h5 class="m-t-0 m-b-0">{!! $razonsocial !!}</h5>
                     @endif
-                    <p class="text-muted m-b-0">
-                        <small><i class="fa fa-circle text-success"></i> <span>Online</span></small>
-                    </p>
                 </span>
             </a>
             <ul class="dropdown-menu">
