@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ActualizarDatosController extends Controller
 {
@@ -135,11 +136,16 @@ class ActualizarDatosController extends Controller
                     
                     $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
                     $path = public_path('avatar/'.$filename);
-                    $request->file('image')->move(public_path('avatar'), $filename);
+
+                    $file = $request->file('image');
+                    Image::make($file)->fit(144, 144);//->save($path);
+                    $file->move('avatar', $filename);
+
+                    //$request->file('image')->move(public_path('avatar'), $filename);
                     //$request->file('image')->move('avatar', $filename);
                     $user = Auth::user();
                     $usuario = Usuario::find($user->id);
-                    $usuario->avatar = $path;
+                    $usuario->avatar = $filename;
                     $usuario->save();
                 }
             }
@@ -177,8 +183,13 @@ class ActualizarDatosController extends Controller
                 if ($request->file('image')->isValid()){
                     
                     $filename = Auth::id().'_'.time().'.'.$request->image->getClientOriginalExtension();
-                    $path = public_path('avatar/'.$filename);
-                    $request->file('image')->move(public_path('avatar'), $filename);
+                    $path = public_path("avatar/".$filename);
+
+                    $file = $request->file('image');
+                    Image::make($file)->fit(144, 144);//->save($path);
+                    $file->move('avatar', $filename);
+
+                    //$request->file('image')->move(public_path('avatar'), $filename);
                     //$request->file('image')->move('avatar', $filename);
                     $user = Auth::user();
                     $usuario = Usuario::find($user->id);
@@ -193,5 +204,10 @@ class ActualizarDatosController extends Controller
 
     }
 
-   
+    public function avatar(Request $request){
+        $user = Auth::user();
+        $usuario = Usuario::find($user->id);
+        return $usuario->avatar;
+    }
+
 }

@@ -47,13 +47,16 @@ class OfertaAlumnoController extends Controller
      */
     public function buscar(Request $request)
     {
-        $pagina           = $request->input('page');
+        //$pagina           = $request->input('page');
         $filas            = $request->input('filas');
+        $nombre           = Libreria::getParam($request->input('nombre'));
+        $fechai           = Libreria::getParam($request->input('fechai'));
+        $fechaf           = Libreria::getParam($request->input('fechaf'));
+        /*
         $entidad          = 'Oferta';
         $nombre           = Libreria::getParam($request->input('nombre'));
         $resultado          = OfertaAlumno::listarOfertas($nombre);
         $lista              = $resultado->get();
-        echo $lista;
         $cabecera       = array();
         $cabecera[]     = array('valor' => '#', 'numero' => '1');
         $cabecera[]     = array('valor' => 'Nombre', 'numero' => '1');
@@ -73,7 +76,8 @@ class OfertaAlumnoController extends Controller
             $request->replace(array('page' => $paginaactual));
             return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
         }
-        return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
+        */
+        return view($this->folderview.'.list')->with(compact('entidad', 'filas','nombre','fechai','fechaf'));
     }
 
     /**

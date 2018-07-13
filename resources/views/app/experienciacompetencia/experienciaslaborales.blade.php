@@ -95,7 +95,7 @@
                                                     </div>
                                             </div>
                                             <div class="col-xs-2">
-                                                <button class='btn btn-xs btn-info' id="btnBuscarExperiencias" style="top: 10px"><i class='glyphicon glyphicon-plus'></i> BUSCAR</button>
+                                                <button class='btn btn-xs btn-info' id="btnBuscarExperiencias" style="margin-top: 15px;"><i class='glyphicon glyphicon-search'></i> BUSCAR</button>
                                             </div>
                                         </div>
                                         <table id="example1" class="table table-bordered table-striped table-condensed table-hover table-sm">

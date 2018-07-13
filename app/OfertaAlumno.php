@@ -58,6 +58,8 @@ class OfertaAlumno extends Model
             $SQLNULL = "IS";
             $SQLVAL = "NULL";
         }
+        echo $SQLNULL.' - '.$SQLVAL;
+        
         $results = Evento::leftjoin('DIRECCION_EVENTO','DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
         ->leftjoin('FACULTAD','FACULTAD.ID','=','DIRECCION_EVENTO.FACULTAD_ID')
         ->leftjoin('ESCUELA','ESCUELA.ID','=','DIRECCION_EVENTO.ESCUELA_ID')
@@ -69,10 +71,16 @@ class OfertaAlumno extends Model
         ->where('EVENTO.OPCIONEVENTO','=','0')
         ->orwhere('FACULTAD.ID','=',$facultad_id)
         ->orwhere('ESCUELA.ID','=',$escuela_id)
-        ->orwhere('ESPECIALIDAD.ID',$SQLNULL,$SQLVAL)
+        ->orwhere('ESPECIALIDAD.ID','=',5)
         ->where('EVENTO.NOMBRE','LIKE','%'.$nombre.'%')
+<<<<<<< HEAD
         ->where('EVENTO.TIPOEVENTO_ID','is','NULL');
+=======
+        ->where('EVENTO.TIPOEVENTO_ID','IS','NULL');
+
+>>>>>>> c0354a71fb55ed169f58eac3b008f6e7a36fa16c
         return $results;
     }
+
 }
 
