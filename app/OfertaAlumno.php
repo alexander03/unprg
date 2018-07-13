@@ -71,7 +71,8 @@ class OfertaAlumno extends Model
         ->orwhere('ESCUELA.ID','=',$escuela_id)
         ->orwhere('ESPECIALIDAD.ID',$SQLNULL,$SQLVAL)
         ->where('EVENTO.NOMBRE','LIKE','%'.$nombre.'%')
-        ->where('EVENTO.TIPOEVENTO_ID','=','NULL');
+        ->where('EVENTO.TIPOEVENTO_ID','is','NULL');
         return $results;
     }
 }
+

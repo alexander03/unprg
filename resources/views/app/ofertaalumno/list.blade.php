@@ -20,9 +20,9 @@ use App\OfertaAlumno;
 		$contador = $inicio + 1;
 		?>
 		@foreach ($lista as $key => $value)
-		<tr 'idEvento'= {{ $value->id }} >
+		<tr 'idEvento'= {{ $value->IDEVENTO }} >
 			<td>{{ $contador }}</td>
-			<td>{{ $value->nombre }}</td>
+			<td>{{ $value->NOMBRE_EVENTO }}</td>
 			<?php
 			$estaRegistrado  =  DB::table('evento_alumno')->where('alumno_id','=', $idAlumno)->where('evento_id','=', $value->evento_id)->count();
 			echo $estaRegistrado;

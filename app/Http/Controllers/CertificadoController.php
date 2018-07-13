@@ -47,7 +47,7 @@ class CertificadoController extends Controller
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Em. Certificadora/Estudios', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '3');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
         $ruta             = $this->rutas;
