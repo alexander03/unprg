@@ -73,8 +73,12 @@ class OfertaAlumno extends Model
         ->orwhere('ESCUELA.ID','=',$escuela_id)
         ->orwhere('ESPECIALIDAD.ID','=',5)
         ->where('EVENTO.NOMBRE','LIKE','%'.$nombre.'%')
+<<<<<<< HEAD
+        ->where('EVENTO.TIPOEVENTO_ID','is','NULL');
+=======
         ->where('EVENTO.TIPOEVENTO_ID','IS','NULL');
 
+>>>>>>> c0354a71fb55ed169f58eac3b008f6e7a36fa16c
         return $results;
     }
     public static function suscribir($oferta_id){
@@ -102,3 +106,4 @@ class OfertaAlumno extends Model
     }
 
 }
+

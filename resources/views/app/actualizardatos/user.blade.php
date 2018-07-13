@@ -8,6 +8,7 @@
 </div>
 <?php
 use Illuminate\Support\Facades\Auth;
+use App\Usuario;
 $user = Auth::user();
 ?>
 <!-- Main content -->
@@ -60,13 +61,13 @@ $user = Auth::user();
 								{!! Form::date('fechanacimiento', null, array('class' => 'form-control input-xs', 'id' => 'fechanacimiento', 'placeholder' => 'fecha nacimiento')) !!}
 							</div>
 							<?php
-							if($alumno != null){
-								echo "<input type='hidden' id='fechaNac' value='".Date::parse($alumno->fechanacimiento )->format('yyyy-MM-dd')."'>";
+								if($alumno != null){
+									echo "<input type='hidden' id='fechaNac' value='".Date::parse($alumno->fechanacimiento )->format('d/m/Y')."'>";
 
-							}else{
-							echo "<input type='hidden' id='fechaNac' value=''>";
-								
-							}
+								}else{
+								echo "<input type='hidden' id='fechaNac' value=''>";
+									
+								}
 							?>
 						</div>
 
@@ -175,13 +176,6 @@ $user = Auth::user();
 </div>
 
 <script>
-	/*$('#btnGuardar').click(function(){
-		var form = $('#formMantenimientoAlumno')[0];
-		// Create an FormData object
-		var formulario = new FormData(form);
-		var data  = procesarAjax(formulario);
-	});*/
-
 	function actualizardatos (entidad, idboton) {
 		var idformulario = IDFORMMANTENIMIENTO + entidad;
 		//FORM
@@ -229,6 +223,14 @@ $user = Auth::user();
 						var elementoValidado = $(cadena);
 						elementoValidado.parent().removeClass('has-error');
 					});
+					//Actualizar imagen -- tengo error no convierte de Object a string
+					$nameavatar = obtenerAvatar().toString();
+					console.log($nameavatar);
+					var avatar = '<img src="avatar/'+ $nameavatar+'" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">';
+					console.log('{!! Usuario::find($user->id)->avatar !!}');
+					var divAvatar = $('#avatar');
+					divAvatar.html(avatar);
+					divAvatar.show('slow');
 				} else {
 					mostrarErrores(respuesta, idformulario, entidad);
 				}
@@ -254,6 +256,28 @@ $user = Auth::user();
 			timeout: 600000
 		});
 		return respuesta;
+	}
+
+	function obtenerAvatar(){
+		var accion     = '{{ url("/actualizardatosavatar") }}';
+		var respuesta  = $.ajax({
+			url : accion,
+			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+			type: 'POST'
+		});
+		return respuesta;
+	}
+
+	$('.input-number').on('input', function () { 
+    	this.value = this.value.replace(/[^0-9]/g,'');
+	});
+
+	if($('#fechaNac').val() !== ""){
+		// DD/MM/YYYY
+		var valoresFecha = $('#fechaNac').val().split('/');
+		//yyy/MM/DD
+		var fecha = valoresFecha[2] + "-" + valoresFecha[1] + "-" + valoresFecha[0];
+		$('#fechanacimiento').val(fecha);
 	}
 
 	/*

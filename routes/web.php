@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('updatepassword', 'UpdatePasswordController', array('except' => array('show')));
 
     /*ACTUALIZAR DATOS*/
+    Route::post('actualizardatosavatar','ActualizarDatosController@avatar');
     Route::resource('actualizardatos', 'ActualizarDatosController', array('except' => array('show')));
 
 

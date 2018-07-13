@@ -20,6 +20,20 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $filas;
 		$inicio = 0;
 		$contador = $inicio + 1;
+<<<<<<< HEAD
+		?>
+		@foreach ($lista as $key => $value)
+		<tr 'idEvento'= {{ $value->IDEVENTO }} >
+			<td>{{ $contador }}</td>
+			<td>{{ $value->NOMBRE_EVENTO }}</td>
+			<?php
+			$estaRegistrado  =  DB::table('evento_alumno')->where('alumno_id','=', $idAlumno)->where('evento_id','=', $value->evento_id)->count();
+			echo $estaRegistrado;
+			if($estaRegistrado > 0 ){
+			?>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Desuscribirse', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
+			<?php
+=======
 		$contadortemp = 0;
 
 		$classbtn = '';
@@ -37,6 +51,7 @@ use Illuminate\Support\Facades\DB;
 			if($r->id_validador != null){
 				$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 				$txtbtn = 'SALIR';
+>>>>>>> c0354a71fb55ed169f58eac3b008f6e7a36fa16c
 			}else{
 				$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 				$txtbtn = 'POSTULAR';
