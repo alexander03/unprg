@@ -16,11 +16,10 @@ use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-
 class EventoAlumnoController extends Controller
 {
     protected $folderview      = 'app.eventoalumno';
-    protected $tituloAdmin     = 'Evento Alumno';
+    protected $tituloAdmin     = 'Oferta Alumno';
     protected $tituloRegistrar = 'Registrar Evento alumno';
     protected $tituloModificar = 'Confirmar suscripcion!';
     protected $tituloEliminar  = 'Confirmar suscripcion!';
@@ -46,34 +45,37 @@ class EventoAlumnoController extends Controller
      * 
      * @return Response 
      */
+    public function suscribir(Request $request){
+        $res = '';
+        $error = DB::transaction(function() use($request,&$res){
+            $eventoalumno = new EventoALumno();
+            $eventoalumno->alumno_id = EventoALumno::getIdALumno();
+            $oferta_id           = Libreria::getParam($request->input('id'));
+            $eventoalumno->evento_id = $evento_id;
+            $eventoalumno->save();
+            $res='OK';
+        });
+        return response()->json($res);
+    }
+     
+    public function dessuscribir(Request $request){
+        $res = '';
+        $evento_id           = Libreria::getParam($request->input('id'));
+        //OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('ALUMNO_ID','=',OfertaALumno::getIdALumno())->delete();
+        DB::delete('DELETE FROM EVENTO_ALUMNO WHERE ALUMNO_ID='.EventoALumno::getIdALumno().' AND EVENTO_ID = '.$evento_id);
+        $res='OK';
+        return response()->json($res);
+    }
+
     public function buscar(Request $request)
     {
-        $pagina           = $request->input('page');
-        $filas            = $request->input('filas');
+        //$pagina           = $request->input('page');
         $entidad          = 'Evento';
+        $filas            = $request->input('filas');
         $nombre           = Libreria::getParam($request->input('nombre'));
-        $resultado          = EventoAlumno::listar($nombre);
-        $lista              = $resultado->get();
-        $cabecera       = array();
-        $cabecera[]     = array('valor' => '#', 'numero' => '1');
-        $cabecera[]     = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]     = array('valor' => 'Operaciones', 'numero' => '2');
-        
-        $titulo_modificar = $this->tituloModificar;
-        $titulo_eliminar  = $this->tituloEliminar;
-        $ruta             = $this->rutas;
-        if (count($lista) > 0) {
-            $clsLibreria     = new Libreria();
-            $paramPaginacion = $clsLibreria->generarPaginacion($lista, $pagina, $filas, $entidad);
-            $paginacion      = $paramPaginacion['cadenapaginacion'];
-            $inicio          = $paramPaginacion['inicio'];
-            $fin             = $paramPaginacion['fin'];
-            $paginaactual    = $paramPaginacion['nuevapagina'];
-            $lista           = $resultado->paginate($filas);
-            $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
-        }
-        return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
+        $fechai           = Libreria::getParam($request->input('fechai'));
+        $fechaf           = Libreria::getParam($request->input('fechaf'));
+        return view($this->folderview.'.list')->with(compact('entidad', 'filas','nombre','fechai','fechaf','entidad'));
     }
 
     /**
@@ -111,9 +113,9 @@ class EventoAlumnoController extends Controller
 
     public function edit($id, Request $request)
     {
-        $title1 = "¿Esta seguro de  Suscribirse de el evento?";
-        $listar = "NO";
-        $modelo   = 'Evento Alumno';
+        $title1 = "¿Esta seguro de  Suscribirse a la evento?";
+        $listar = "SI";
+        $modelo   = 'EventoAlumno';
         $entidad  = 'EventoAlumno';
         $formData       = array('eventoalumno.update', $id);
         $formData = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
@@ -128,18 +130,12 @@ class EventoAlumnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    
     public function update(Request $request, $id)
     {
-        $reglas = array(
-            );
-
-        $validacion = Validator::make($request->all(),$reglas);
-        if ($validacion->fails()) {
-            return $validacion->messages()->toJson();
-        } 
         
         $error = DB::transaction(function() use($request, $id){
-            $eventoalumno = new EventoAlumno();
+            $eventoalumno = new EventoALumno();
             $eventoalumno->alumno_id = EventoALumno::getIdALumno();
             $eventoalumno->evento_id = $id;
             $eventoalumno->save();
@@ -155,11 +151,12 @@ class EventoAlumnoController extends Controller
      */
     public function destroy($id)
     {
-        $eventoalumno_id = DB::table('Evento_ALumno')->where('evento_id', $id)->value('id');
-        $error = DB::transaction(function() use($eventoalumno_id){
-            $eventoalumno = EventoAlumno::find($eventoalumno_id);
-            $eventoalumno->delete();
-        });
+        // $ofertaalumno_id = DB::table('Evento_ALumno')->where('evento_id', $id)->value('id');
+        // $error = DB::transaction(function() use($ofertaalumno_id){
+        //     $ofertaalumno = OfertaAlumno::find($ofertaalumno_id);
+        //     $ofertaalumno->delete();
+        // });
+        $error = EventoAlumno::where('EVENTO_ID','=',$evento_id)->where('EVENTO_ID','=',EventoALumno::getIdALumno())->delete();
         return is_null($error) ? "OK" : $error;
     }
 
@@ -171,13 +168,13 @@ class EventoAlumnoController extends Controller
      */
     public function eliminar($id, $listarLuego)
     {
-        $listar = "NO";
-        $title1 ="¿Esta seguro de  Desuscribirse de el evento?";
-        $modelo   = 'Evento Alumno';
+        $listar = "SI";
+        $title1 ="¿Esta seguro de  Desuscribirse a la evento?";
+        $modelo   = 'EventoAlumno';
         $entidad  = 'EventoAlumno';
         $formData       = array('eventoalumno.destroy', $id);
         $formData = array('route' => $formData, 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
-        $boton    = 'Desuscribirse';
-        return view($this->folderview.'.mant')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar', 'title1'));
+        $nombreBtn    = 'POSTULAR';
+        return view($this->folderview.'.mant')->with(compact('modelo', 'formData', 'entidad', 'nombreBtn', 'listar', 'title1'));
     }
 }

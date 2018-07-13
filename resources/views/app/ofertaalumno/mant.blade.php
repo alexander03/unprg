@@ -14,4 +14,6 @@
 		init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
 		configurarAnchoModal('350');
 	}); 
+
 </script>
+

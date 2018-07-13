@@ -59,6 +59,24 @@ class Evento extends Model
         			
     }
 
+    public function scopelistarsuscritos($query, $nombre, $empresa_id)
+    {
+        return $query->where(function($subquery) use($nombre)
+		            {
+		            	if (!is_null($nombre)) {
+		            		$subquery->where('nombre', 'LIKE', '%'.$nombre.'%');
+		            	}
+		            })->where(function($subquery) use($empresa_id){
+                        if (!is_null($empresa_id)) {
+		            		$subquery->where('empresa_id', '=', $empresa_id);
+		            	}
+                    })->where(function($subquery) {
+		            	$subquery->where('tipoevento_id', '!=', null);
+                    })
+        			->orderBy('nombre', 'ASC');
+        			
+    }
+
     public static function listarDetalleEvento($evento_id){
         $results = Direccion_evento::leftjoin('FACULTAD','FACULTAD.ID','DIRECCION_EVENTO.FACULTAD_ID')
         ->leftjoin('ESCUELA','ESCUELA.ID','DIRECCION_EVENTO.ESCUELA_ID')

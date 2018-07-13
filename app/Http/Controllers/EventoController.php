@@ -93,8 +93,8 @@ class EventoController extends Controller
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         $cboFacultad = [''=>'Todos'];// + Facultad::pluck('nombre', 'id')->all();
-        $cboEscuela = [''=>'Todos']; //+ Escuela::pluck('nombre', 'id')->all();
-        $cboEspecialidad = [''=>'Todos']; //+ Especialidad::pluck('nombre', 'id')->all();
+        $cboEscuela = array('' => 'Seleccione'); //+ Escuela::pluck('nombre', 'id')->all();
+        $cboEspecialidad = array('' => 'Seleccione'); //+ Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento    = array('0'=>'Libre','1' => 'Con restricciones');
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
     }
@@ -310,7 +310,10 @@ class EventoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $evento = Evento::find($id);
+            
             $evento->delete();
+            Evento::eliminarDetalle($id);
+            Evento::eliminarSuscriptores($id);
         });
         return is_null($error) ? "OK" : $error;
     }
