@@ -35,8 +35,8 @@ if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3
         <div class="clearfix"></div>
     </div>
 
-    <div class="user-detail">
-        <div class="dropup" style ="text-align : center">
+    <div class="user-detail" style ="text-align : center">
+        <div class="dropup" style="width: 100%;">
             <a href="" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
                 <div id="avatar">
                 <img src="avatar\{!! $usuario->avatar !!}" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">

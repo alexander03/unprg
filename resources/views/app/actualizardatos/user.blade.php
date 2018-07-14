@@ -224,10 +224,22 @@ $user = Auth::user();
 						elementoValidado.parent().removeClass('has-error');
 					});
 					//Actualizar imagen -- tengo error no convierte de Object a string
-					$nameavatar = obtenerAvatar().toString();
-					console.log($nameavatar);
-					var avatar = '<img src="avatar/'+ $nameavatar+'" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">';
-					console.log('{!! Usuario::find($user->id)->avatar !!}');
+					
+					var accion     = '{{ url("/actualizardatosavatar") }}';
+					$.ajax({
+						url : accion,
+						headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+						type: 'POST',
+						success: function (JSONRESPONSE) {
+							console.log(JSONRESPONSE);
+							var avatar = '<img src="avatar/'+ JSONRESPONSE +'" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">';
+							var divAvatar = $('#avatar');
+							divAvatar.html(avatar);
+							divAvatar.show('slow');
+						},
+					});
+
+					var avatar = '<img src="avatar/'+  +'" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">';
 					var divAvatar = $('#avatar');
 					divAvatar.html(avatar);
 					divAvatar.show('slow');
