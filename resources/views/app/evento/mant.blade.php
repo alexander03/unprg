@@ -105,7 +105,6 @@ $(document).on('click', '.borrar', function (event) {
 				<?php
 				if($evento != null){
 					echo "<input type='hidden' id='fechaI' value='".Date::parse($evento->fechai )->format('d/m/Y')."'>";
-
 				}else{
 				echo "<input type='hidden' id='fechaI' value=''>";
 					
@@ -211,5 +210,10 @@ if($('#fechaF').val() !== ""){
 		//yyy/MM/DD
 		var fecha = valoresFecha[2] + "-" + valoresFecha[1] + "-" + valoresFecha[0];
 		$('#fechaFin').val(fecha);
+}
+if($('#opcionevento').val() == 0){
+	$('.visualisar').attr('disabled','disabled');
+}else{
+	$('.visualisar').removeAttr('disabled');
 }
 </script>

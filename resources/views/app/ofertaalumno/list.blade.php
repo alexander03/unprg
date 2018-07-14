@@ -1,6 +1,6 @@
 <?php
 use App\OfertaAlumno;
-use App\Evento;
+use App\Oferta;
 use Illuminate\Support\Facades\DB;
 ?>
 
@@ -8,23 +8,25 @@ use Illuminate\Support\Facades\DB;
 	<thead>
 		<tr>
 			<th style='width: 5%' class='text-center'>#</th>
-			<th>EVENTO</th>
+			<th>OFERTA</th>
 			<th style='width: 15%' class='text-center'>FECHA APERTURA</th>
 			<th style='width: 15%' class='text-center'>FECHA CESE</th>
 			<th style='width: 10%'>OPERACIONES</th>
 		</tr>
 	</thead>
-	<tbody>
+
+	<tbody id='registrostabla'>
 		<?php
 		$cant_filas = $filas;
 		$inicio = 0;
 		$contador = $inicio + 1;
+
 		$contadortemp = 0;
 
 		$classbtn = '';
 		$txtbtn = '';
 
-		$alumno_id        = OfertaALumno::getIdALumno();
+		$alumno_id = OfertaALumno::getIdALumno();
         $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
         $facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
@@ -34,9 +36,9 @@ use Illuminate\Support\Facades\DB;
 			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
         foreach ($result as $r) {
 			if($r->id_validador != null){
-				//SI ESTA SUSCRITO
 				$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 				$txtbtn = 'SALIR';
+
 			}else{
 				$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 				$txtbtn = 'POSTULAR';
@@ -55,7 +57,6 @@ use Illuminate\Support\Facades\DB;
 			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				if($r->id_validador != null){
-					//SI ESTA SUSCRITO
 					$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 					$txtbtn = 'SALIR';
 				}else{
@@ -78,7 +79,6 @@ use Illuminate\Support\Facades\DB;
 			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				if($r->id_validador != null){
-					//SI ESTA SUSCRITO
 					$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 					$txtbtn = 'SALIR';
 				}else{
@@ -98,10 +98,9 @@ use Illuminate\Support\Facades\DB;
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.ESPECIALIDAD_ID = ".$especialidad_id." AND E.TIPOEVENTO_ID IS NULL 
-			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd')");
+			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				if($r->id_validador != null){
-					//SI ESTA SUSCRITO
 					$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 					$txtbtn = 'SALIR';
 				}else{
@@ -113,12 +112,64 @@ use Illuminate\Support\Facades\DB;
 				$contadortemp++;
 			}
 		}
-		
-		
-
 		?>
 		
 	</tbody>
 	<tfoot>
 	</tfoot>
 </table>
+
+<script>
+
+	 $(document).ready(function() {
+
+		 $('.btn-sus').each(function (){
+			 $(this).click(function (){
+				 procesarAjax('suscribir','registrostabla',$(this).attr('idevento'));
+			 });
+		 });
+
+		 $('.btn-des').each(function (){
+			 $(this).click(function (){
+				 procesarAjax('dessuscribir','registrostabla',$(this).attr('idevento'));
+			 });
+		 });
+		 
+		 
+	 });
+
+	function procesarAjax(accion, idelementCargando, id){
+        var route = 'ofertaalumno/'+accion;
+        route += '?id='+id;
+        console.log(route);
+        $.ajax({
+			url: route,
+			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+			type: 'GET',
+			beforeSend: function(){
+                var tempCargando;
+				tempCargando= "<tr><td colspan='5'>"+imgCargando()+"</td></tr>";                
+				$('#'+ idelementCargando).html(tempCargando);
+	        },
+	        success: function(JSONRESPONSE){
+                $('#'+ idelementCargando).html('');
+				console.log(JSONRESPONSE);
+				if(JSONRESPONSE.toLowerCase()==="ok"){
+					if(accion.toLowerCase()==="suscribir"){
+						mostrarMensaje('Suscripción exitosa!','OK');
+					}else{
+						mostrarMensaje('Cambios guardados!','OK');
+					}
+					buscar('{{ $entidad }}');
+				}else{
+					mostrarMensaje('Error interno en el Servidor!','ERROR');
+				}
+            },
+            error: function () {
+                $('#'+ idelementCargando).html('');
+                /*MOSTRAMOS MENSAJE ERROR SERVIDOR*/
+                mostrarMensaje('Error interno en el Servidor!','ERROR');
+            }
+        });
+    }
+</script>

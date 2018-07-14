@@ -34,7 +34,7 @@ class Experiencia_CompetenciaController extends Controller
         $codigo = Libreria::getParam($request->input('codigo'));
         $nombre = Libreria::getParam($request->input('nombre'));
         $escuela_id = Libreria::getParam($request->input('escuela1_id'));
-        $resultado = Alumno::listar($codigo, $nombre, $escuela_id);
+        $resultado = Alumno::listar($codigo, $nombre, $escuela_id, null);
         $lista = $resultado->get();
         $cabecera = array();
         $cabecera[] = array('valor' => '#', 'numero' => '1');

@@ -58,7 +58,7 @@ class OfertaAlumno extends Model
             $SQLNULL = "IS";
             $SQLVAL = "NULL";
         }
-        echo $SQLNULL.' - '.$SQLVAL;
+        
         
         $results = Evento::leftjoin('DIRECCION_EVENTO','DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
         ->leftjoin('FACULTAD','FACULTAD.ID','=','DIRECCION_EVENTO.FACULTAD_ID')
@@ -74,8 +74,31 @@ class OfertaAlumno extends Model
         ->orwhere('ESPECIALIDAD.ID','=',5)
         ->where('EVENTO.NOMBRE','LIKE','%'.$nombre.'%')
         ->where('EVENTO.TIPOEVENTO_ID','IS','NULL');
-
         return $results;
+    }
+    public static function suscribir($oferta_id){
+        $error = DB::transaction(function() use($request, $id){
+            $ofertaalumno = new OfertaALumno();
+            $ofertaalumno->alumno_id = OfertaALumno::getIdALumno();
+            $ofertaalumno->evento_id = $oferta_id;
+            $ofertaalumno->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+     
+    public static function dessuscribir($oferta_id){
+        OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('EVENTO_ID','=',OfertaALumno::getIdALumno())->delete();
+    }
+
+    public function scopelistarSuscriptores($query, $id)
+    {
+        return $query->where(function($subquery) use($id)
+		            {
+		            	if (!is_null($id)) {
+		            		$subquery->where('evento_id', '=', $id);
+		            	}
+		            });
     }
 
 }
+

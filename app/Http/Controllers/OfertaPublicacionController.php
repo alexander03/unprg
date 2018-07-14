@@ -1,17 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
 use Validator;
 use App\Http\Requests;
 use App\Oferta;
-use App\Direccion_evento;
+use App\Direccion_oferta;
 use App\Empresa;
 use App\Alumno;
 use App\Tipoevento;
-use App\EventoALumno;
+use App\OfertaALumno;
 use App\Facultad;
 use App\Escuela;
 use App\Especialidad;
@@ -23,7 +21,7 @@ class OfertaPublicacionController extends Controller
 {
     protected $folderview      = 'app.ofertapublicacion';
     protected $tituloAdmin     = 'Oferta Publicacion';
-    protected $tituloListar = 'Evento';
+    protected $tituloListar = 'Oferta';
     protected $rutas           = array(
             'listsuscriptores' => 'ofertapublicacion.listsuscriptores',
             'search' => 'ofertapublicacion.buscar',
@@ -50,15 +48,16 @@ class OfertaPublicacionController extends Controller
     {
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
-        $entidad          = 'Evento';
+        $entidad          = 'Oferta';
         $nombre      = Libreria::getParam($request->input('nombre'));
         $empresa_id      = Oferta::getIdEmpresa();
         //$tipoevento_id      = Libreria::getParam($request->input('tipoevento_id'));
-        $resultado        = Oferta::listar($nombre, $empresa_id);
+        $resultado        = Oferta::listarsuscritos($nombre, $empresa_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
+        // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Cantidad Suscritos', 'numero' => '1');
         // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '1');
@@ -86,7 +85,7 @@ class OfertaPublicacionController extends Controller
      */
     public function index()
     {
-        $entidad          = 'Evento';
+        $entidad          = 'Oferta';
         $title            = $this->tituloAdmin;
         $tituloListar = $this->tituloListar;
         $ruta             = $this->rutas;
@@ -113,7 +112,7 @@ class OfertaPublicacionController extends Controller
      */
     public function listsuscriptores($id, Request $request)
     {
-        $listarSuscriptores        = EventoAlumno::listarSuscriptores($id);
+        $listarSuscriptores        = OfertaAlumno::listarSuscriptores($id);
         $lista           = $listarSuscriptores->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -129,4 +128,5 @@ class OfertaPublicacionController extends Controller
         return view($this->folderview.'.suscriptores')->with(compact('lista', 'entidad', 'id', 'ruta'));
 
     }
+
 }
