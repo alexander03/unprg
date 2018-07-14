@@ -50,7 +50,7 @@ class EventoAlumnoController extends Controller
         $error = DB::transaction(function() use($request,&$res){
             $eventoalumno = new EventoALumno();
             $eventoalumno->alumno_id = EventoALumno::getIdALumno();
-            $oferta_id           = Libreria::getParam($request->input('id'));
+            $evento_id           = Libreria::getParam($request->input('id'));
             $eventoalumno->evento_id = $evento_id;
             $eventoalumno->save();
             $res='OK';

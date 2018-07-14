@@ -10,6 +10,7 @@ use App\Empresa;
 use App\Alumno;
 use App\Tipoevento;
 use App\OfertaALumno;
+use App\EventoALumno;
 use App\Facultad;
 use App\Escuela;
 use App\Especialidad;
@@ -112,7 +113,7 @@ class OfertaPublicacionController extends Controller
      */
     public function listsuscriptores($id, Request $request)
     {
-        $listarSuscriptores        = OfertaAlumno::listarSuscriptores($id);
+        $listarSuscriptores        = EventoAlumno::listarSuscriptores($id);
         $lista           = $listarSuscriptores->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');

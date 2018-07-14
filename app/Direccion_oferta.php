@@ -15,7 +15,7 @@ class Direccion_oferta extends Model
     {
         return $query->where(function($subquery) use($oferta_id)
         {
-            if (!is_null($evento_id)) {
+            if (!is_null($oferta_id)) {
                 $subquery->where('evento_id', 'LIKE', '%'.$oferta_id.'%');
             }
         })

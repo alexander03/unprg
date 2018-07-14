@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Oferta;
 class OfertaAlumno extends Model
 {
     use SoftDeletes;
@@ -60,7 +61,7 @@ class OfertaAlumno extends Model
         }
         
         
-        $results = Evento::leftjoin('DIRECCION_EVENTO','DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
+        $results = Oferta::leftjoin('DIRECCION_EVENTO','DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
         ->leftjoin('FACULTAD','FACULTAD.ID','=','DIRECCION_EVENTO.FACULTAD_ID')
         ->leftjoin('ESCUELA','ESCUELA.ID','=','DIRECCION_EVENTO.ESCUELA_ID')
         ->leftjoin('ESPECIALIDAD','ESPECIALIDAD.ID','=','DIRECCION_EVENTO.ESPECIALIDAD_ID')
