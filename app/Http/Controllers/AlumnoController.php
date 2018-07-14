@@ -192,7 +192,7 @@ class AlumnoController extends Controller
         $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         //$cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') + Especialidad::where('escuela_id', '=', $alumno->escuela_id)->pluck('nombre', 'id')->all();
-        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado');
+        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado', 'GR' => 'Graduado');
         $formData       = array('alumno.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
