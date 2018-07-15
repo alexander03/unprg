@@ -220,6 +220,11 @@ Route::group(['middleware' => 'auth'], function () {
     
     /* VER RESPUESTAS DE ENCUESTA */
     Route::get('alumnoencuesta/respuestasencuesta', 'AlumnoEncuestaController@respuestasencuesta')->name('alumnoencuesta.respuestasencuesta');
+
+    /* EMPRESA-ENCUESTAS */
+    Route::resource('empresaencuesta', 'EmpresaEncuestaController', array('except' => array('show')));
+    Route::post('empresaencuesta/buscar', 'EmpresaEncuestaController@buscar')->name('empresaencuesta.buscar');
+    Route::get('empresaencuesta/respuestasencuesta', 'EmpresaEncuestaController@respuestasencuesta')->name('empresaencuesta.respuestasencuesta');
  
     /*ALUMNO*/
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');

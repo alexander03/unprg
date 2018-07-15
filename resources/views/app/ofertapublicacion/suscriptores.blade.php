@@ -4,7 +4,7 @@
 		<div id="carousel-ejemplo" class="carousel slide" data-ride="carousel">
   				<div class="carousel-inner" role="listbox">
     				<div class="item active">
-      					<!-- ppppp -->
+      				
 						<div class="row">
 						    <div class="col-sm-12">
 						        <div class="card-box table-responsive">
