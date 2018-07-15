@@ -227,6 +227,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('empresaencuesta/respuestasencuesta', 'EmpresaEncuestaController@respuestasencuesta')->name('empresaencuesta.respuestasencuesta');
  
     /*ALUMNO*/
+    Route::post('alumno/restablecer/{id}', 'AlumnoController@restablecerPassword')->name('alumno.restablecer');
+    Route::get('alumno/password/{id}/{listarluego}', 'AlumnoController@password')->name('alumno.password');
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
     Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
     Route::resource('alumno', 'AlumnoController', array('except' => array('show')));

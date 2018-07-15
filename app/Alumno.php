@@ -64,5 +64,5 @@ class Alumno extends Model
     public function especialidad()
 	{
 		return $this->belongsTo('App\Especialidad', 'especialidad_id');
-	}
+    }
 }
