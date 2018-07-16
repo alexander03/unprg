@@ -19,6 +19,7 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->nombre }}</td>
+			<td>{{ $value->detalle }}</td>
 			<td>{{ Date::parse($value->fechai)->format('d/m/y') }}</td>
 			<td>{{ Date::parse($value->fechaf)->format('d/m/Y') }}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-pencil"></div> Editar', array('onclick' => 'modal (\''.URL::route($ruta["edit"], array($value->id, 'listar'=>'SI')).'\', \''.$titulo_modificar.'\', this);', 'class' => 'btn btn-xs btn-warning')) !!}</td>
