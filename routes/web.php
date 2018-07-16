@@ -233,6 +233,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
     Route::resource('alumno', 'AlumnoController', array('except' => array('show')));
     Route::get('alumno/cargarselect/{idselect}', 'AlumnoController@cargarselect')->name('alumno.cargarselect');
+    Route::get('alumno/cambiarsituacion', 'AlumnoController@cambiarsituacion')->name('alumno.cambiarsituacion');
 
     /*COMPETENCIA*/
     Route::post('competencia/buscar', 'CompetenciaController@buscar')->name('competencia.buscar');
