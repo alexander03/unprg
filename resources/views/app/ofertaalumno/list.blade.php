@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\DB;
         $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
         $facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
-		$result = DB::select("SELECT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+		$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 		     LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 WHERE E.OPCIONEVENTO = 0 AND ROWNUM <= ".$cant_filas."  
 			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE, E.DETALLE,EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE,EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.FACULTAD_ID = ".$facultad_id." AND E.TIPOEVENTO_ID IS NULL 
@@ -73,7 +73,7 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.ESCUELA_ID = ".$escuela_id." AND E.TIPOEVENTO_ID IS NULL 
@@ -95,7 +95,7 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.ESPECIALIDAD_ID = ".$especialidad_id." AND E.TIPOEVENTO_ID IS NULL 
