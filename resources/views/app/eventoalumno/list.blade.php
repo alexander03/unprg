@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 		<tr>
 			<th style='width: 5%' class='text-center'>#</th>
 			<th>EVENTO</th>
+			<th>DESCRIPCIÓN</th>
 			<th style='width: 15%' class='text-center'>FECHA APERTURA</th>
 			<th style='width: 15%' class='text-center'>FECHA CESE</th>
 			<th style='width: 10%'>OPERACIONES</th>
@@ -41,7 +42,7 @@ use Illuminate\Support\Facades\DB;
 				$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 				$txtbtn = 'POSTULAR';
 			}
-			echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+			echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 			$contador++;
 			$contadortemp++;
 		}
@@ -61,7 +62,7 @@ use Illuminate\Support\Facades\DB;
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
@@ -83,7 +84,7 @@ use Illuminate\Support\Facades\DB;
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
@@ -105,7 +106,7 @@ use Illuminate\Support\Facades\DB;
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
