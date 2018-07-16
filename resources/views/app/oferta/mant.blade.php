@@ -93,9 +93,13 @@ use App\Especialidad;
 	<fieldset class="col-12">
 		<legend>Datos Oferta</legend>
 		<div class="panel panel-default" style="margin-bottom: 10px;">
-				<div class="form-group col-xs-8">
-					{!! Form::label('nombre', 'Nombre:', array('class' => 'col-lg-3 col-md-3 col-sm-3 control-label')) !!}
+				<div class="form-group col-xs-12">
+					{!! Form::label('nombre', 'Nombre:', array('class' => '')) !!}
 					{!! Form::text('nombre', null, array('class' => 'form-control input-xs', 'id' => 'nombre', 'placeholder' => 'Ingrese nombre')) !!}
+				</div>
+				<div class="form-group col-xs-12">
+					{!! Form::label('detalle', 'Descripción:', array('class' => '')) !!}
+					{!! Form::text('detalle', null, array('class' => 'form-control input-sm', 'id' => 'detalle', 'placeholder' => 'Ingrese descripción')) !!}
 				</div>
 				<div class="form-group col-xs-6">
 					{!! Form::label('fechaInicio', 'Fecha Inicio:', array('class' => '')) !!}
