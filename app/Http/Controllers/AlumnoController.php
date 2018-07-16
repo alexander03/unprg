@@ -75,6 +75,7 @@ class AlumnoController extends Controller
         $titulo_eliminar  = $this->tituloEliminar;
         $titulo_password  = $this->tituloPassword;
         $ruta             = $this->rutas;
+        $cboSituacion     = array('ES'=>'Estudiante','EG' => 'Egresado', 'GR' => 'Graduado');
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
             $paramPaginacion = $clsLibreria->generarPaginacion($lista, $pagina, $filas, $entidad);
@@ -84,9 +85,9 @@ class AlumnoController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_password' , 'titulo_eliminar', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_password' , 'titulo_eliminar', 'ruta', 'cboSituacion'));
         }
-        return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
+        return view($this->folderview.'.list')->with(compact('lista', 'entidad', 'cboSituacion'));
     }
 
     /**
@@ -354,5 +355,13 @@ class AlumnoController extends Controller
         $retorno .= '</select></div>';
 
         echo $retorno;
+    }
+    
+    public function cambiarsituacion(Request $request) {
+        $idalumno          = $request->get('idalumno');
+        $situacion         = $request->get('situacion');
+        $alumno            = Alumno::find($idalumno);
+        $alumno->situacion = $situacion;
+        $alumno->save();
     }
 }
