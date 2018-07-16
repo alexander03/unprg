@@ -19,6 +19,7 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->nombre }}</td>
+			<td>{{ $value->detalle }}</td>
 			<td>{{ $value->Tipoevento->nombre}}</td>
 			<td>
 			<?php
