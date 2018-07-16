@@ -97,6 +97,10 @@ $(document).on('click', '.borrar', function (event) {
 					{!! Form::label('tipoevento_id', 'Tipo evento:', array('class' => '')) !!}
 					{!! Form::select('tipoevento_id', $cboTipoevento, null, array('class' => 'form-control input-sm opOferte', 'id' => 'tipoevento_id')) !!}
 				</div>
+				<div class="form-group col-xs-12">
+					{!! Form::label('detalle', 'Descripción:', array('class' => '')) !!}
+					{!! Form::text('detalle', null, array('class' => 'form-control input-sm', 'id' => 'detalle', 'placeholder' => 'Ingrese descripción')) !!}
+				</div>
 				<div class="form-group col-xs-6">
 					{!! Form::label('fechaInicio', 'Fecha Inicio:', array('class' => '')) !!}
 					{!! Form::date('fechaInicio', null, array('class' => 'form-control input-xs', 'id' => 'fechaInicio', 'placeholder' => 'fecha inicio')) !!}
