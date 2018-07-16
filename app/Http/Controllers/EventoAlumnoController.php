@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 class EventoAlumnoController extends Controller
 {
     protected $folderview      = 'app.eventoalumno';
-    protected $tituloAdmin     = 'Oferta Alumno';
+    protected $tituloAdmin     = 'Evento Alumno';
     protected $tituloRegistrar = 'Registrar Evento alumno';
     protected $tituloModificar = 'Confirmar suscripcion!';
     protected $tituloEliminar  = 'Confirmar suscripcion!';
