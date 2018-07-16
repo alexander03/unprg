@@ -147,7 +147,7 @@ use Illuminate\Support\Facades\DB;
 			type: 'GET',
 			beforeSend: function(){
                 var tempCargando;
-				tempCargando= "<tr><td colspan='5'>"+imgCargando()+"</td></tr>";                
+				tempCargando= "<tr><td colspan='6'>"+imgCargando()+"</td></tr>";                
 				$('#'+ idelementCargando).html(tempCargando);
 	        },
 	        success: function(JSONRESPONSE){
