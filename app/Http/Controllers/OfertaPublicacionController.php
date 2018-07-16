@@ -58,6 +58,7 @@ class OfertaPublicacionController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Cantidad Suscritos', 'numero' => '1');
         // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
