@@ -45,39 +45,37 @@ class OfertaAlumnoController extends Controller
      * 
      * @return Response 
      */
+    public function suscribir(Request $request){
+        $res = '';
+        $error = DB::transaction(function() use($request,&$res){
+            $ofertaalumno = new OfertaALumno();
+            $ofertaalumno->alumno_id = OfertaALumno::getIdALumno();
+            $oferta_id           = Libreria::getParam($request->input('id'));
+            $ofertaalumno->evento_id = $oferta_id;
+            $ofertaalumno->save();
+            $res='OK';
+        });
+        return response()->json($res);
+    }
+     
+    public function dessuscribir(Request $request){
+        $res = '';
+        $oferta_id           = Libreria::getParam($request->input('id'));
+        //OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('ALUMNO_ID','=',OfertaALumno::getIdALumno())->delete();
+        DB::delete('DELETE FROM EVENTO_ALUMNO WHERE ALUMNO_ID='.OfertaALumno::getIdALumno().' AND EVENTO_ID = '.$oferta_id);
+        $res='OK';
+        return response()->json($res);
+    }
+
     public function buscar(Request $request)
     {
         //$pagina           = $request->input('page');
+        $entidad          = 'Oferta';
         $filas            = $request->input('filas');
         $nombre           = Libreria::getParam($request->input('nombre'));
         $fechai           = Libreria::getParam($request->input('fechai'));
         $fechaf           = Libreria::getParam($request->input('fechaf'));
-        /*
-        $entidad          = 'Oferta';
-        $nombre           = Libreria::getParam($request->input('nombre'));
-        $resultado          = OfertaAlumno::listarOfertas($nombre);
-        $lista              = $resultado->get();
-        $cabecera       = array();
-        $cabecera[]     = array('valor' => '#', 'numero' => '1');
-        $cabecera[]     = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]     = array('valor' => 'Operaciones', 'numero' => '1');
-        
-        $titulo_modificar = $this->tituloModificar;
-        $titulo_eliminar  = $this->tituloEliminar;
-        $ruta             = $this->rutas;
-        if (count($lista) > 0) {
-            $clsLibreria     = new Libreria();
-            $paramPaginacion = $clsLibreria->generarPaginacion($lista, $pagina, $filas, $entidad);
-            $paginacion      = $paramPaginacion['cadenapaginacion'];
-            $inicio          = $paramPaginacion['inicio'];
-            $fin             = $paramPaginacion['fin'];
-            $paginaactual    = $paramPaginacion['nuevapagina'];
-            $lista           = $resultado->paginate($filas);
-            $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
-        }
-        */
-        return view($this->folderview.'.list')->with(compact('entidad', 'filas','nombre','fechai','fechaf'));
+        return view($this->folderview.'.list')->with(compact('entidad', 'filas','nombre','fechai','fechaf','entidad'));
     }
 
     /**
@@ -132,15 +130,9 @@ class OfertaAlumnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    
     public function update(Request $request, $id)
     {
-        $reglas = array(
-            );
-
-        $validacion = Validator::make($request->all(),$reglas);
-        if ($validacion->fails()) {
-            return $validacion->messages()->toJson();
-        } 
         
         $error = DB::transaction(function() use($request, $id){
             $ofertaalumno = new OfertaALumno();
@@ -159,11 +151,12 @@ class OfertaAlumnoController extends Controller
      */
     public function destroy($id)
     {
-        $ofertaalumno_id = DB::table('Evento_ALumno')->where('evento_id', $id)->value('id');
-        $error = DB::transaction(function() use($ofertaalumno_id){
-            $ofertaalumno = OfertaAlumno::find($ofertaalumno_id);
-            $ofertaalumno->delete();
-        });
+        // $ofertaalumno_id = DB::table('Evento_ALumno')->where('evento_id', $id)->value('id');
+        // $error = DB::transaction(function() use($ofertaalumno_id){
+        //     $ofertaalumno = OfertaAlumno::find($ofertaalumno_id);
+        //     $ofertaalumno->delete();
+        // });
+        $error = OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('EVENTO_ID','=',OfertaALumno::getIdALumno())->delete();
         return is_null($error) ? "OK" : $error;
     }
 
@@ -181,7 +174,7 @@ class OfertaAlumnoController extends Controller
         $entidad  = 'OfertaAlumno';
         $formData       = array('ofertaalumno.destroy', $id);
         $formData = array('route' => $formData, 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
-        $boton    = 'Desuscribirse';
-        return view($this->folderview.'.mant')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar', 'title1'));
+        $nombreBtn    = 'POSTULAR';
+        return view($this->folderview.'.mant')->with(compact('modelo', 'formData', 'entidad', 'nombreBtn', 'listar', 'title1'));
     }
 }

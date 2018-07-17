@@ -59,6 +59,7 @@ class EventoController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Fin', 'numero' => '1');
@@ -93,8 +94,8 @@ class EventoController extends Controller
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
         $cboFacultad = [''=>'Todos'];// + Facultad::pluck('nombre', 'id')->all();
-        $cboEscuela = [''=>'Todos']; //+ Escuela::pluck('nombre', 'id')->all();
-        $cboEspecialidad = [''=>'Todos']; //+ Especialidad::pluck('nombre', 'id')->all();
+        $cboEscuela = array('' => 'Seleccione'); //+ Escuela::pluck('nombre', 'id')->all();
+        $cboEspecialidad = array('' => 'Seleccione'); //+ Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento    = array('0'=>'Libre','1' => 'Con restricciones');
         return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
     }
@@ -147,6 +148,7 @@ class EventoController extends Controller
         $validacion = Validator::make($request->all(),
         array(
                 'nombre'       => 'required|max:120|unique:evento,nombre,NULL,id,deleted_at,NULL',
+                'detalle'       => 'required|max:200|unique:evento,detalle,NULL,id,deleted_at,NULL',
                 'tipoevento_id' => 'required',
                 'fechaInicio' => 'required',
                 'fechaFin' => 'required',
@@ -160,6 +162,7 @@ class EventoController extends Controller
         $error = DB::transaction(function() use($request){
             $evento               = new Evento();
             $evento->nombre = $request->input('nombre');
+            $evento->detalle = $request->input('detalle');
             $evento->empresa_id = Evento::getIdEmpresa();
             $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento =$request->input('opcionevento');
@@ -251,6 +254,7 @@ class EventoController extends Controller
         $validacion = Validator::make($request->all(),
         array(
                 'nombre'       => 'required|max:120|unique:evento,nombre,'.$id.',id,deleted_at,NULL',
+                'detalle'       => 'required|max:200|unique:evento,detalle,NULL,id,deleted_at,NULL',
                 'tipoevento_id' => 'required',
                 'fechaInicio' => 'required',
                 'fechaFin' => 'required',
@@ -263,6 +267,7 @@ class EventoController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $evento                 = Evento::find($id);
             $evento->nombre = $request->input('nombre');
+            $evento->detalle = $request->input('detalle');
             $evento->empresa_id = Evento::getIdEmpresa();
             $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento = $request->input('opcionevento');
@@ -310,7 +315,10 @@ class EventoController extends Controller
         }
         $error = DB::transaction(function() use($id){
             $evento = Evento::find($id);
+            
             $evento->delete();
+            Evento::eliminarDetalle($id);
+            Evento::eliminarSuscriptores($id);
         });
         return is_null($error) ? "OK" : $error;
     }

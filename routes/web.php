@@ -123,6 +123,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     /*EVENTO ALUMNO*/
+    Route::get('eventoalumno/suscribir', 'EventoAlumnoController@suscribir');
+    Route::get('eventoalumno/dessuscribir', 'EventoAlumnoController@dessuscribir');
     Route::post('eventoalumno/buscar', 'EventoAlumnoController@buscar')->name('eventoalumno.buscar');
     Route::get('eventoalumno/eliminar/{id}/{listarluego}', 'EventoAlumnoController@eliminar')->name('eventoalumno.eliminar');
     Route::resource('eventoalumno', 'EventoAlumnoController', array('except' => array('show')));
@@ -139,6 +141,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('ofertapublicacion', 'OfertaPublicacionController', array('except' => array('show')));
 
     /*OFERTA ALUMNO*/
+    Route::get('ofertaalumno/suscribir', 'OfertaAlumnoController@suscribir');
+    Route::get('ofertaalumno/dessuscribir', 'OfertaAlumnoController@dessuscribir');
     Route::post('ofertaalumno/buscar', 'OfertaAlumnoController@buscar')->name('ofertaalumno.buscar');
     Route::get('ofertaalumno/eliminar/{id}/{listarluego}', 'OfertaAlumnoController@eliminar')->name('ofertaalumno.eliminar');
     Route::resource('ofertaalumno', 'OfertaAlumnoController', array('except' => array('show')));
@@ -216,12 +220,20 @@ Route::group(['middleware' => 'auth'], function () {
     
     /* VER RESPUESTAS DE ENCUESTA */
     Route::get('alumnoencuesta/respuestasencuesta', 'AlumnoEncuestaController@respuestasencuesta')->name('alumnoencuesta.respuestasencuesta');
+
+    /* EMPRESA-ENCUESTAS */
+    Route::resource('empresaencuesta', 'EmpresaEncuestaController', array('except' => array('show')));
+    Route::post('empresaencuesta/buscar', 'EmpresaEncuestaController@buscar')->name('empresaencuesta.buscar');
+    Route::get('empresaencuesta/respuestasencuesta', 'EmpresaEncuestaController@respuestasencuesta')->name('empresaencuesta.respuestasencuesta');
  
     /*ALUMNO*/
+    Route::post('alumno/restablecer/{id}', 'AlumnoController@restablecerPassword')->name('alumno.restablecer');
+    Route::get('alumno/password/{id}/{listarluego}', 'AlumnoController@password')->name('alumno.password');
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
     Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
     Route::resource('alumno', 'AlumnoController', array('except' => array('show')));
     Route::get('alumno/cargarselect/{idselect}', 'AlumnoController@cargarselect')->name('alumno.cargarselect');
+    Route::get('alumno/cambiarsituacion', 'AlumnoController@cambiarsituacion')->name('alumno.cambiarsituacion');
 
     /*COMPETENCIA*/
     Route::post('competencia/buscar', 'CompetenciaController@buscar')->name('competencia.buscar');
@@ -279,8 +291,6 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('escuelas/{id}','EventoController@getEscuelas');
 Route::get('especialidades/{id}','EventoController@getEspecialidades');
 
-Route::get('escuelas2/{id}','OfertaController@getEscuelas2');
-Route::get('especialidades2/{id}','OfertaController@getEspecialidades2');
 ///******** */
 Route::get('provincia/cboprovincia/{id?}', array('as' => 'provincia.cboprovincia', 'uses' => 'ProvinciaController@cboprovincia'));
 Route::get('distrito/cbodistrito/{id?}', array('as' => 'distrito.cbodistrito', 'uses' => 'DistritoController@cbodistrito'));

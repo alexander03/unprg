@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Oferta;
 class OfertaAlumno extends Model
 {
     use SoftDeletes;
@@ -58,9 +59,9 @@ class OfertaAlumno extends Model
             $SQLNULL = "IS";
             $SQLVAL = "NULL";
         }
-        echo $SQLNULL.' - '.$SQLVAL;
         
-        $results = Evento::leftjoin('DIRECCION_EVENTO','DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
+        
+        $results = Oferta::leftjoin('DIRECCION_EVENTO','DIRECCION_EVENTO.EVENTO_ID','=','EVENTO.ID')
         ->leftjoin('FACULTAD','FACULTAD.ID','=','DIRECCION_EVENTO.FACULTAD_ID')
         ->leftjoin('ESCUELA','ESCUELA.ID','=','DIRECCION_EVENTO.ESCUELA_ID')
         ->leftjoin('ESPECIALIDAD','ESPECIALIDAD.ID','=','DIRECCION_EVENTO.ESPECIALIDAD_ID')
@@ -73,13 +74,31 @@ class OfertaAlumno extends Model
         ->orwhere('ESCUELA.ID','=',$escuela_id)
         ->orwhere('ESPECIALIDAD.ID','=',5)
         ->where('EVENTO.NOMBRE','LIKE','%'.$nombre.'%')
-<<<<<<< HEAD
-        ->where('EVENTO.TIPOEVENTO_ID','is','NULL');
-=======
         ->where('EVENTO.TIPOEVENTO_ID','IS','NULL');
-
->>>>>>> c0354a71fb55ed169f58eac3b008f6e7a36fa16c
         return $results;
+    }
+    public static function suscribir($oferta_id){
+        $error = DB::transaction(function() use($request, $id){
+            $ofertaalumno = new OfertaALumno();
+            $ofertaalumno->alumno_id = OfertaALumno::getIdALumno();
+            $ofertaalumno->evento_id = $oferta_id;
+            $ofertaalumno->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+     
+    public static function dessuscribir($oferta_id){
+        OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('EVENTO_ID','=',OfertaALumno::getIdALumno())->delete();
+    }
+
+    public function scopelistarSuscriptores($query, $id)
+    {
+        return $query->where(function($subquery) use($id)
+		            {
+		            	if (!is_null($id)) {
+		            		$subquery->where('evento_id', '=', $id);
+		            	}
+		            });
     }
 
 }

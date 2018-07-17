@@ -9,6 +9,7 @@ use Validator;
 use App\Alumno;
 use App\Facultad;
 use App\Escuela;
+use App\Usuario;
 use App\Especialidad;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -23,11 +24,14 @@ class AlumnoController extends Controller
     protected $tituloRegistrar = 'Registrar alumno';
     protected $tituloModificar = 'Modificar alumno';
     protected $tituloEliminar  = 'Eliminar alumno';
+    protected $tituloPassword  = 'Restablecer contraseña de alumno';
     protected $rutas           = array('create' => 'alumno.create', 
             'edit'   => 'alumno.edit', 
             'delete' => 'alumno.eliminar',
             'search' => 'alumno.buscar',
             'index'  => 'alumno.index',
+            'password' => 'alumno.password',
+            'restablecer' => 'alumno.restablecerPassword',
         );
 
     /**
@@ -65,11 +69,13 @@ class AlumnoController extends Controller
         $cabecera[]       = array('valor' => 'Escuela', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Especialidad', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Situación', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
+        $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '3');
         
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar  = $this->tituloEliminar;
+        $titulo_password  = $this->tituloPassword;
         $ruta             = $this->rutas;
+        $cboSituacion     = array('ES'=>'Estudiante','EG' => 'Egresado', 'GR' => 'Graduado');
         if (count($lista) > 0) {
             $clsLibreria     = new Libreria();
             $paramPaginacion = $clsLibreria->generarPaginacion($lista, $pagina, $filas, $entidad);
@@ -79,9 +85,9 @@ class AlumnoController extends Controller
             $paginaactual    = $paramPaginacion['nuevapagina'];
             $lista           = $resultado->paginate($filas);
             $request->replace(array('page' => $paginaactual));
-            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_eliminar', 'ruta'));
+            return view($this->folderview.'.list')->with(compact('lista', 'paginacion', 'inicio', 'fin', 'entidad', 'cabecera', 'titulo_modificar', 'titulo_password' , 'titulo_eliminar', 'ruta', 'cboSituacion'));
         }
-        return view($this->folderview.'.list')->with(compact('lista', 'entidad'));
+        return view($this->folderview.'.list')->with(compact('lista', 'entidad', 'cboSituacion'));
     }
 
     /**
@@ -192,7 +198,7 @@ class AlumnoController extends Controller
         $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         //$cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') + Especialidad::where('escuela_id', '=', $alumno->escuela_id)->pluck('nombre', 'id')->all();
-        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado');
+        $cboSituacion         = [''=>'Seleccione']+ array('ES'=>'Estudiante','EG' => 'Egresado', 'GR' => 'Graduado');
         $formData       = array('alumno.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
@@ -288,6 +294,42 @@ class AlumnoController extends Controller
         $boton    = 'Eliminar';
         return view('app.confirmarEliminar')->with(compact('modelo', 'formData', 'entidad', 'boton', 'listar'));
     }
+
+    public function restablecerPassword($id)
+    {
+        $existe = Libreria::verificarExistencia($id, 'usuario');
+        if ($existe !== true) {
+            return $existe;
+        }
+
+        $error = DB::transaction(function() use($id){
+            $usuario = Usuario::find($id);
+            $usuario->password = bcrypt($usuario->login);
+            $usuario->save();
+        });
+        return is_null($error) ? "OK" : $error;
+    }
+
+    public function password($id, $listarLuego)
+    {
+        $existe = Libreria::verificarExistencia($id, 'alumno');
+        if ($existe !== true) {
+            return $existe;
+        }
+        $listar = "NO";
+        if (!is_null(Libreria::obtenerParametro($listarLuego))) {
+            $listar = $listarLuego;
+        }
+        $modelo   = Alumno::find($id);
+
+        $usuario  = Usuario::where('alumno_id', "=", $id)->first();
+        $id = $usuario->id;
+
+        $entidad  = 'Alumno';
+        $formData = array('route' => array('alumno.restablecer', $id), 'method' => 'POST', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
+        $boton    = 'Restablecer Contraseña';
+        return view('app.confirmarPassword')->with(compact('modelo','formData', 'entidad', 'boton', 'listar'));
+    }
     
     //cargar datos de especialidad segun el id de escuela
     public function cargarselect($idselect, Request $request)
@@ -313,5 +355,13 @@ class AlumnoController extends Controller
         $retorno .= '</select></div>';
 
         echo $retorno;
+    }
+    
+    public function cambiarsituacion(Request $request) {
+        $idalumno          = $request->get('idalumno');
+        $situacion         = $request->get('situacion');
+        $alumno            = Alumno::find($idalumno);
+        $alumno->situacion = $situacion;
+        $alumno->save();
     }
 }

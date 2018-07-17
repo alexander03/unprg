@@ -1,6 +1,6 @@
 <?php
 use App\OfertaAlumno;
-use App\Evento;
+use App\Oferta;
 use Illuminate\Support\Facades\DB;
 ?>
 
@@ -8,76 +8,63 @@ use Illuminate\Support\Facades\DB;
 	<thead>
 		<tr>
 			<th style='width: 5%' class='text-center'>#</th>
-			<th>EVENTO</th>
+			<th>OFERTA</th>
+			<th>DESCRIPCIÓN</th>
 			<th style='width: 15%' class='text-center'>FECHA APERTURA</th>
 			<th style='width: 15%' class='text-center'>FECHA CESE</th>
 			<th style='width: 10%'>OPERACIONES</th>
 		</tr>
 	</thead>
-	<tbody>
+
+	<tbody id='registrostabla'>
 		<?php
 		$cant_filas = $filas;
 		$inicio = 0;
 		$contador = $inicio + 1;
-<<<<<<< HEAD
-		?>
-		@foreach ($lista as $key => $value)
-		<tr 'idEvento'= {{ $value->IDEVENTO }} >
-			<td>{{ $contador }}</td>
-			<td>{{ $value->NOMBRE_EVENTO }}</td>
-			<?php
-			$estaRegistrado  =  DB::table('evento_alumno')->where('alumno_id','=', $idAlumno)->where('evento_id','=', $value->evento_id)->count();
-			echo $estaRegistrado;
-			if($estaRegistrado > 0 ){
-			?>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Desuscribirse', array('onclick' => 'modal (\''.URL::route($ruta["delete"], array($value->id, 'SI')).'\', \''.$titulo_eliminar.'\', this);', 'class' => 'btn btn-xs btn-danger')) !!}</td>
-			<?php
-=======
+
 		$contadortemp = 0;
 
 		$classbtn = '';
 		$txtbtn = '';
 
-		$alumno_id        = OfertaALumno::getIdALumno();
+		$alumno_id = OfertaALumno::getIdALumno();
         $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
         $facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
-		$result = DB::select("SELECT E.ID, E.NOMBRE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+		$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 		     LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 WHERE E.OPCIONEVENTO = 0 AND ROWNUM <= ".$cant_filas."  
 			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
         foreach ($result as $r) {
 			if($r->id_validador != null){
-				//SI ESTA SUSCRITO
 				$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 				$txtbtn = 'SALIR';
->>>>>>> c0354a71fb55ed169f58eac3b008f6e7a36fa16c
+
 			}else{
 				$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 				$txtbtn = 'POSTULAR';
 			}
-			echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+			echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 			$contador++;
 			$contadortemp++;
 		}
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE,EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE,EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.FACULTAD_ID = ".$facultad_id." AND E.TIPOEVENTO_ID IS NULL 
 			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				if($r->id_validador != null){
-					//SI ESTA SUSCRITO
 					$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 					$txtbtn = 'SALIR';
 				}else{
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
@@ -86,21 +73,20 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.ESCUELA_ID = ".$escuela_id." AND E.TIPOEVENTO_ID IS NULL 
 			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				if($r->id_validador != null){
-					//SI ESTA SUSCRITO
 					$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 					$txtbtn = 'SALIR';
 				}else{
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
@@ -109,31 +95,82 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.ESPECIALIDAD_ID = ".$especialidad_id." AND E.TIPOEVENTO_ID IS NULL 
-			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd')");
+			 AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				if($r->id_validador != null){
-					//SI ESTA SUSCRITO
 					$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
 					$txtbtn = 'SALIR';
 				}else{
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
 		}
-		
-		
-
 		?>
 		
 	</tbody>
 	<tfoot>
 	</tfoot>
 </table>
+
+<script>
+
+	 $(document).ready(function() {
+
+		 $('.btn-sus').each(function (){
+			 $(this).click(function (){
+				 procesarAjax('suscribir','registrostabla',$(this).attr('idevento'));
+			 });
+		 });
+
+		 $('.btn-des').each(function (){
+			 $(this).click(function (){
+				 procesarAjax('dessuscribir','registrostabla',$(this).attr('idevento'));
+			 });
+		 });
+		 
+		 
+	 });
+
+	function procesarAjax(accion, idelementCargando, id){
+        var route = 'ofertaalumno/'+accion;
+        route += '?id='+id;
+        console.log(route);
+        $.ajax({
+			url: route,
+			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+			type: 'GET',
+			beforeSend: function(){
+                var tempCargando;
+				tempCargando= "<tr><td colspan='6'>"+imgCargando()+"</td></tr>";                
+				$('#'+ idelementCargando).html(tempCargando);
+	        },
+	        success: function(JSONRESPONSE){
+                $('#'+ idelementCargando).html('');
+				console.log(JSONRESPONSE);
+				if(JSONRESPONSE.toLowerCase()==="ok"){
+					if(accion.toLowerCase()==="suscribir"){
+						mostrarMensaje('Suscripción exitosa!','OK');
+					}else{
+						mostrarMensaje('Cambios guardados!','OK');
+					}
+					buscar('{{ $entidad }}');
+				}else{
+					mostrarMensaje('Error interno en el Servidor!','ERROR');
+				}
+            },
+            error: function () {
+                $('#'+ idelementCargando).html('');
+                /*MOSTRAMOS MENSAJE ERROR SERVIDOR*/
+                mostrarMensaje('Error interno en el Servidor!','ERROR');
+            }
+        });
+    }
+</script>

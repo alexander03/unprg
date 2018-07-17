@@ -20,11 +20,7 @@
 					<div class="form-group">
 						{!! Form::label('nombre', 'Nombre:', array('class' => 'input-sm')) !!}
 						{!! Form::text('nombre', '', array('class' => 'form-control input-sm', 'id' => 'nombre')) !!}
-					</div>
-					<div class="form-group">
-						{!! Form::label('tipoencuesta_id', 'Tipo:', array('class' => 'input-sm')) !!}
-						{!! Form::select('tipoencuesta_id', $cboTipoEncuesta, null, array('class' => 'form-control input-sm', 'id' => 'tipoencuesta_id')) !!}
-					</div>					
+					</div>				
 					<div class="form-group">
 						{!! Form::label('filas', 'Filas:', array('class' => 'input-sm'))!!}
 						{!! Form::selectRange('filas', 1, 30, 10, array('class' => 'form-control input-sm', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}

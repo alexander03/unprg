@@ -59,7 +59,7 @@
 		var day = ("0" + fechaActual.getDate()).slice(-2);
 		var month = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
 		var fechai = (fechaActual.getFullYear()) +"-"+month+"-01";
-		var fechaf = fechaActual.getFullYear() + "-"+month+"-"+day;
+		var fechaf = (fechaActual.getFullYear() +1) + "-"+month+"-"+day;
 		$('#fechai').val(fechai);
 		$('#fechaf').val(fechaf);
 		

@@ -52,11 +52,12 @@ class EventoPublicacionController extends Controller
         $nombre      = Libreria::getParam($request->input('nombre'));
         $empresa_id      = Evento::getIdEmpresa();
         //$tipoevento_id      = Libreria::getParam($request->input('tipoevento_id'));
-        $resultado        = Evento::listar($nombre, $empresa_id);
+        $resultado        = Evento::listarsuscritos($nombre, $empresa_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Cantidad Suscritos', 'numero' => '1');
         // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');

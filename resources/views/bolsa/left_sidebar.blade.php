@@ -36,12 +36,12 @@ if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3
     </div>
 
     <div class="user-detail">
-        <div class="dropup" style ="text-align : center">
+        <div class="dropup">
             <a href="" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
-                <div id="avatar">
-                <img src="avatar\{!! $usuario->avatar !!}" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">
+                <div id="avatar" style ="display: block; margin-top: -40px; position: relative; top: 33px;">
+                <img src="avatar\{!! $usuario->avatar !!}" alt="user-img" class="img-circle">
                 </div>
-                <span class="user-info-span" style ="padding-top: 10px;">
+                <span class="user-info-span" style="margin-left: 40px;">
                     @if($user->usertype_id == 1 || $user->usertype_id == 2 || $user->usertype_id == 3 )
                         <h5 class="m-t-0 m-b-0">{!! $nombrecompleto !!}</h5>
                     @elseif($user->usertype_id == 4 || $user->usertype_id == 5)
