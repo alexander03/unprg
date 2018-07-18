@@ -16,6 +16,7 @@ use App\Especialidad;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class EventoPublicacionController extends Controller
 {
@@ -24,6 +25,7 @@ class EventoPublicacionController extends Controller
     protected $tituloListar = 'Evento';
     protected $rutas           = array(
             'listsuscriptores' => 'eventopublicacion.listsuscriptores',
+            //'downloadPDF' => 'eventopublicacion.downloadPDF',
             'search' => 'eventopublicacion.buscar',
             'index'  => 'eventopublicacion.index',
         );
@@ -59,7 +61,7 @@ class EventoPublicacionController extends Controller
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Cantidad Suscritos', 'numero' => '1');
-        // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'reporte pdf', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '1');
         
         $tituloListar = $this->tituloListar;
@@ -128,5 +130,54 @@ class EventoPublicacionController extends Controller
         return view($this->folderview.'.suscriptores')->with(compact('lista', 'entidad', 'id', 'ruta'));
 
     }
+    // METODO PARA PDF DE SUSCRIPTORES POR CADA EVENTO
+    public function suscriptoresPDF($id, Request $request, $accion='ver',$tipo='digital')
+    {
+        $listarSuscriptorespdf        = EventoAlumno::listarSuscriptoresPDF($id);
+        $lista           = $listarSuscriptorespdf->get();
+
+        $html_content = "<h1>Reporte de los suscriptores del evento: </h1>
+                        <h4>by<br/> Learn infinity</h4>";
+        PDF::SteTitle('Sample PDF');
+        PDF::AddPage();
+        PDF::writeHTML($html_content, true, false, true, false,'');
+        PDF::Output('SamplePDF.pdf');
+
+    }
+    public function sabePDF(){
+        $html_content = "<h1>Reporte de los suscriptores del evento: </h1>
+                        <h4>by<br/> Learn infinity</h4>";
+        PDF::SteTitle('Sample PDF');
+        PDF::AddPage();
+        PDF::writeHTML($html_content, true, false, true, false,'');
+        PDF::Output(public_path(uniqid.'_samplePDF.pdf','f'));
+        
+    }
+
+    public function downloadPDF($id, Request $request)
+    {    
+        $listarSuscriptoresPDF        = EventoAlumno::listarSuscriptoresPDF($id);
+        $lista           = $listarSuscriptoresPDF->get();
+        $cabecera         = array();
+        $cabecera[]       = array('valor' => '#', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Alumno', 'numero' => '1');
+        $ruta             = $this->rutas;
+
+        
+    }
+
+    public function HtmlToPDF()
+    {    
+        $view = \View::make('HtmlToPDF');
+        $html_content = $view->render();
+      
+ 
+        PDF::SetTitle('Sample PDF');
+        PDF::AddPage();
+        PDF::writeHTML($html_content, true, false, true, false, '');
+ 
+        PDF::Output(uniqid().'_SamplePDF.pdf');
+    }
+
 
 }

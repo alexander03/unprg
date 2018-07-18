@@ -133,6 +133,7 @@ Route::group(['middleware' => 'auth'], function () {
     /*EVENTO PUBLICACIONES*/
     Route::post('eventopublicacion/buscar', 'EventoPublicacionController@buscar')->name('eventopublicacion.buscar');
     Route::get('eventopublicacion/listsuscriptores/{id}', 'EventoPublicacionController@listsuscriptores')->name('eventopublicacion.listsuscriptores');
+    Route::get('eventopublicacion/downloadPDF/{id}', 'EventoPublicacionController@downloadPDF')->name('eventopublicacion.downloadPDF');
     Route::resource('eventopublicacion', 'EventoPublicacionController', array('except' => array('show')));
 
     /*OFERTA PUBLICACIONES*/
