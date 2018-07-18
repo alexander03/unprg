@@ -33,7 +33,7 @@
 			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<?php 
 					$calificacion = '';
-					for ($i=0; $i < $competencia->calificacion; $i++) { 
+					for ($e=0; $e < $competencia->calificacion; $e++) { 
 						$calificacion .= ' <img src="assets/images/estrella.png"width="10" height="10"/>';
 					}
 					echo $calificacion;
