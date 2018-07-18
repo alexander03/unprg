@@ -19,6 +19,7 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->nombre }}</td>
+			<td>{{ $value->detalle }}</td>
 			<td>
 			<?php
 				$cant = DB::table('evento_alumno')->where('evento_id','=', $value->id)->count();

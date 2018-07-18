@@ -59,6 +59,7 @@ class OfertaController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Fin', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
@@ -144,7 +145,8 @@ class OfertaController extends Controller
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $validacion = Validator::make($request->all(),
         array(
-            'nombre'       => 'required|max:120|unique:evento,nombre,NULL,id,deleted_at,NULL',
+                'nombre'       => 'required|max:120|unique:evento,nombre,NULL,id,deleted_at,NULL',
+                'detalle'       => 'required|max:200|unique:evento,detalle,NULL,id,deleted_at,NULL',
                 'fechaInicio' => 'required',
                 'fechaFin' => 'required',
             )
@@ -157,6 +159,7 @@ class OfertaController extends Controller
         $error = DB::transaction(function() use($request){
             $oferta               = new Oferta();
             $oferta->nombre = $request->input('nombre');
+            $oferta->detalle = $request->input('detalle');
             $oferta->empresa_id = Oferta::getIdEmpresa();
             $oferta->opcionevento =$request->input('opcionevento');
             $oferta->fechai     = $request->input('fechaInicio');
@@ -245,7 +248,8 @@ class OfertaController extends Controller
         }
         $validacion = Validator::make($request->all(),
         array(
-            'nombre'       => 'required|max:120|unique:evento,nombre,'.$id.',id,deleted_at,NULL',
+                'nombre'       => 'required|max:120|unique:evento,nombre,'.$id.',id,deleted_at,NULL',
+                'detalle'       => 'required|max:200|unique:evento,detalle,NULL,id,deleted_at,NULL',
                 'fechaInicio' => 'required',
                 'fechaFin' => 'required',
             )
@@ -257,6 +261,7 @@ class OfertaController extends Controller
         $error = DB::transaction(function() use($request, $id){
             $oferta                 = Oferta::find($id);
             $oferta->nombre = $request->input('nombre');
+            $oferta->detalle = $request->input('detalle');
             $oferta->empresa_id = Oferta::getIdEmpresa();
             $oferta->opcionevento = $request->input('opcionevento');
             $oferta->fechai     = $request->input('fechaInicio');

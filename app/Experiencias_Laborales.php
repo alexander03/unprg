@@ -20,6 +20,16 @@ class Experiencias_Laborales extends Model
                     ->orderBy('fechainicio', 'ASC');
                     
     }
+	
+    public function scopelistartodo($query, $alumno_id)
+    {
+        return $query->where(function($subquery) use($alumno_id)
+                    {
+                        $subquery->where('alumno_id','=',$alumno_id);
+                    })
+                    ->orderBy('fechainicio', 'ASC');
+                    
+    }
 
     public function alumno(){
         return $this->belongsTo('App\Alumno', 'alumno_id');

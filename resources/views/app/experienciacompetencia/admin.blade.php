@@ -59,6 +59,7 @@
 
 <script>
 	$(document).ready(function () {
+		console.log("sdasd");
 		buscar('{{ $entidad }}');
 		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
 		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="name"]').keyup(function (e) {
@@ -68,9 +69,18 @@
 			}
 		});
 
-		$('.buscar-alumno').keyup(function (e) {
+		$('#codigo').keyup(function (e) {
 			var key = window.event ? e.keyCode : e.which;
 			if (key == '13') {
+				console.log("entro 13");
+				buscar('{{ $entidad }}');
+			}
+		});
+
+		$('#nombre').keyup(function (e) {
+			var key = window.event ? e.keyCode : e.which;
+			if (key == '13') {
+				console.log("entro 13");
 				buscar('{{ $entidad }}');
 			}
 		});

@@ -59,7 +59,8 @@
     input[type="radio"]:checked ~ label {
       color: orange;
     }
-    </style>
+    
+</style>
 <div class="row">
         <div class="col-xs-12">
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -185,7 +186,7 @@
         configurarAnchoModal('900');
         $('.modal-body').css('padding-top','10px');
         $('.modal-body').css('padding-bottom','10px');
-
+        var fechaActual = new Date();
         var day = ("0" + fechaActual.getDate()).slice(-2);
 	    var month = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
     	var fechai = (fechaActual.getFullYear() - 1) + "-01-01";

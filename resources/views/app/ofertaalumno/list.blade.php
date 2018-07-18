@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 		<tr>
 			<th style='width: 5%' class='text-center'>#</th>
 			<th>OFERTA</th>
+			<th>DESCRIPCIÓN</th>
 			<th style='width: 15%' class='text-center'>FECHA APERTURA</th>
 			<th style='width: 15%' class='text-center'>FECHA CESE</th>
 			<th style='width: 10%'>OPERACIONES</th>
@@ -30,7 +31,7 @@ use Illuminate\Support\Facades\DB;
         $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
         $facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
-		$result = DB::select("SELECT E.ID, E.NOMBRE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+		$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 		     LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 WHERE E.OPCIONEVENTO = 0 AND ROWNUM <= ".$cant_filas."  
 			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
@@ -43,14 +44,14 @@ use Illuminate\Support\Facades\DB;
 				$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 				$txtbtn = 'POSTULAR';
 			}
-			echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+			echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 			$contador++;
 			$contadortemp++;
 		}
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE,EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE,EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.FACULTAD_ID = ".$facultad_id." AND E.TIPOEVENTO_ID IS NULL 
@@ -63,7 +64,7 @@ use Illuminate\Support\Facades\DB;
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
@@ -72,7 +73,7 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.ESCUELA_ID = ".$escuela_id." AND E.TIPOEVENTO_ID IS NULL 
@@ -85,7 +86,7 @@ use Illuminate\Support\Facades\DB;
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
@@ -94,7 +95,7 @@ use Illuminate\Support\Facades\DB;
 		$cant_filas = $cant_filas - $contador;
 		if($cant_filas>0){
 			$contadortemp = 0;
-			$result = DB::select("SELECT E.ID, E.NOMBRE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
+			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF FROM EVENTO E 
 			 LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID
 			 LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 where ROWNUM <= ".$cant_filas." AND DE.ESPECIALIDAD_ID = ".$especialidad_id." AND E.TIPOEVENTO_ID IS NULL 
@@ -107,7 +108,7 @@ use Illuminate\Support\Facades\DB;
 					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
 					$txtbtn = 'POSTULAR';
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td>".$r->detalle."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button></td></tr>";
 				$contador++;
 				$contadortemp++;
 			}
@@ -148,7 +149,7 @@ use Illuminate\Support\Facades\DB;
 			type: 'GET',
 			beforeSend: function(){
                 var tempCargando;
-				tempCargando= "<tr><td colspan='5'>"+imgCargando()+"</td></tr>";                
+				tempCargando= "<tr><td colspan='6'>"+imgCargando()+"</td></tr>";                
 				$('#'+ idelementCargando).html(tempCargando);
 	        },
 	        success: function(JSONRESPONSE){

@@ -228,10 +228,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('empresaencuesta/respuestasencuesta', 'EmpresaEncuestaController@respuestasencuesta')->name('empresaencuesta.respuestasencuesta');
  
     /*ALUMNO*/
+    Route::post('alumno/restablecer/{id}', 'AlumnoController@restablecerPassword')->name('alumno.restablecer');
+    Route::get('alumno/password/{id}/{listarluego}', 'AlumnoController@password')->name('alumno.password');
     Route::post('alumno/buscar', 'AlumnoController@buscar')->name('alumno.buscar');
     Route::get('alumno/eliminar/{id}/{listarluego}', 'AlumnoController@eliminar')->name('alumno.eliminar');
     Route::resource('alumno', 'AlumnoController', array('except' => array('show')));
     Route::get('alumno/cargarselect/{idselect}', 'AlumnoController@cargarselect')->name('alumno.cargarselect');
+    Route::get('alumno/cambiarsituacion', 'AlumnoController@cambiarsituacion')->name('alumno.cambiarsituacion');
 
     /*COMPETENCIA*/
     Route::post('competencia/buscar', 'CompetenciaController@buscar')->name('competencia.buscar');
@@ -271,19 +274,21 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('certificado/eliminar/{id}/{listarluego}', 'CertificadoController@eliminar')->name('certificado.eliminar');
     Route::resource('certificado', 'CertificadoController', array('except' => array('show')));    
 
-    /*EXPERIENCIA_COMPETENCIA*/
     //IMPLEMENTACION USUARIO ALUMNO
     Route::get('experiencia_competencia/listarCompetencias', 'Experiencia_CompetenciaController@listarCompetencias');
     Route::get('experiencia_competencia/eliminarCompetencia', 'Experiencia_CompetenciaController@eliminarCompetencia');
     Route::get('experiencia_competencia/agregarCompetencia', 'Experiencia_CompetenciaController@agregarCompetencia');
     Route::get('experiencia_competencia/listarCompetenciasAlumno', 'Experiencia_CompetenciaController@listarCompetenciasAlumno');
+    
     //IMPLEMENTACION USUARIO UNPRG
     Route::get('experiencia_competencia/editarCompetencia', 'Experiencia_CompetenciaController@editarCompetencia');
     Route::get('experiencia_competencia/listarExperienciasLaborales', 'Experiencia_CompetenciaController@listarExperienciasLaborales');
     Route::post('experiencia_competencia/buscar', 'Experiencia_CompetenciaController@buscar')->name('experienciacompetencia.buscar');
     Route::get('experiencia_competencia/obtenerexperienciaslaborales/{listar}/{id}', 'Experiencia_CompetenciaController@obtenerexperienciaslaborales')->name('experienciacompetencia.obtenerexperienciaslaborales');
-    Route::resource('experiencia_competencia', 'Experiencia_CompetenciaController', array('except' => array('show')));    
+    Route::resource('experiencia_competencia', 'Experiencia_CompetenciaController', array('except' => array('show')));   
     
+    /* REPORTES */   
+    Route::get('/generarcurriculum', 'PdfController@generarcurriculum')->name('generarcurriculum');    
 });
 //********** */
 Route::get('escuelas/{id}','EventoController@getEscuelas');

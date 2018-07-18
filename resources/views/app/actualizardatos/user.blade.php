@@ -232,17 +232,12 @@ $user = Auth::user();
 						type: 'POST',
 						success: function (JSONRESPONSE) {
 							console.log(JSONRESPONSE);
-							var avatar = '<img src="avatar/'+ JSONRESPONSE +'" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">';
+							var avatar = '<img src="avatar/'+ JSONRESPONSE +'" alt="user-img" class="img-circle">';
 							var divAvatar = $('#avatar');
 							divAvatar.html(avatar);
 							divAvatar.show('slow');
 						},
 					});
-
-					var avatar = '<img src="avatar/'+  +'" alt="user-img" class="img-circle" style ="height: 75px;width: 75px;float: none;">';
-					var divAvatar = $('#avatar');
-					divAvatar.html(avatar);
-					divAvatar.show('slow');
 				} else {
 					mostrarErrores(respuesta, idformulario, entidad);
 				}

@@ -44,7 +44,7 @@
                                                     <tr>
                                                         <th style="width: 4%">#</th>
                                                         <th>COMPETENCIA</th>
-                                                        <th style="width: 4%">ELI</th>
+                                                        <th style="width: 8%">ELIMINAR</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbody_competencias">
