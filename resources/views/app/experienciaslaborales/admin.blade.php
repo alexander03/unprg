@@ -35,7 +35,7 @@
 					</div>
 					{!! Form::button('<i class="glyphicon glyphicon-search"></i> Buscar', array('class' => 'btn btn-success waves-effect waves-light m-l-10 btn-md', 'id' => 'btnBuscar', 'onclick' => 'buscar(\''.$entidad.'\')')) !!}
 					{!! Form::button('<i class="glyphicon glyphicon-plus"></i> Nuevo', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnNuevo', 'onclick' => 'modal (\''.URL::route($ruta["create"], array('listar'=>'SI')).'\', \''.$titulo_registrar.'\', this);')) !!}
-					{!! Form::button('<i class="glyphicon glyphicon-save-file"></i> PDF', array('class' => 'btn btn-info waves-effect waves-light m-l-10 btn-md', 'id' => 'btnPDF', 'onclick' => 'pdf(\''.$entidad.'\')'))!!}
+					<a href="{{ route('generarcurriculum')}}" class="btn btn-info waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-save-file"></i> Mi Currículum</a>
 					{!! Form::close() !!}
 		 		</div>
             </div>
@@ -65,9 +65,4 @@
 			}
 		});
 	});
-
-	function pdf(entidad){
-			window.open('experienciaslaborales/pdf?idalumno='+$('#txtidalumno'));
-	}
-	
 </script>
