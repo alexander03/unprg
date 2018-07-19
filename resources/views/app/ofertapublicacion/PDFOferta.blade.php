@@ -49,17 +49,17 @@
         <h1>REPORTE DE INSCRITOS</h1>
 		<table width="100%" class="tabla2">
             <tr>
-                <td width="8%" style="font-weight: bold ">EVENTO:</td>
-                <td width="92%" ><span class="text">{{ $evento->nombre }}</span></td>
+                <td width="8%" style="font-weight: bold ">OFERTA:</td>
+                <td width="92%" ><span class="text">{{ $oferta->nombre }}</span></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td width="8%" style="font-weight: bold">DESDE:</td>
-                <td width="15%"><span class="text">{{ Date::parse($evento->fechai)->format('d/m/y') }}</span></td>
+                <td width="15%"><span class="text">{{ Date::parse($oferta->fechai)->format('d/m/y') }}</span></td>
                 <td width="8%" style="font-weight: bold">HASTA:</td>
-                <td width="15%"><span class="text">{{ Date::parse($evento->fechaf)->format('d/m/y') }}</span></td>
+                <td width="15%"><span class="text">{{ Date::parse($oferta->fechaf)->format('d/m/y') }}</span></td>
                 <td width="59%"></td>
             </tr>
             <tr>

@@ -17,6 +17,8 @@ use App\Especialidad;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use PDF;
+use Jenssegers\Date\Date;
 
 class OfertaPublicacionController extends Controller
 {
@@ -61,7 +63,7 @@ class OfertaPublicacionController extends Controller
         $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Cantidad Suscritos', 'numero' => '1');
-        // $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Reporte pdf', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '1');
         
         $tituloListar = $this->tituloListar;
@@ -129,6 +131,23 @@ class OfertaPublicacionController extends Controller
         }
         return view($this->folderview.'.suscriptores')->with(compact('lista', 'entidad', 'id', 'ruta'));
 
+    }
+
+    public function PDFOferta($id, Request $request)
+    {    
+        $listarSuscriptoresPDF        = OfertaAlumno::listarSuscriptoresPDF($id);
+        $lista           = $listarSuscriptoresPDF->get();
+        $oferta       = Oferta::find($id);
+        $nomoferta = $oferta->nombre;
+        $view = \View::make('app.ofertapublicacion.PDFOferta')->with(compact('lista','oferta', 'id'));
+        $html_content = $view->render();      
+ 
+        PDF::SetTitle($nomoferta);
+        PDF::AddPage('L','A4',0);
+        PDF::SetDisplayMode('fullpage');
+        PDF::writeHTML($html_content, true, false, true, false, '');
+ 
+        PDF::Output($nomoferta.'.pdf', 'D');
     }
 
 }

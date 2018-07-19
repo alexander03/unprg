@@ -77,11 +77,13 @@ class EventoAlumno extends Model
     }
 
     public static function listarSuscriptoresPDF($evento_id){
-        $results = EVENTO_ALUMNO::innerjoin('ALUMNO','EVENTO_ALUMNO.ALUMNO_ID','=','ALUMNO.ID')
-        ->innerjoin('EVENTO','EVENTO_ALUMNO.EVENTO_ID','=','EVENTO.ID')
-        ->innerjoin('ESCUELA','ALUMNO.ESCUELA_ID','=','ESCUELA.ID')
-        ->innerjoin('ESPECIALIDAD','ALUMNO.ESPECIALIDAD_ID','=','ESPECIALIDAD.ID')
-        ->innerjoin('FACULTAD','ESCUELA.FACULTAD_ID','=','FACULTAD.ID')
+
+        
+        $results = EventoAlumno::join('ALUMNO','ALUMNO.ID','=','EVENTO_ALUMNO.ALUMNO_ID')
+        ->join('EVENTO','EVENTO.ID','=','EVENTO_ALUMNO.EVENTO_ID')
+        ->join('ESCUELA','ESCUELA.ID','=','ALUMNO.ESCUELA_ID')
+        ->join('ESPECIALIDAD','ESPECIALIDAD.ID','=','ALUMNO.ESPECIALIDAD_ID')
+        ->join('FACULTAD','FACULTAD.ID','=','ESCUELA.FACULTAD_ID')
         ->select(
             'FACULTAD.NOMBRE AS NOMBRE_FACULTAD',
             'ESCUELA.NOMBRE AS NOMBRE_ESCUELA',
@@ -94,7 +96,7 @@ class EventoAlumno extends Model
             'ALUMNO.EMAIL AS ALUMNO_EMAIL',
             'EVENTO.NOMBRE AS EVENTO_NOMBRE'
         )
-        ->where('EVENTO.OPCIONEVENTO','=',$evento_id);
+        ->where('EVENTO.ID','=',$evento_id);
         return $results;
     }
 

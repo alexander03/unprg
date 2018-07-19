@@ -77,6 +77,30 @@ class OfertaAlumno extends Model
         ->where('EVENTO.TIPOEVENTO_ID','IS','NULL');
         return $results;
     }
+
+    public static function listarSuscriptoresPDF($evento_id){
+
+        $results = OfertaAlumno::join('ALUMNO','ALUMNO.ID','=','EVENTO_ALUMNO.ALUMNO_ID')
+        ->join('EVENTO','EVENTO.ID','=','EVENTO_ALUMNO.EVENTO_ID')
+        ->join('ESCUELA','ESCUELA.ID','=','ALUMNO.ESCUELA_ID')
+        ->join('ESPECIALIDAD','ESPECIALIDAD.ID','=','ALUMNO.ESPECIALIDAD_ID')
+        ->join('FACULTAD','FACULTAD.ID','=','ESCUELA.FACULTAD_ID')
+        ->select(
+            'FACULTAD.NOMBRE AS NOMBRE_FACULTAD',
+            'ESCUELA.NOMBRE AS NOMBRE_ESCUELA',
+            'ESPECIALIDAD.NOMBRE AS NOMBRE_ESPECIALIDAD',
+            'ALUMNO.CODIGO AS ALUMNO_CODIGO',
+            'ALUMNO.NOMBRES AS ALUMNO_NOMBRES',
+            'ALUMNO.APELLIDOPATERNO AS ALUMNO_APELLIDOPATERNO',
+            'ALUMNO.APELLIDOMATERNO AS ALUMNO_APELLIDOMATERNO',
+            'ALUMNO.TELEFONO AS ALUMNO_TELEFONO',
+            'ALUMNO.EMAIL AS ALUMNO_EMAIL',
+            'EVENTO.NOMBRE AS EVENTO_NOMBRE'
+        )
+        ->where('EVENTO.ID','=',$evento_id);
+        return $results;
+    }
+
     public static function suscribir($oferta_id){
         $error = DB::transaction(function() use($request, $id){
             $ofertaalumno = new OfertaALumno();
