@@ -28,6 +28,10 @@
 						{!! Form::text('login', '', array('class' => 'form-control input-xs', 'id' => 'login')) !!}
 					</div>
 					<div class="form-group">
+						{!! Form::label('tipousuario_id', 'Tipo:') !!}
+						{!! Form::select('tipousuario_id', $cboTipousuario, null, array('class' => 'form-control input-xs', 'id' => 'tipousuario_id')) !!}
+					</div>	
+					<div class="form-group">
 						{!! Form::label('filas', 'Filas a mostrar:')!!}
 						{!! Form::selectRange('filas', 1, 30, 10, array('class' => 'form-control input-xs', 'onchange' => 'buscar(\''.$entidad.'\')')) !!}
 					</div>

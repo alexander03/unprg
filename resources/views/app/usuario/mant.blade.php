@@ -1,27 +1,13 @@
-@php 
-$nombrepersona = NULL;
-if (!is_null($usuario)) {
-	$persona = $usuario->person;
-	$nombrepersona = $persona->lastname.', '.$persona->firstname;
-}
-@endphp
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($usuario, $formData) !!}
 {!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
 <div class="form-group">
 	{!! Form::label('usertype_id', 'Tipo de usuario:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
 	<div class="col-lg-8 col-md-8 col-sm-8">
-		{!! Form::select('usertype_id', $cboTipousuario, null, array('class' => 'form-control input-xs', 'id' => 'usertype_id')) !!}
-	</div>
-</div>
-<div class="form-group">
-	{!! Form::label('nombrepersona', 'Persona:', array('class' => 'col-lg-4 col-md-4 col-sm-4 control-label')) !!}
-	{!! Form::hidden('person_id', null, array('id' => 'person_id')) !!}
-	<div class="col-lg-8 col-md-8 col-sm-8">
-		@if(!is_null($usuario))
-		{!! Form::text('nombrepersona', $nombrepersona, array('class' => 'form-control input-xs', 'id' => 'nombrepersona', 'placeholder' => 'Seleccione persona')) !!}
+		@if($usuario == null)	
+			{!! Form::select('usertype_id', $cboTipousuario, null, array('class' => 'form-control input-xs', 'id' => 'usertype_id')) !!}
 		@else
-		{!! Form::text('nombrepersona', $nombrepersona, array('class' => 'form-control input-xs', 'id' => 'nombrepersona', 'placeholder' => 'Seleccione persona')) !!}
+			{!! Form::select('usertype_id', $cboTipousuario, null, array('disabled','class' => 'form-control input-xs', 'id' => 'usertype_id')) !!}
 		@endif
 	</div>
 </div>

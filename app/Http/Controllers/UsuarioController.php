@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Hash;
 use Validator;
 use App\Http\Requests;
-use App\User;
+use App\Usuario;
 use App\Usertype;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
@@ -47,14 +47,14 @@ class UsuarioController extends Controller
         $pagina           = $request->input('page');
         $filas            = $request->input('filas');
         $entidad          = 'Usuario';
-        $name             = Libreria::getParam($request->input('name'));
-        $resultado        = User::listar($name);
+        $login            = Libreria::getParam($request->input('login'));
+        $tipousuario_id  = Libreria::getParam($request->input('tipousuario_id'));
+        $resultado        = Usuario::listar($login,$tipousuario_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Login', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Tipo de usuario', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Personal', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
         
         $titulo_modificar = $this->tituloModificar;
@@ -85,7 +85,8 @@ class UsuarioController extends Controller
         $title            = $this->tituloAdmin;
         $titulo_registrar = $this->tituloRegistrar;
         $ruta             = $this->rutas;
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta'));
+        $cboTipousuario = array('' => 'Seleccione') + Usertype::pluck('nombre', 'id')->all();
+        return view($this->folderview.'.admin')->with(compact('entidad', 'cboTipousuario' , 'title', 'titulo_registrar', 'ruta'));
     }
 
     /**
@@ -98,7 +99,7 @@ class UsuarioController extends Controller
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
         $entidad        = 'Usuario';
         $usuario        = null;
-        $cboTipousuario = array('' => 'Seleccione') + Usertype::pluck('name', 'id')->all();
+        $cboTipousuario = array('' => 'Seleccione') + Usertype::pluck('nombre', 'id')->all();
         $formData       = array('usuario.store');
         $formData       = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Registrar'; 
@@ -115,21 +116,19 @@ class UsuarioController extends Controller
     {
         $listar     = Libreria::getParam($request->input('listar'), 'NO');
         $reglas = array(
-            'login'       => 'required|max:20|unique:user,login,NULL,id,deleted_at,NULL',
+            'login'       => 'required|max:20|unique:usuario,login,NULL,id,deleted_at,NULL',
             'password'    => 'required|max:20',
             'usertype_id' => 'required|integer|exists:usertype,id,deleted_at,NULL',
-            'person_id'   => 'required|integer|exists:person,id,deleted_at,NULL',
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
         $error = DB::transaction(function() use($request){
-            $usuario               = new User();
+            $usuario               = new Usuario();
             $usuario->login        = $request->input('login');
             $usuario->password     = Hash::make($request->input('password'));
             $usuario->usertype_id  = $request->input('usertype_id');
-            $usuario->person_id    = $request->input('person_id');
             $usuario->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -154,13 +153,13 @@ class UsuarioController extends Controller
      */
     public function edit($id, Request $request)
     {
-        $existe = Libreria::verificarExistencia($id, 'user');
+        $existe = Libreria::verificarExistencia($id, 'usuario');
         if ($existe !== true) {
             return $existe;
         }
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
-        $cboTipousuario = array('' => 'Seleccione') + Usertype::pluck('name', 'id')->all();
-        $usuario        = User::find($id);
+        $cboTipousuario = array('' => 'Seleccione') + Usertype::pluck('nombre', 'id')->all();
+        $usuario        = Usuario::find($id);
         $entidad        = 'Usuario';
         $formData       = array('usuario.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
@@ -177,25 +176,24 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existe = Libreria::verificarExistencia($id, 'user');
+        $existe = Libreria::verificarExistencia($id, 'usuario');
         if ($existe !== true) {
             return $existe;
         }
         $reglas = array(
-            'login'       => 'required|max:20|unique:user,login,'.$id.',id,deleted_at,NULL',
-            'usertype_id' => 'required|integer|exists:usertype,id,deleted_at,NULL'
+            'login'       => 'required|max:20|unique:usuario,login,'.$id.',id,deleted_at,NULL',
+            'password' => 'required|min:6|max:18',
             );
         $validacion = Validator::make($request->all(),$reglas);
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         } 
         $error = DB::transaction(function() use($request, $id){
-            $usuario                 = User::find($id);
+            $usuario                 = Usuario::find($id);
             $usuario->login          = $request->input('login');
             if ($request->input('password') != null && $request->input('password') != '') {
                 $usuario->password = Hash::make($request->input('password'));
             }
-            $usuario->usertype_id = $request->input('usertype_id');
             $usuario->save();
         });
         return is_null($error) ? "OK" : $error;
@@ -209,12 +207,12 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        $existe = Libreria::verificarExistencia($id, 'user');
+        $existe = Libreria::verificarExistencia($id, 'usuario');
         if ($existe !== true) {
             return $existe;
         }
         $error = DB::transaction(function() use($id){
-            $usuario = User::find($id);
+            $usuario = Usuario::find($id);
             $usuario->delete();
         });
         return is_null($error) ? "OK" : $error;
@@ -228,7 +226,7 @@ class UsuarioController extends Controller
      */
     public function eliminar($id, $listarLuego)
     {
-        $existe = Libreria::verificarExistencia($id, 'user');
+        $existe = Libreria::verificarExistencia($id, 'usuario');
         if ($existe !== true) {
             return $existe;
         }
@@ -236,7 +234,7 @@ class UsuarioController extends Controller
         if (!is_null(Libreria::obtenerParametro($listarLuego))) {
             $listar = $listarLuego;
         }
-        $modelo   = User::find($id);
+        $modelo   = Usuario::find($id);
         $entidad  = 'Usuario';
         $formData = array('route' => array('usuario.destroy', $id), 'method' => 'DELETE', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton    = 'Eliminar';

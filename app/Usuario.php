@@ -31,12 +31,15 @@ class Usuario extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function scopelistar($query, $login)
+    public function scopelistar($query, $login, $tipousuario_id)
     {
-        return $query->where(function($subquery) use($login)
+        return $query->where(function($subquery) use($login, $tipousuario_id)
                     {
                         if (!is_null($login)) {
                             $subquery->where('login', 'LIKE', '%'.$login.'%');
+                        }
+                        if (!is_null($tipousuario_id)) {
+                            $subquery->where('usertype_id', '=', $tipousuario_id);
                         }
                     })
                     ->orderBy('login', 'ASC');
