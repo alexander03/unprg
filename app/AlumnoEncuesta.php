@@ -21,7 +21,7 @@ class AlumnoEncuesta extends Model
 		return $this->belongsTo('App\Encuesta', 'encuesta_id');
 	}
 
-	public function scopelistar($query, $nombre)
+	public function scopelistar($query, $nombre, $alumno_id)
     {
     	$encuesta = Encuesta::select('id')->where('nombre', 'LIKE', '%'.$nombre.'%')->get();
     	$like = '';
@@ -34,6 +34,11 @@ class AlumnoEncuesta extends Model
             	}
             } else {
             	$subquery->orWhere('encuesta_id', '=', $false);
+            }
+        })
+        ->where(function($subquery) use($alumno_id) {
+            if (!is_null($alumno_id)) {
+                $subquery->Where('alumno_id', '=', $alumno_id);
             }
         })
         ->orderBy('encuesta_id', 'ASC');
