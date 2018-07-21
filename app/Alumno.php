@@ -44,7 +44,7 @@ class Alumno extends Model
 		            })->where(function($subquery) use($nombre)
 		            {
 		            	if (!is_null($nombre)) {
-		            		$subquery->where('nombres', 'LIKE', '%'.$nombre.'%');
+		            		$subquery->whereRaw("nombres || ' ' || apellidopaterno || ' ' || apellidomaterno LIKE ?", '%'.$nombre.'%');
 		            	}
 		            })->where(function($subquery) use($escuelas, $like)
                     {
