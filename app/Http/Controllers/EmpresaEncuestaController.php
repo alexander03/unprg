@@ -51,7 +51,8 @@ class EmpresaEncuestaController extends Controller
         $filas            = $request->input('filas');
         $entidad          = 'Encuesta';
         $nombre           = Libreria::getParam($request->input('nombre'));
-        $resultado        = AlumnoEncuesta::listar($nombre);
+        $alumno_id        = Libreria::getParam($request->input('nomalumno'));
+        $resultado        = AlumnoEncuesta::listar($nombre, $alumno_id);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
