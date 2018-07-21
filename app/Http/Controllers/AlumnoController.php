@@ -364,4 +364,18 @@ class AlumnoController extends Controller
         $alumno->situacion = $situacion;
         $alumno->save();
     }
+    
+    public function cargaralumnos(Request $request) {
+        $nomalumno  = $request->get('nomalumno');
+        $alumnos    = Alumno::listar(null, $nomalumno, null, null)->get();
+        $options = '';
+        if(count($alumnos) == 0){
+            $options = '<option value="">Alumno no presente</option>';
+        } else {
+            foreach ($alumnos as $alumno) {
+                $options .= '<option value="' . $alumno->id . '">' . $alumno->nombres . ' ' . $alumno->apellidopaterno . ' ' . $alumno->apellidomaterno . '</option>';
+            }
+        }            
+        echo $options;        
+    }
 }
