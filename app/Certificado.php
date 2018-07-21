@@ -21,4 +21,16 @@ class Certificado extends Model
                     ->orderBy('nombre', 'ASC');
                     
     }
+	
+    public function scopelistarparacv($query, $alumno_id)
+    {
+        return $query->where(function($subquery) use($alumno_id)
+                    {
+                        if (!is_null($alumno_id)) {
+                            $subquery->where('alumno_id', '=', $alumno_id);
+                        }
+                    })
+                    ->orderBy('nombre', 'ASC');
+                    
+    }
 }
