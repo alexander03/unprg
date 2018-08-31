@@ -164,7 +164,7 @@ class AlumnoEncuestaController extends Controller
         $encuestaallenar = Encuesta::find($encuesta_id);
         $titulo = $encuestaallenar->nombre;
 
-        $preguntas = Pregunta::select('id', 'nombre')->where('encuesta_id', '=', $encuesta_id)->get();
+        $preguntas = Pregunta::select('id', 'nombre', 'tipo')->where('encuesta_id', '=', $encuesta_id)->get();
 
         return view($this->folderview.'.llenarencuesta')->with(compact('existe', 'titulo', 'preguntas', 'encuesta_id'));
     }
@@ -182,10 +182,17 @@ class AlumnoEncuestaController extends Controller
         $alumnoencuesta->save();
 
         for ($i = 1; $i <= $cantpreguntas; $i++) { 
+            $tipo = $request->get('tipo' . $i);
             $alternativa_id = $request->get('alternativa' . $i);
             $respuesta = new Respuesta();
             $respuesta->alumno_id = $alumno_id;
-            $respuesta->alternativa_id = $alternativa_id;
+            if($tipo == "NO") {
+                $respuesta->libre = $alternativa_id;
+                $respuesta->alternativa_id = 0;
+                $respuesta->pregunta_id = $request->get('pregunta_id' . $i);;
+            } else {
+                $respuesta->alternativa_id = $alternativa_id;
+            }
             $respuesta->save();
         }
     }
@@ -195,7 +202,7 @@ class AlumnoEncuestaController extends Controller
         $user        = Auth::user();
         $alumno_id   = $user->alumno_id;
 
-        $preguntas   = Pregunta::select('id', 'nombre')->where('encuesta_id', '=', $encuesta_id)->get();
+        $preguntas   = Pregunta::select('id', 'nombre', 'tipo')->where('encuesta_id', '=', $encuesta_id)->get();
 
         return view($this->folderview.'.respuestasencuesta')->with(compact('preguntas'));
     }
