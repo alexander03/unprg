@@ -6,6 +6,7 @@ use App\Alternativa;
 	<?php $i = 1; ?>
 	@foreach($preguntas as $pregunta)
 		{!! '<b><u><span class=\'text-info\'>'.$i. '. ' .$pregunta->nombre.'<span></u></b><br>' !!}
+		@if($pregunta->tipo == 1)
 		<?php 
 			$alternativas = Alternativa::select('id', 'nombre')->where('pregunta_id', '=', $pregunta->id)->get();
 			foreach ($alternativas as $alternativa) {
@@ -15,6 +16,12 @@ use App\Alternativa;
 				}
 			}
 		?>
+		@else 
+			<?php 
+				$respuesta = Respuesta::select('libre')->where('pregunta_id', '=', $pregunta->id)->where('alumno_id', '=', $alumno_id)->get();
+				echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>RESPUESTA: </b> <b>' . $respuesta[0]->libre . '</b><br><br>';
+			?>
+		@endif
 		<?php $i++; ?>
 	@endforeach
 </div>
