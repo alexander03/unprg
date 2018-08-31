@@ -68,6 +68,9 @@
 													<div class="col-lg-6 col-md-6 col-sm-6">
 														{!! Form::text('pregunta', '', array('class' => 'form-control input-sm', 'id' => 'pregunta')) !!}
 													</div>
+													<div class="col-lg-2 col-md-2 col-sm-2">
+														{!! Form::select('tipopregunta', array('1' => 'Múltiple', '2' => 'Libre'), null, array('class' => 'form-control input-sm', 'id' => 'tipopregunta')) !!}
+													</div>
 													<div class="col-lg-1 col-md-1 col-sm-1">
 														{!! Form::button('<i class="glyphicon glyphicon-plus"></i>', array('class' => 'btn btn-info input-sm waves-effect waves-light m-l-10 btn-md btnAnadir', 'onclick' => 'gestionpa(1, "pregunta", "", ' . $encuesta_id . ');')) !!}
 													</div>
@@ -100,7 +103,13 @@
 													<td>{{ $contador }}</td>
 													<td>{{ $value->nombre }}</td>
 													<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'gestionpa(2, "pregunta", ' . $value->id . ', ' . $encuesta_id . ');', 'class' => 'btn btn-xs btn-danger')) !!}</td>
-													<td><a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick='gestionpa(3, "alternativa", "", {{ $value->id }}); $(".correcto").addClass("hidden");'><div class="glyphicon glyphicon-list"></div> Alternativas</a>
+													<td>
+														@if($value->tipo == 1)
+														<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick='gestionpa(3, "alternativa", "", {{ $value->id }}); $(".correcto").addClass("hidden");'><div class="glyphicon glyphicon-list"></div> Alternativas</a>
+														@else
+														<a href="javascript:void(0)" style="btn btn-default btn-xs">Libre</a>
+														@endif
+													</td>
 												</tr>
 												<?php
 												$contador = $contador + 1;
