@@ -296,6 +296,7 @@ class EncuestaController extends Controller
     {
         $pregunta              = new Pregunta();
         $pregunta->nombre      = $request->get('pregunta');
+        $pregunta->tipo        = $request->get('tipopregunta');
         $pregunta->encuesta_id = $encuesta_id;
         $pregunta->save();
 
@@ -357,7 +358,12 @@ class EncuestaController extends Controller
                     $tabla .= '</td>
                         <td>';
 
-                    $tabla .= '<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick=\'gestionpa(3, "alternativa", "", ' . $value->id . ');\'><div class="glyphicon glyphicon-list"></div> Alternativas</a>';
+                        if($value->tipo == 1) {
+                            $tabla .= '<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick=\'gestionpa(3, "alternativa", "", ' . $value->id . ');\'><div class="glyphicon glyphicon-list"></div> Alternativas</a>';
+                        } else {
+                            $tabla .= '<a href="javascript:void(0)" style="btn btn-default btn-xs">Libre</a>';
+                        }
+                    
                     $tabla .= "</td>
                     </tr>";
                     $contador = $contador + 1;
@@ -681,5 +687,11 @@ class EncuestaController extends Controller
         $alternativa           = Alternativa::find($alternativa_id);
         $alternativa->correcto = true;
         $alternativa->save();
+    }
+
+    public function eliminarencuestas(Request $request) {
+        Alternativa::truncate();
+        Pregunta::truncate();
+        Encuesta::truncate();
     }
 }
