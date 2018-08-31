@@ -25,7 +25,6 @@ class AlumnoEncuesta extends Model
     {
     	$encuesta = Encuesta::select('id')->where('nombre', 'LIKE', '%'.$nombre.'%')->get();
     	$like = '';
-    	$false = '%%%%%%%%%%%%%%%%%%';
         return $query->orWhere(function($subquery) use($encuesta)
         {
             if(count($encuesta) > 0) {
@@ -33,7 +32,7 @@ class AlumnoEncuesta extends Model
             		$subquery->orWhere('encuesta_id', '=', $enc->id);
             	}
             } else {
-            	$subquery->orWhere('encuesta_id', '=', $false);
+            	$subquery->orWhere('encuesta_id', '=', 0);
             }
         })
         ->where(function($subquery) use($alumno_id) {
