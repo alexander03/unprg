@@ -23,7 +23,7 @@
 				$alumno = $value->alumno->nombres . ' ' . $value->alumno->apellidopaterno . ' ' . $value->alumno->apellidomaterno;
 			?>
 			<td>{{ $alumno }}</td>
-			<td>{!! Form::button('<div class="glyphicon glyphicon-eye-open"></div> Ver', array('class' => 'btn btn-xs btn-success', 'onclick' => 'modal (\'' . URL::route($ruta["respuestasencuesta"], array('encuesta_id'=>$value->encuesta->id)) . '\', \'Respuestas de encuesta: ' . $value->encuesta->nombre . '<br>Alumno: ' . $alumno . '\', this);')) !!}</td>		
+			<td>{!! Form::button('<div class="glyphicon glyphicon-eye-open"></div> Ver', array('class' => 'btn btn-xs btn-success', 'onclick' => 'modal (\'' . URL::route($ruta["respuestasencuesta"], array('encuesta_id'=>$value->encuesta->id, 'alumno_id'=>$value->alumno->id)) . '\', \'Respuestas de encuesta: ' . $value->encuesta->nombre . '<br>Alumno: ' . $alumno . '\', this);')) !!}</td>		
 		</tr>
 		<?php
 		$contador = $contador + 1;
