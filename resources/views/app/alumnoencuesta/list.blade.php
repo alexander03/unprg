@@ -26,13 +26,13 @@
 			<td>{{ $value->tipoencuesta->nombre or '-' }}</td>
 
 			<?php 
-				$alumnoencuesta = AlumnoEncuesta::select('estado')->where('encuesta_id', '=', $value->id)->get();
+				$alumnoencuesta = AlumnoEncuesta::select('estado', 'alumno_id')->where('encuesta_id', '=', $value->id)->get();
 			?>
 			@if(count($alumnoencuesta) == 0)
 			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Preguntas', array('onclick' => 'cargarRuta(\'http://localhost/unprg/alumnoencuesta/llenarencuesta?encuesta_id=' . $value->id . '\', \'container\');', 'class' => 'btn btn-default btn-xs')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Pendiente', array('onclick' => '#', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 			@else
-			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Ver', array('class' => 'btn btn-default btn-xs', 'onclick' => 'modal (\'' . URL::route($ruta["respuestasencuesta"], array('encuesta_id'=>$value->id)) . '\', \'Respuestas de encuesta ' . $value->nombre . '\', this);')) !!}</td>
+			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Ver', array('class' => 'btn btn-default btn-xs', 'onclick' => 'modal (\'' . URL::route($ruta["respuestasencuesta"], array('encuesta_id'=>$value->id, 'alumno_id'=>$alumnoencuesta[0]->alumno_id)) . '\', \'Respuestas de encuesta ' . $value->nombre . '\', this);')) !!}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-ok"></div> Completo', array('onclick' => '#', 'class' => 'btn btn-xs btn-success')) !!}</td>
 			@endif
 			
