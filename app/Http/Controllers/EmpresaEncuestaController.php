@@ -80,16 +80,18 @@ class EmpresaEncuestaController extends Controller
         $entidad          = 'EmpresaEncuesta';
         $title            = $this->tituloAdmin;
         $ruta             = $this->rutas;
+        $cboAlumno        = [''=>'Escriba el nombre del Alumno'] + Alumno::pluck('nombres', 'id')->all();
 
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'ruta'));
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'ruta', 'cboAlumno'));
     }
 
     public function respuestasencuesta(Request $request) {
         $encuesta_id = $request->get('encuesta_id');
+        $alumno_id   = $request->get('alumno_id');
 
-        $preguntas   = Pregunta::select('id', 'nombre')->where('encuesta_id', '=', $encuesta_id)->get();
+        $preguntas   = Pregunta::select('id', 'nombre', 'tipo')->where('encuesta_id', '=', $encuesta_id)->get();
 
-        return view($this->folderview.'.respuestasencuesta')->with(compact('preguntas'));
+        return view($this->folderview.'.respuestasencuesta')->with(compact('preguntas', 'alumno_id'));
     }
 }
 
