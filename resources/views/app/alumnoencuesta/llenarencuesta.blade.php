@@ -144,17 +144,24 @@ use App\Alternativa;
                 <div class="row" style="margin-top: 10px">
                     <div class="col-md-12">
                         <h3>{{ $i }}. {{ $pregunta->nombre }}</h3>
-                        <?php 
-                            $alternativas = Alternativa::select('id', 'nombre')->where('pregunta_id', '=', $pregunta->id)->get();
-                        ?>
-                        @foreach($alternativas as $alternativa)
-                            <div class="form-check">
-                                <label>
-                                    <input type="radio" name="radio{{ $pregunta->id }}" id="radio{{ $pregunta->id }}" class="alternativacorrecta" onclick="marcarcorrecto({{ $pregunta->id }}, {{ $alternativa->id }});"> <span class="label-text">{{ $alternativa->nombre }}</span>
-                                </label>
-                            </div>                                
-                        @endforeach
-                        {!! Form::hidden('alternativa' . $i, '', array('id' => 'alternativa' . $pregunta->id, 'class' => 'alternativa')) !!}
+                        @if($pregunta->tipo == 1)
+                            <?php 
+                                $alternativas = Alternativa::select('id', 'nombre')->where('pregunta_id', '=', $pregunta->id)->get();
+                            ?>
+                            @foreach($alternativas as $alternativa)
+                                <div class="form-check">
+                                    <label>
+                                        <input type="radio" name="radio{{ $pregunta->id }}" id="radio{{ $pregunta->id }}" class="alternativacorrecta" onclick="marcarcorrecto({{ $pregunta->id }}, {{ $alternativa->id }});"> <span class="label-text">{{ $alternativa->nombre }}</span>
+                                    </label>
+                                </div>                                
+                            @endforeach
+                            {!! Form::hidden('alternativa' . $i, '', array('id' => 'alternativa' . $pregunta->id, 'class' => 'alternativa')) !!}
+                            {!! Form::hidden('tipo' . $i, 'SI', array('id' => 'tipo' . $i)) !!}
+                        @else
+                            <textarea class="form-control input-xs" id="alternativa{{ $pregunta->id }}" class="alternativa" placeholder="Ingrese respuesta" name="alternativa{{ $i }}" cols="20" rows="2"></textarea>
+                            {!! Form::hidden('tipo' . $i, 'NO', array('id' => 'tipo' . $i)) !!}
+                            {!! Form::hidden('pregunta_id' . $i, $pregunta->id, array('id' => 'pregunta_id' . $i)) !!}
+                        @endif
                     </div>
                 </div>
                 <?php $i++; ?>
