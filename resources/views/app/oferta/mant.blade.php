@@ -90,20 +90,22 @@ use App\Especialidad;
 <div id="divMensajeError{!! $entidad !!}"></div>
 {!! Form::model($oferta, $formData) !!}	
 	{!! Form::hidden('listar', $listar, array('id' => 'listar')) !!}
-	<fieldset class="col-12">
-		<legend>Datos Oferta</legend>
-		<div class="panel panel-default" style="margin-bottom: 10px;">
-				<div class="form-group col-xs-12">
-					{!! Form::label('nombre', 'Nombre:', array('class' => '')) !!}
-					{!! Form::text('nombre', null, array('class' => 'form-control input-xs', 'id' => 'nombre', 'placeholder' => 'Ingrese nombre')) !!}
+	
+				<div class="form-group">
+					{!! Form::label('nombre', 'Nombre:', array('class' => 'col-lg-1 col-md-1 col-sm-1 control-label')) !!}
+					<div class="col-lg-12 col-md-12 col-sm-12" >
+						{!! Form::text('nombre', null, array('class' => 'form-control input-sm', 'id' => 'nombre', 'placeholder' => 'Ingrese nombre')) !!}					
+					</div>
 				</div>
-				<div class="form-group col-xs-12">
-					{!! Form::label('detalle', 'Descripción:', array('class' => '')) !!}
-					{!! Form::text('detalle', null, array('class' => 'form-control input-sm', 'id' => 'detalle', 'placeholder' => 'Ingrese descripción')) !!}
+				<div class="form-group">
+					{!! Form::label('detalle', 'Descripción:', array('class' => 'col-lg-1 col-md-1 col-sm-1 control-label')) !!}
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						{!! Form::text('detalle', null, array('class' => 'form-control input-sm', 'id' => 'detalle', 'placeholder' => 'Ingrese descripción')) !!}
+					</div>
 				</div>
 				<div class="form-group col-xs-6">
 					{!! Form::label('fechaInicio', 'Fecha Inicio:', array('class' => '')) !!}
-					{!! Form::date('fechaInicio', null, array('class' => 'form-control input-xs', 'id' => 'fechaInicio', 'placeholder' => 'fecha inicio')) !!}
+					{!! Form::date('fechaInicio', null, array('class' => 'form-control ', 'id' => 'fechaInicio', 'placeholder' => 'fecha inicio')) !!}
 				</div>
 				<?php
 				if($oferta != null){
@@ -113,9 +115,9 @@ use App\Especialidad;
 					
 				}
 				?>
-				<div class="form-group col-xs-6" style="margin-left: 10px;">
+				<div class="form-group col-xs-6" style="margin-left: 28px;">
 					{!! Form::label('fechaFin', 'Fecha Fin:', array('class' => '')) !!}
-					{!! Form::date('fechaFin', null, array('class' => 'form-control input-xs', 'id' => 'fechaFin', 'placeholder' => 'fecha fin')) !!}
+					{!! Form::date('fechaFin', null, array('class' => 'form-control ', 'id' => 'fechaFin', 'placeholder' => 'fecha fin')) !!}
 				</div>
 				<?php
 				if($oferta != null){
@@ -126,30 +128,51 @@ use App\Especialidad;
 					
 				}
 				?>
-		</div>
-	</fieldset>
 
-	<legend>Datos dirección</legend>
-	
-		<div class="form-group col-xs-12">
-			{!! Form::label('opcionevento', 'Opcion de oferta:', array('class' => '')) !!}
-			{!! Form::select('opcionevento', $cboOpcionEvento, null, array('class' => 'form-control opOferte', 'id' => 'opcionevento')) !!}
-		</div>
+				<div class="form-group col-xs-6" >
+					{!! Form::label('temporalidad', 'Temporalidad:', array('class' => '')) !!}
+					{!! Form::select('temporalidad', $cboTemporalidad, null, array('class' => 'form-control ', 'id' => 'temporalidad')) !!}
+				</div>
+				<div class="form-group col-xs-6" style="margin-left: 28px;">
+					{!! Form::label('dedicacion', 'Dedicacion:', array('class' => '')) !!}
+					{!! Form::select('dedicacion', $cboDedicacion, null, array('class' => 'form-control', 'id' => 'dedicacion')) !!}
+				</div>
 
-		<div class="form-group col-xs-4" style="margin-left: 10px;">
-			{!! Form::label('facultad_id', 'Facultad:', array('class' => ' visualisar')) !!}
-			{!! Form::select('facultad_id', $cboFacultad, null, array('class' => 'form-control input-sm visualisar', 'id' => 'facultad_id')) !!}
-		</div>
-		<div class="form-group col-xs-4" style="margin-left: 10px;">
-			{!! Form::label('escuela_id', 'Escuela:', array('class' => 'visualisar')) !!}
-			<div id="selectescuela">
-				{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-sm visualisar', 'id' => 'escuela_id')) !!}
+				<div class="form-group">
+					{!! Form::label('requisitos', 'Requisitos:', array('class' => 'col-lg-1 col-md-1 col-sm-1 control-label')) !!}
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						{!! Form::text('requisitos', null, array('class' => 'form-control input-sm', 'id' => 'requisitos', 'placeholder' => 'Ingrese requisitos necesarios...')) !!}
+					</div>
+				</div>
+
+				<div class="form-group">
+					{!! Form::label('experiencia', 'Experiencia:', array('class' => 'col-lg-1 col-md-1 col-sm-1 control-label')) !!}
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						{!! Form::text('experiencia', null, array('class' => 'form-control input-sm', 'id' => 'experiencia', 'placeholder' => 'Ingrese Experiencia...')) !!}
+					</div>
+				</div>
+
+		<div class="form-group">
+			{!! Form::label('opcionevento', 'Opcion:', array('class' => 'col-lg-1 col-md-1 col-sm-1 control-label')) !!}
+			<div class="col-lg-12 col-md-12 col-sm-12" >
+				{!! Form::select('opcionevento', $cboOpcionEvento, null, array('class' => 'form-control input-sm opOferte', 'id' => 'opcionevento')) !!}
 			</div>
 		</div>
-		<div class="form-group col-xs-4" style="margin-left: 10px;">
+
+		<div class="form-group col-xs-4" >
+			{!! Form::label('facultad_id', 'Facultad:', array('class' => ' visualisar')) !!}
+			{!! Form::select('facultad_id', $cboFacultad, null, array('class' => 'form-control  visualisar', 'id' => 'facultad_id')) !!}
+		</div>
+		<div class="form-group col-xs-4" style="margin-left: 15px;">
+			{!! Form::label('escuela_id', 'Escuela:', array('class' => 'visualisar')) !!}
+			<div id="selectescuela">
+				{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control  visualisar', 'id' => 'escuela_id')) !!}
+			</div>
+		</div>
+		<div class="form-group col-xs-4" style="margin-left: 15px;">
 			{!! Form::label('especialidad_id', 'Especialidad:', array('class' => 'visualisar')) !!}
 			<div id="selectespecialidad">
-				{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control input-sm visualisar', 'id' => 'especialidad_id')) !!}
+				{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control  visualisar', 'id' => 'especialidad_id')) !!}
 			</div>
 		</div>
 
@@ -187,11 +210,9 @@ use App\Especialidad;
 					@endforeach
 				@endif
 			</tbody>
-
 				<input type="hidden" id="cadenaDirecciones" name="cadenaDirecciones" value="">
 			</table>
-	
-</fieldset>
+
 
 <div class="form-group">
 	<div class="col-lg-12 col-md-12 col-sm-12 text-right">
@@ -203,7 +224,7 @@ use App\Especialidad;
 <script type="text/javascript">
 $(document).ready(function() {
 	configurarAnchoModal('650');
-	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');
+	init(IDFORMMANTENIMIENTO+'{!! $entidad !!}', 'M', '{!! $entidad !!}');		
 }); 
 $('#cadenaDirecciones').val(getCadenaTablaDetalles);
 if($('#fechaI').val() !== ""){

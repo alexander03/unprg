@@ -235,7 +235,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Date' => Jenssegers\Date\Date::class,
-
+        
     ],
 
 ];
