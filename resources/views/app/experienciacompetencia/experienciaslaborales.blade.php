@@ -106,6 +106,7 @@
                                                     <th style="width: 8%">RUC</th>
                                                     <th>EMPRESA</th>
                                                     <th>CARGO</th>
+						    <th>CONTACTO</th>
                                                     <th style="width: 4%">COMP</th>
                                                 </tr>
                                             </thead>
@@ -261,7 +262,7 @@
 			beforeSend: function(){
                 var tempCargando;
                 if(idelementCargando.toLowerCase()==="tbody_experiencias"){
-                    tempCargando= "<tr><td colspan='5'>"+imgCargando()+"</td></tr>";
+                    tempCargando= "<tr><td colspan='6'>"+imgCargando()+"</td></tr>";
                 }else{
                     tempCargando= "<tr><td colspan='4'>"+imgCargando()+"</td></tr>";
                 }
@@ -306,6 +307,7 @@
                                 "<td class='align-middle'>" + value.ruc + "</td>"+
                                 "<td class='align-middle'>" + value.empresa + "</td>"+
                                 "<td class='align-middle'>" + value.cargo + "</td>"+
+				"<td class='align-middle'>" + value.telefono + "</td>"+
                                 "<td class='text-center align-middle'><button idexperiencia_laboral='" + value.id + "' class='btn btn-warning btn-xs competencias-experiencia' title='Competencias'><i class='fa fa-list' aria-hidden='true'></i></button></td>" +
                                 "</tr>";
                 $('#tbody_experiencias').append(fila);

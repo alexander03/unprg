@@ -59,7 +59,6 @@ class OfertaController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Fin', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Operaciones', 'numero' => '2');
@@ -96,7 +95,9 @@ class OfertaController extends Controller
         $cboEscuela = array('' => 'Seleccione'); //+ Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione'); //+ Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento    = array('0'=>'Libre','1' => 'Con restricciones');
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta','cboOpcionEvento', 'cboFacultad','cboEscuela','cboEspecialidad'));
+        $cboTemporalidad = array('0'=>'Tiempo completo','1' => 'Medio tiempo', '2'=>'Por horas');
+        $cboDedicacion = array('0'=>'Completo','1' => 'Parcial');
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta','cboOpcionEvento', 'cboFacultad','cboEscuela','cboEspecialidad', 'cboTemporalidad', 'cboDedicacion'));
     }
 
     public function getEscuelas(Request $request, $id){
@@ -118,7 +119,7 @@ class OfertaController extends Controller
      */
     public function create(Request $request)
     {
-        
+
         $listar         = Libreria::getParam($request->input('listar'), 'NO');
         $entidad        = 'Oferta';
         $oferta        = null;
@@ -126,10 +127,12 @@ class OfertaController extends Controller
         $cboEscuela = array('' => 'Seleccione');// + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') ;//+ Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento = array('0'=>'Libre','1' => 'Con restricciones');
+        $cboTemporalidad = array('0'=>'Tiempo completo','1' => 'Medio tiempo', '2'=>'Por horas');
+        $cboDedicacion = array('0'=>'Completo','1' => 'Parcial');
         $formData  = array('oferta.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('oferta', 'formData', 'entidad', 'boton', 'listar','cboOpcionEvento','cboFacultad','cboEscuela','cboEspecialidad'));
+        return view($this->folderview.'.mant')->with(compact('oferta', 'formData', 'entidad', 'boton', 'listar','cboOpcionEvento','cboFacultad','cboEscuela','cboEspecialidad', 'cboTemporalidad', 'cboDedicacion'));
     }
 
     /**
@@ -141,7 +144,7 @@ class OfertaController extends Controller
 
     public function store(Request $request)
     {
-       
+
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $validacion = Validator::make($request->all(),
         array(
@@ -164,6 +167,10 @@ class OfertaController extends Controller
             $oferta->opcionevento =$request->input('opcionevento');
             $oferta->fechai     = $request->input('fechaInicio');
             $oferta->fechaf     = $request->input('fechaFin');
+            $oferta->temporalidad =$request->input('temporalidad');
+            $oferta->dedicacion =$request->input('dedicacion');
+            $oferta->requisitos = $request->input('requisitos');
+            $oferta->experiencia = $request->input('experiencia');
             $oferta->save();
 
             if($request->input('cadenaDirecciones') != ''){
@@ -226,10 +233,12 @@ class OfertaController extends Controller
         $cboEscuela = array('' => 'Seleccione') ;//+ Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione');// + Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento = array('0'=>'Libre','1' => 'Con restricciones');
+        $cboTemporalidad = array('0'=>'Tiempo completo','1' => 'Medio tiempo', '2'=>'Por horas');
+        $cboDedicacion = array('0'=>'Completo','1' => 'Parcial');
         $formData       = array('oferta.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('oferta', 'formData', 'entidad', 'boton', 'listar','listaDet','cboOpcionEvento','cboFacultad','cboEscuela','cboEspecialidad'));
+        return view($this->folderview.'.mant')->with(compact('oferta', 'formData', 'entidad', 'boton', 'listar','listaDet', 'cboTemporalidad', 'cboDedicacion','cboOpcionEvento','cboFacultad','cboEscuela','cboEspecialidad'));
     }
 
     /**
@@ -249,7 +258,7 @@ class OfertaController extends Controller
         $validacion = Validator::make($request->all(),
         array(
                 'nombre'       => 'required|max:120|unique:evento,nombre,'.$id.',id,deleted_at,NULL',
-                'detalle'       => 'required|max:200|unique:evento,detalle,NULL,id,deleted_at,NULL',
+                'detalle'       => 'required|max:200|unique:evento,detalle,'.$id.',id,deleted_at,NULL',
                 'fechaInicio' => 'required',
                 'fechaFin' => 'required',
             )
@@ -266,6 +275,10 @@ class OfertaController extends Controller
             $oferta->opcionevento = $request->input('opcionevento');
             $oferta->fechai     = $request->input('fechaInicio');
             $oferta->fechaf     = $request->input('fechaFin');
+            $oferta->temporalidad =$request->input('temporalidad');
+            $oferta->dedicacion =$request->input('dedicacion');
+            $oferta->requisitos = $request->input('requisitos');
+            $oferta->experiencia = $request->input('experiencia');
             $oferta->save();
             Oferta::eliminarDetalle($id);
             if($request->input('cadenaDirecciones') != ''){

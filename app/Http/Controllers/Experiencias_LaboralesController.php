@@ -46,8 +46,9 @@ class Experiencias_LaboralesController extends Controller
         $cabecera[] = array('valor' => 'Ruc', 'numero' => '1');
         $cabecera[] = array('valor' => 'Empresa', 'numero' => '1');
         $cabecera[] = array('valor' => 'Cargo', 'numero' => '1');
-        $cabecera[] = array('valor' => 'Fecha Inicio', 'numero' => '1');
-        $cabecera[] = array('valor' => 'Fecha Fin', 'numero' => '1');
+        $cabecera[] = array('valor' => 'Contacto', 'numero' => '1');
+        $cabecera[] = array('valor' => 'F. Inicio', 'numero' => '1');
+        $cabecera[] = array('valor' => 'F. Fin', 'numero' => '1');
         $cabecera[] = array('valor' => 'Operaciones', 'numero' => '3');
         $titulo_modificar = $this->tituloModificar;
         $titulo_eliminar = $this->tituloEliminar;

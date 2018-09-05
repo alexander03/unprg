@@ -20,6 +20,7 @@
 			<td>{{ $value->ruc }}</td>
 			<td>{{ $value->empresa }}</td>
 			<td>{{ $value->cargo }}</td>
+			<td>{{ $value->telefono }}</td>
 			<td>{{ Date::parse($value->fechainicio)->format('d/m/y') }}</td>
 			<td>{{ Date::parse($value->fechafin)->format('d/m/Y') }}</td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Competencias', array('onclick' => 'modal (\''.URL::route($ruta["competencias"], array('SI',$value->id)).'\', \'<h5>EXP. LABORAL [ '.$value->cargo.' ]</h5>\', this);', 'class' => 'btn btn-xs btn-default')) !!}</td>

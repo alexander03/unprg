@@ -28,6 +28,7 @@ class OfertaAlumnoController extends Controller
             'delete' => 'ofertaalumno.eliminar',
             'search' => 'ofertaalumno.buscar',
             'index'  => 'ofertaalumno.index',
+            'detalle' => 'ofertaalumno.detalle'
         );
 
     /**
