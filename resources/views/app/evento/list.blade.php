@@ -19,7 +19,6 @@
 		<tr>
 			<td>{{ $contador }}</td>
 			<td>{{ $value->nombre }}</td>
-			<td>{{ $value->detalle }}</td>
 			<td>{{ $value->Tipoevento->nombre}}</td>
 			<td>{{ Date::parse($value->fechai)->format('d/m/y') }}</td>
 			<td>{{ Date::parse($value->fechaf)->format('d/m/Y') }}</td>

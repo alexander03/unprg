@@ -59,7 +59,7 @@ class EventoController extends Controller
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Nombre', 'numero' => '1');
-        $cabecera[]       = array('valor' => 'Descripción', 'numero' => '1');
+        
         $cabecera[]       = array('valor' => 'Tipo Evento', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Inicio', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Fecha Fin', 'numero' => '1');
@@ -97,7 +97,8 @@ class EventoController extends Controller
         $cboEscuela = array('' => 'Seleccione'); //+ Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione'); //+ Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento    = array('0'=>'Libre','1' => 'Con restricciones');
-        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        $cboAcceso    = array('0'=>'Libre','1' => 'Costo');
+        return view($this->folderview.'.admin')->with(compact('entidad', 'title', 'titulo_registrar', 'ruta', 'cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento','cboAcceso'));
     }
 
     public function getEscuelas(Request $request, $id){
@@ -128,10 +129,11 @@ class EventoController extends Controller
         $cboEscuela = array('' => 'Seleccione');// + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') ;//+ Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento = array('0'=>'Libre','1' => 'Con restricciones');
+        $cboAcceso    = array('0'=>'Libre','1' => 'Costo');
         $formData  = array('evento.store');
         $formData = array('route' => $formData, 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton = 'Registrar'; 
-        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','cboTipoevento','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','cboTipoevento','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento','cboAcceso'));
     }
 
     /**
@@ -163,6 +165,13 @@ class EventoController extends Controller
             $evento               = new Evento();
             $evento->nombre = $request->input('nombre');
             $evento->detalle = $request->input('detalle');
+
+            $evento->ponente = $request->input('ponente');
+            $evento->direccion = $request->input('direccion');
+            $evento->hora = $request->input('hora');
+            $evento->acceso = $request->input('acceso');
+            
+
             $evento->empresa_id = Evento::getIdEmpresa();
             $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento =$request->input('opcionevento');
@@ -231,10 +240,11 @@ class EventoController extends Controller
         $cboEscuela = array('' => 'Seleccione') + Escuela::pluck('nombre', 'id')->all();
         $cboEspecialidad = array('' => 'Seleccione') + Especialidad::pluck('nombre', 'id')->all();
         $cboOpcionEvento = array('0'=>'Libre','1' => 'Con restricciones');
+        $cboAcceso    = array('0'=>'Libre','1' => 'Costo');
         $formData       = array('evento.update', $id);
         $formData       = array('route' => $formData, 'method' => 'PUT', 'class' => 'form-horizontal', 'id' => 'formMantenimiento'.$entidad, 'autocomplete' => 'off');
         $boton          = 'Modificar';
-        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','listaDet','cboTipoevento','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento'));
+        return view($this->folderview.'.mant')->with(compact('evento', 'formData', 'entidad', 'boton', 'listar','listaDet','cboTipoevento','cboFacultad','cboEscuela','cboEspecialidad','cboOpcionEvento','cboAcceso'));
     }
 
     /**
@@ -254,7 +264,7 @@ class EventoController extends Controller
         $validacion = Validator::make($request->all(),
         array(
                 'nombre'       => 'required|max:120|unique:evento,nombre,'.$id.',id,deleted_at,NULL',
-                'detalle'       => 'required|max:200|unique:evento,detalle,NULL,id,deleted_at,NULL',
+                'detalle'       => 'required|max:200|unique:evento,detalle,'.$id.',id,deleted_at,NULL',
                 'tipoevento_id' => 'required',
                 'fechaInicio' => 'required',
                 'fechaFin' => 'required',
@@ -268,6 +278,12 @@ class EventoController extends Controller
             $evento                 = Evento::find($id);
             $evento->nombre = $request->input('nombre');
             $evento->detalle = $request->input('detalle');
+            
+            $evento->ponente = $request->input('ponente');
+            $evento->direccion = $request->input('direccion');
+            $evento->hora = $request->input('hora');
+            $evento->acceso = $request->input('acceso');
+
             $evento->empresa_id = Evento::getIdEmpresa();
             $evento->tipoevento_id =$request->input('tipoevento_id');
             $evento->opcionevento = $request->input('opcionevento');

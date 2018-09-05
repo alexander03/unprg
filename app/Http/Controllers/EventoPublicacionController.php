@@ -20,6 +20,7 @@ use PDF;
 use Jenssegers\Date\Date;
 class EventoPublicacionController extends Controller
 {
+    
     protected $folderview      = 'app.eventopublicacion';
     protected $tituloAdmin     = 'Evento Publicacion';
     protected $tituloListar = 'Evento';
@@ -105,7 +106,7 @@ class EventoPublicacionController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *

@@ -24,6 +24,7 @@ class EventoAlumnoController extends Controller
     protected $tituloModificar = 'Confirmar suscripcion!';
     protected $tituloEliminar  = 'Confirmar suscripcion!';
     protected $rutas           = array('create' => 'eventoalumno.create', 
+            'detalleevento'   => 'eventoalumno.detalleevento', 
             'edit'   => 'eventoalumno.edit', 
             'delete' => 'eventoalumno.eliminar',
             'search' => 'eventoalumno.buscar',
@@ -45,6 +46,11 @@ class EventoAlumnoController extends Controller
      * 
      * @return Response 
      */
+public function detalleevento($id, Request $request){
+    $evento       = Evento::find($id);
+    return view($this->folderview.'.detalle')->with(compact('evento'));
+}
+
     public function suscribir(Request $request){
         $res = '';
         $error = DB::transaction(function() use($request,&$res){

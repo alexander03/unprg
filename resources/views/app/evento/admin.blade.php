@@ -13,11 +13,9 @@
         </div>
     </div>
 </div>
-
 <div class="row" style="background: rgba(51,122,183,0.10);">
     <div class="col-sm-12">
         <div class="card-box table-responsive">
-
             <div class="row m-b-30">
                 <div class="col-sm-12">
 					{!! Form::open(['route' => $ruta["search"], 'method' => 'POST' ,'onsubmit' => 'return false;', 'class' => 'form-inline', 'role' => 'form', 'autocomplete' => 'off', 'id' => 'formBusqueda'.$entidad]) !!}
@@ -44,9 +42,7 @@
 					{!! Form::close() !!}
 		 		</div>
             </div>
-
 			<div id="listado{{ $entidad }}"></div>
-			
             <table id="datatable" class="table table-striped table-bordered">
             </table>
         </div>
@@ -54,10 +50,7 @@
 </div>
 
 <script>
-	
-
 	$(document).ready(function () {
-
 		var fechaActual = new Date();
 		var day = ("0" + fechaActual.getDate()).slice(-2);
 		var month = ("0" + (fechaActual.getMonth() + 1)).slice(-2);
@@ -65,7 +58,6 @@
 		var fechaf = (fechaActual.getFullYear() +1) + "-"+month+"-"+day;
 		$('#fechai').val(fechai);
 		$('#fechaf').val(fechaf);
-
 		buscar('{{ $entidad }}');
 		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
 		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="nombre"]').keyup(function (e) {
