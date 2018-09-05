@@ -128,7 +128,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('eventoalumno/buscar', 'EventoAlumnoController@buscar')->name('eventoalumno.buscar');
     Route::get('eventoalumno/eliminar/{id}/{listarluego}', 'EventoAlumnoController@eliminar')->name('eventoalumno.eliminar');
     Route::resource('eventoalumno', 'EventoAlumnoController', array('except' => array('show')));
-    Route::get('eventoalumno/detalleevento/{id}', 'EventoAlumnoController@detalleevento')->name('eventoalumno.detalleevento');
     //Route::get('socio/asistente', 'EventoController@asistente')->name('evento.asistente');
 
     /*EVENTO PUBLICACIONES*/
