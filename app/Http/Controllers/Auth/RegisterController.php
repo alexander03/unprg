@@ -68,8 +68,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'ruc'       => 'required|numeric|digits:11|unique:empresa',
-            'razonsocial'    => 'required|string|max:200|unique:empresa',
+            'ruc'       => 'required|numeric|digits:11|unique:empresa,ruc,NULL,id,deleted_at,NULL', // deleted_at = NULL
+            'razonsocial'    => 'required|string|max:200|unique:empresa,razonsocial,NULL,id,deleted_at,NULL',
             'direccion' => 'required|string|max:255',
             'telefono'   => 'required|numeric|digits:9',
             'email' => 'required|email|max:255|unique:usuario',
