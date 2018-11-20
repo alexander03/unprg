@@ -74,9 +74,10 @@ class OfertaAlumnoController extends Controller
         $entidad          = 'Oferta';
         $filas            = $request->input('filas');
         $nombre           = Libreria::getParam($request->input('nombre'));
+        $experiencia           = Libreria::getParam($request->input('experiencia'));
         $fechai           = Libreria::getParam($request->input('fechai'));
         $fechaf           = Libreria::getParam($request->input('fechaf'));
-        return view($this->folderview.'.list')->with(compact('entidad', 'filas','nombre','fechai','fechaf','entidad'));
+        return view($this->folderview.'.list')->with(compact('entidad', 'filas','nombre','experiencia','fechai','fechaf','entidad'));
     }
 
     /**

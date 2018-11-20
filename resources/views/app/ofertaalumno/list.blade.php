@@ -37,7 +37,7 @@ use Illuminate\Support\Facades\DB;
 			 FROM EVENTO E LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID 
 			 WHERE ROWNUM <= ".$cant_filas."  
-			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 					$classbtn  = 'btn btn-xs btn-light btn-block';
 					$txtbtn = '- ° -';
@@ -54,7 +54,7 @@ use Illuminate\Support\Facades\DB;
 				FROM EVENTO E LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 				INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID 
 				WHERE E.OPCIONEVENTO = 0 AND ROWNUM <= ".$cant_filas."  
-				AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+				AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				$fechaActual = strtotime(date("d-m-Y"));
 				$fechafinal=strtotime($r->fechai);
@@ -87,7 +87,7 @@ use Illuminate\Support\Facades\DB;
 				LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 				LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 				INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID 
-				where ROWNUM <= ".$cant_filas." AND DE.FACULTAD_ID = ".$facultad_id." AND E.TIPOEVENTO_ID IS NULL 
+				where ROWNUM <= ".$cant_filas." AND DE.FACULTAD_ID = ".$facultad_id." AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.TIPOEVENTO_ID IS NULL 
 				AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 				foreach ($result as $r) {
 					$fechaActual = strtotime(date("d-m-Y"));
@@ -123,8 +123,8 @@ use Illuminate\Support\Facades\DB;
 				LEFT JOIN DIRECCION_EVENTO DE ON DE.EVENTO_ID = E.ID 
 				LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 				INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID  
-				where ROWNUM <= ".$cant_filas." AND DE.ESCUELA_ID = ".$escuela_id." AND E.TIPOEVENTO_ID IS NULL 
-				AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+				where ROWNUM <= ".$cant_filas." AND DE.ESCUELA_ID = ".$escuela_id."  AND E.TIPOEVENTO_ID IS NULL 
+				AND NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 				foreach ($result as $r) {
 					$fechaActual = strtotime(date("d-m-Y"));
 					$fechafinal=strtotime($r->fechai);
@@ -160,7 +160,7 @@ use Illuminate\Support\Facades\DB;
 				LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID  
 				INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID   
 				where ROWNUM <= ".$cant_filas." AND DE.ESPECIALIDAD_ID = ".$especialidad_id." AND E.TIPOEVENTO_ID IS NULL 
-				AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+				AND NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 				foreach ($result as $r) {
 					$fechaActual = strtotime(date("d-m-Y"));
 					$fechafinal=strtotime($r->fechai);

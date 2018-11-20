@@ -29,6 +29,10 @@
 						{!! Form::text('nombre', '', array('class' => 'form-control input-xs', 'id' => 'nombre')) !!}
 					</div>
 					<div class="form-group">
+						{!! Form::label('experiencia', 'Experiencia:') !!}
+						{!! Form::text('experiencia', '', array('class' => 'form-control input-xs', 'id' => 'experiencia')) !!}
+					</div>
+					<div class="form-group">
 						{!! Form::label('fechai', 'Desde:') !!}
 						{!! Form::date('fechai', '', array('class' => 'form-control input-xs', 'id' => 'fechai')) !!}
 					</div>
