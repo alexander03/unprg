@@ -16,7 +16,7 @@
 
                 <div class="form-group{{ $errors->has('ruc') ? ' has-error' : '' }}">
                     <div class="col-xs-12">
-                        <input name="ruc" class="form-control" type="text" required="" placeholder="RUC" autofocus>
+                        <input name="ruc" id="ruc" class="form-control" type="text" required="" placeholder="RUC" autofocus>
                         <i class="md md-account-circle form-control-feedback l-h-34"></i>
                         @if ($errors->has('ruc'))
                             <span class="help-block">
@@ -27,19 +27,19 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="razonsocial" class="form-control" type="text" required="" placeholder="Razón Social">
+                        <input name="razonsocial" id="razonsocial" class="form-control" type="text" required="" placeholder="Razón Social" readonly="readonly">
                         <i class="md md-info-outline form-control-feedback l-h-34"></i>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="direccion" class="form-control" type="text" required="" placeholder="Dirección">
+                        <input name="direccion" id="direccion" class="form-control" type="text" required="" placeholder="Dirección" readonly="readonly">
                         <i class="md md-account-balance form-control-feedback l-h-34"></i>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="telefono" class="form-control" type="text" required="" placeholder="Teléfono">
+                        <input name="telefono" id="telefono" class="form-control" type="text" required="" placeholder="Teléfono">
                         <i class="md md-phone form-control-feedback l-h-34"></i>
                     </div>
                 </div>
@@ -102,4 +102,39 @@
         </div>
     </div>
 </div>
+
 @include('auth.bolsa.footer')
+
+<script>
+    function consultaRUC(){
+        var ruc = $("#ruc").val();
+        $.ajax({
+            type: 'GET',
+            url: "../../SunatPHP/demo.php",
+            data: "ruc="+ruc,
+            beforeSend(){
+                $("#ruc").val('Comprobando Empresa');
+            },
+            success: function (data, textStatus, jqXHR) {
+                if(data.RazonSocial == null) {
+                    alert('Empresa no encontrada');
+                    $("#ruc").val('').focus();
+                } else {
+                    $("#ruc").val(ruc);
+                    $("#razonsocial").val(data.RazonSocial);
+                    $("#direccion").val(data.Direccion);
+                    $("#telefono").val('').focus();
+                }
+            }
+        });
+    };
+
+    $(document).on('keyup', '#ruc', function() {
+        if($(this).val().length === 11) {
+            consultaRUC();
+        } else {
+            $("#razonsocial").val('');
+            $("#direccion").val('');
+        }
+    });
+</script>

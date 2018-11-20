@@ -148,6 +148,8 @@ class OfertaController extends Controller
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $validacion = Validator::make($request->all(),
         array(
+                'temporalidad'       => 'required',
+                'dedicacion'       => 'required',
                 'nombre'       => 'required|max:120|unique:evento,nombre,NULL,id,deleted_at,NULL',
                 'detalle'       => 'required|max:200|unique:evento,detalle,NULL,id,deleted_at,NULL',
                 'fechaInicio' => 'required',
@@ -257,6 +259,8 @@ class OfertaController extends Controller
         }
         $validacion = Validator::make($request->all(),
         array(
+                'temporalidad'       => 'required',
+                'dedicacion'       => 'required',
                 'nombre'       => 'required|max:120|unique:evento,nombre,'.$id.',id,deleted_at,NULL',
                 'detalle'       => 'required|max:200|unique:evento,detalle,'.$id.',id,deleted_at,NULL',
                 'fechaInicio' => 'required',

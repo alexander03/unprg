@@ -27,7 +27,10 @@
 												@foreach ($lista as $key => $value)
 												<tr>
 													<td>{{ $contador }}</td>
-													<td>{{ $value->alumno->nombres.'  '.$value->alumno->apellidopaterno.'  '.$value->alumno->apellidomaterno }}</td>
+													<td>{{ $value->alumno_nombres.'  '.$value->alumno_apellidopaterno.'  '.$value->alumno_apellidomaterno }}</td>
+													<td>
+													<a href="{{ route('vercurriculum',array('id'=>$value->alumno_id)) }}" class="btn btn-info waves-effect waves-light m-l-10 btn-xs" target="_blank"><i class="glyphicon glyphicon-eye-open"></i> Ver </a>
+													</td>
 												</tr>
 												<?php
 												$contador = $contador + 1;
