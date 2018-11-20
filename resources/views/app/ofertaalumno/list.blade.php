@@ -31,7 +31,6 @@ use Illuminate\Support\Facades\DB;
         $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
 		$facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
-		echo("facultad_id: ".$facultad_id);
 		if($facultad_id == ''){
 			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, E.TEMPORALIDAD, E.DEDICACION, E.REQUISITOS, E.EXPERIENCIA, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF, 
 			 EMP.RUC, EMP.RAZONSOCIAL, EMP.TELEFONO, EMP.EMAIL  
