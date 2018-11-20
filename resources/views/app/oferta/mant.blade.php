@@ -54,7 +54,6 @@ use App\Especialidad;
 			$('#especialidad_id').empty();
 			$('#escuela_id').append("<option value=''>Seleccione</option>");
 			$('#especialidad_id').append("<option value=''>Seleccione</option>");
-			// $("#tablaDir tr").length;
 		}
 		$('#cadenaDirecciones').val(getCadenaTablaDetalles);
 	}

@@ -6,8 +6,6 @@ use App\Especialidad;
 function cargarselect(entidad){
 	var select = $('#escuela_id').val();
 	route = 'alumno/cargarselect/'+select+'?entidad= '+entidad+'&t=no';
-	console.log(route);
-
 	$.ajax({
 		url:route,
 		headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },

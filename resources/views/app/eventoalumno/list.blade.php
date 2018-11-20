@@ -219,7 +219,6 @@ use Illuminate\Support\Facades\DB;
 	function procesarAjax(accion, idelementCargando, id){
         var route = 'ofertaalumno/'+accion;
         route += '?id='+id;
-        console.log(route);
         $.ajax({
 			url: route,
 			headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}' },
@@ -231,7 +230,6 @@ use Illuminate\Support\Facades\DB;
 	        },
 	        success: function(JSONRESPONSE){
                 $('#'+ idelementCargando).html('');
-				console.log(JSONRESPONSE);
 				if(JSONRESPONSE.toLowerCase()==="ok"){
 					if(accion.toLowerCase()==="suscribir"){
 						mostrarMensaje('Suscripción exitosa!','OK');
