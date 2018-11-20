@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\DB;
         $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
 		$facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
 		echo("facultad_id: ".$facultad_id);
-		if($facultad_id == '' || $alumno_id == 1){
+		if($facultad_id == ''){
 			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, E.TEMPORALIDAD, E.DEDICACION, E.REQUISITOS, E.EXPERIENCIA, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF, 
 			 EMP.RUC, EMP.RAZONSOCIAL, EMP.TELEFONO, EMP.EMAIL  
 			 FROM EVENTO E LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
@@ -57,15 +57,22 @@ use Illuminate\Support\Facades\DB;
 				WHERE E.OPCIONEVENTO = 0 AND ROWNUM <= ".$cant_filas."  
 				AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
-				if($r->id_validador != null){
-					$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
-					$txtbtn = 'SALIR';
-
+				$fechaActual = strtotime(date("d-m-Y"));
+				$fechafinal=strtotime($r->fechai);
+				if($fechaActual>$fechafinal){
+					$classbtn  = 'btn btn-xs btn-light btn-block ';
+					$txtbtn = 'CADUCÓ';
+					$alumno_id ='';
 				}else{
-					$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
-					$txtbtn = 'POSTULAR';
+					if($r->id_validador != null){
+						$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
+						$txtbtn = 'SALIR';
+					}else{
+						$classbtn  = 'btn btn-xs btn-warning btn-block btn-sus';
+						$txtbtn = 'POSTULAR';
+					}
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ".$alumno_id.">".$txtbtn."</button><td>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
 				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 				echo "</td></tr>";
 				$contador++;
@@ -89,6 +96,7 @@ use Illuminate\Support\Facades\DB;
 					if($fechaActual>$fechafinal){
 						$classbtn  = 'btn btn-xs btn-light btn-block ';
 						$txtbtn = 'CADUCÓ';
+						$alumno_id ='';
 					}else{
 						if($r->id_validador != null){
 							$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
@@ -98,8 +106,8 @@ use Illuminate\Support\Facades\DB;
 							$txtbtn = 'POSTULAR';
 						}
 					}
-					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ''>- ° -</button><td>";
-				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
+					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 					echo "</td></tr>";
 					$contador++;
 					$contadortemp++;
@@ -124,6 +132,7 @@ use Illuminate\Support\Facades\DB;
 					if($fechaActual>$fechafinal){
 						$classbtn  = 'btn btn-xs btn-light btn-block ';
 						$txtbtn = 'CADUCÓ';
+						$alumno_id = '';
 					}else{
 						if($r->id_validador != null){
 							$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
@@ -133,8 +142,8 @@ use Illuminate\Support\Facades\DB;
 							$txtbtn = 'POSTULAR';
 						}
 					}
-					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ''>- ° -</button><td>";
-				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
+					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 					echo "</td></tr>";
 					$contador++;
 					$contadortemp++;
@@ -159,6 +168,7 @@ use Illuminate\Support\Facades\DB;
 					if($fechaActual>$fechafinal){
 						$classbtn  = 'btn btn-xs btn-light btn-block ';
 						$txtbtn = 'CADUCÓ';
+						$alumno_id = '';
 					}else{
 						if($r->id_validador != null){
 							$classbtn  = 'btn btn-xs btn-danger btn-block btn-des';
@@ -168,8 +178,8 @@ use Illuminate\Support\Facades\DB;
 							$txtbtn = 'POSTULAR';
 						}
 					}
-					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ''>- ° -</button><td>";
-				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
+					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 					echo "</td></tr>";
 					$contador++;
 					$contadortemp++;
