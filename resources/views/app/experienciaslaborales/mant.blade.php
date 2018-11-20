@@ -1,4 +1,4 @@
-<<div id="divMensajeError{!! $entidad !!}"></div>
+<div id="divMensajeError{!! $entidad !!}"></div>
 <?php
 $fechainiciop = null;
 $fechafinp = null;
