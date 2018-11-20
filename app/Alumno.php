@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Escuela;
-
+//**** */
 class Alumno extends Model
 {
     use SoftDeletes;

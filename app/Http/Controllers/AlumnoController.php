@@ -332,7 +332,7 @@ class AlumnoController extends Controller
     }
     
     //cargar datos de especialidad segun el id de escuela
-    public function cargarselect($idselect, Request $request)
+    public function cargarselect($idselect, Request $request)//IDSELECT DEBE SER IGUAL EL NOMBRE DE LA RUTA
     {
         $entidad = $request->get('entidad');
         $t = '';
@@ -356,7 +356,7 @@ class AlumnoController extends Controller
 
         echo $retorno;
     }
-    
+    //***** */
     public function cambiarsituacion(Request $request) {
         $idalumno          = $request->get('idalumno');
         $situacion         = $request->get('situacion');
