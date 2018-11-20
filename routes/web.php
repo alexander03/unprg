@@ -141,6 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('ofertapublicacion/listsuscriptores/{id}', 'OfertaPublicacionController@listsuscriptores')->name('ofertapublicacion.listsuscriptores');
     Route::get('/PDFOferta/{id}', 'OfertaPublicacionController@PDFOferta')->name('PDFOferta');
     Route::resource('ofertapublicacion', 'OfertaPublicacionController', array('except' => array('show')));
+    Route::get('/vercurriculum/{id}', 'OfertaPublicacionController@vercurriculum')->name('vercurriculum'); 
 
     /*OFERTA ALUMNO*/
     Route::get('ofertaalumno/suscribir', 'OfertaAlumnoController@suscribir');

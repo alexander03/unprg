@@ -115,14 +115,17 @@ class OfertaAlumno extends Model
         OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('EVENTO_ID','=',OfertaALumno::getIdALumno())->delete();
     }
 
-    public function scopelistarSuscriptores($query, $id)
+    public static function listarSuscriptores($id)
     {
-        return $query->where(function($subquery) use($id)
-		            {
-		            	if (!is_null($id)) {
-		            		$subquery->where('evento_id', '=', $id);
-		            	}
-		            });
+        $results = OfertaAlumno::join('ALUMNO','ALUMNO.ID','=','EVENTO_ALUMNO.ALUMNO_ID')
+                        ->select(
+                            'ALUMNO.ID AS ALUMNO_ID',
+                            'ALUMNO.NOMBRES AS ALUMNO_NOMBRES',
+                            'ALUMNO.APELLIDOPATERNO AS ALUMNO_APELLIDOPATERNO',
+                            'ALUMNO.APELLIDOMATERNO AS ALUMNO_APELLIDOMATERNO'
+                        )
+                        ->where('EVENTO_ALUMNO.EVENTO_ID','=',$id);
+        return $results;
     }
 
 }

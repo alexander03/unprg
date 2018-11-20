@@ -14,11 +14,16 @@ use App\EventoALumno;
 use App\Facultad;
 use App\Escuela;
 use App\Especialidad;
+use App\Experiencias_Laborales;
+use App\Certificado;
+use App\CompetenciaAlumno;
+use Illuminate\Support\Facades\DB;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use PDF;
 use Jenssegers\Date\Date;
+use Illuminate\Support\Facades\Auth;
+use PDF;
+
 
 class OfertaPublicacionController extends Controller
 {
@@ -116,11 +121,12 @@ class OfertaPublicacionController extends Controller
      */
     public function listsuscriptores($id, Request $request)
     {
-        $listarSuscriptores        = EventoAlumno::listarSuscriptores($id);
+        $listarSuscriptores        = OfertaAlumno::listarSuscriptores($id);
         $lista           = $listarSuscriptores->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Alumno', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Curriculum', 'numero' => '1');
         $ruta             = $this->rutas;
 
         $tituloListar = $this->tituloListar;
@@ -148,6 +154,36 @@ class OfertaPublicacionController extends Controller
         PDF::writeHTML($html_content, true, false, true, false, '');
  
         PDF::Output($nomoferta.'.pdf', 'D');
+    }
+
+    public function vercurriculum(Request $request, $id)
+    {    
+        $alumno = DB::table('alumno')->where('id', $id)->first();
+        $nombrealumno = $alumno->apellidopaterno . '_' . $alumno->apellidomaterno;
+        $nombrealumno = 'CV_' . $nombrealumno;
+        $explaborales = Experiencias_Laborales::listartodo($id)->get();
+        $competencias = CompetenciaAlumno::listar($id,'')->get();
+        $certificados = Certificado::listarparacv($id,'')->get();
+
+        $view = \View::make('app.ofertapublicacion.vercurriculum')->with(compact('alumno', 'explaborales', 'competencias', 'certificados'));
+        $html_content = $view->render();      
+ 
+        PDF::SetTitle($nombrealumno);
+        PDF::AddPage(); 
+
+        // set margins
+        PDF::SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        PDF::SetHeaderMargin(PDF_MARGIN_HEADER);
+        PDF::SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        PDF::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        PDF::setImageScale(PDF_IMAGE_SCALE_RATIO);
+        PDF::writeHTML($html_content, true, true, true, true, '');
+
+        PDF::Output($nombrealumno.'.pdf', 'I');
     }
 
 }
