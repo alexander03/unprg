@@ -116,7 +116,7 @@
                 $("#ruc").val('Comprobando Empresa');
             },
             success: function (data, textStatus, jqXHR) {
-                if(data.RazonSocial === '') {
+                if(data.RazonSocial == null) {
                     alert('Empresa no encontrada');
                     $("#ruc").val('').focus();
                 } else {
