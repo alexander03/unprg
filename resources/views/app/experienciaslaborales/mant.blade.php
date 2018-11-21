@@ -120,21 +120,25 @@ $(document).ready(function() {
         var ruc = $("#ruc").val();
         $.ajax({
             type: 'GET',
-            url: "SunatPHP/demo.php",
+            url: "SunatPHP/prueba.php",
             data: "ruc="+ruc,
+            dataType: "json",
             beforeSend(){
                 $("#ruc").val('Comprobando Empresa');
             },
-            success: function (data, textStatus, jqXHR) {
-                if(data.RazonSocial == null) {
+            success: function (data) {
+                if(data.razon_social == null) {
                     alert('Empresa no encontrada');
                     $("#ruc").val('').focus();
                 } else {
                     $("#ruc").val(ruc);
-                    $("#empresa").val(data.RazonSocial);
-                    $("#cargo").val('').focus();
+                    $("#empresa").val(data.razon_social);
+                    $("#cargo").focus();
                 }
             }
+        }).fail(function(){
+            alert('Empresa no encontrada');
+            $("#ruc").val('').focus();
         });
     };
 
