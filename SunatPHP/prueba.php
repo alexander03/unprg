@@ -2,14 +2,23 @@
 	require_once("./src/autoload.php");
 	
 	$company = new \Sunat\Sunat( true, true );
-	$ruc = "10737004509";
-	
-	$search1 = $company->search( $ruc );
 
-	if( $search1->success === true )
+	$ruc = $_GET['ruc'];
+	
+	$search1 = $company->search($ruc);
+
+	if($search1->success === true)
 	{
-		echo "Empresa: " . $search1->result->razon_social;
-		echo "Empresa: " . $search1->result->direccion;
+		$parametros = array(
+			'razon_social'=> $search1->result->razon_social,
+			'direccion'=> $search1->result->direccion
+		);
+	} else {
+		$parametros = array(
+			'razon_social'=> null,
+			'direccion'=> null
+		);
 	}
+	echo json_encode($parametros);
 	
 ?>
