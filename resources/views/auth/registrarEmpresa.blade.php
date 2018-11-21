@@ -111,7 +111,7 @@
 <script>
 
 $('.btnGuardar').on('click', function(){
-    guardarRegistro();    
+    guardarRegistro("{{ url('/registrovalidator') }}");    
 });
 
  /*   function consultaRUC(){

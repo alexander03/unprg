@@ -51,6 +51,7 @@ Route::group(['middleware' => 'guest'], function() {
     Route::get('password','Auth\ResetPasswordController@showPasswordReset');
     Route::get('registro','Auth\RegisterController@showRegistrationForm');
     Route::post('registro', 'Auth\RegisterController@register');
+    Route::post('registrovalidator', 'Auth\RegisterController@validator');
     //other routes
 });
 

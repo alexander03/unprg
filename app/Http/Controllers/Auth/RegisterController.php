@@ -31,8 +31,8 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectPath = '/bolsa/login';
-    protected $redirectTo = '/bolsa/login';
+    protected $redirectPath = '/bolsa';
+    protected $redirectTo = '/bolsa';
 
     /**
      * Create a new controller instance.
@@ -52,6 +52,18 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
 
+       //Create user
+        $user = $this->create($request->all());
+
+        //Authenticates user
+        $this->guard()->login($user);
+
+       //Redirects users
+        return redirect($this->redirectPath);
+    }
+
+    protected function validator(Request $request)
+    {
         $validacion = Validator::make($request->all(), [
             'ruc'       => 'required|numeric|digits:11|unique:empresa,ruc,NULL,id,deleted_at,NULL', // deleted_at = NULL
             'razonsocial'    => 'required|string|max:200|unique:empresa,razonsocial,NULL,id,deleted_at,NULL',
@@ -63,31 +75,8 @@ class RegisterController extends Controller
 
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
-        }
-
-       //Create user
-        $user = $this->create($request->all());
-
-        //Authenticates user
-        $this->guard()->login($user);
-
-       //Redirects users
-        return redirect($this->redirectPath);
-    }
-
-    protected function validator(array $data)
-    {
-        $validacion = Validator::make($data, [
-            'ruc'       => 'required|numeric|digits:11|unique:empresa,ruc,NULL,id,deleted_at,NULL', // deleted_at = NULL
-            'razonsocial'    => 'required|string|max:200|unique:empresa,razonsocial,NULL,id,deleted_at,NULL',
-            'direccion' => 'required|string|max:255',
-            'telefono'   => 'required|numeric|digits:9',
-            'email' => 'required|email|max:255|unique:usuario',
-            'password' => 'required|min:6|max:18|confirmed',
-        ]);
-
-        if ($validacion->fails()) {
-            return $validacion->messages()->toJson();
+        }else{
+            return "OK";
         }
     }
 
