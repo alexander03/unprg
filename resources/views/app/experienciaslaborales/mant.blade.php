@@ -120,7 +120,7 @@ $(document).ready(function() {
         var ruc = $("#ruc").val();
         $.ajax({
             type: 'GET',
-            url: "../../../SunatPHP/demo.php",
+            url: "SunatPHP/demo.php",
             data: "ruc="+ruc,
             beforeSend(){
                 $("#ruc").val('Comprobando Empresa');
