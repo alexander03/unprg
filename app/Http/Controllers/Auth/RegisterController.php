@@ -48,26 +48,11 @@ class RegisterController extends Controller
         return view('auth.registrarEmpresa');
     }
 
-    //Handles registration request for seller
+    //Handles registration request for user
     public function register(Request $request)
     {
 
-       //Validates data
-        $this->validator($request->all())->validate();
-
-       //Create seller
-        $seller = $this->create($request->all());
-
-        //Authenticates seller
-        $this->guard()->login($seller);
-
-       //Redirects sellers
-        return redirect($this->redirectPath);
-    }
-
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
+        $validacion = Validator::make($request->all(), [
             'ruc'       => 'required|numeric|digits:11|unique:empresa,ruc,NULL,id,deleted_at,NULL', // deleted_at = NULL
             'razonsocial'    => 'required|string|max:200|unique:empresa,razonsocial,NULL,id,deleted_at,NULL',
             'direccion' => 'required|string|max:255',
@@ -75,6 +60,35 @@ class RegisterController extends Controller
             'email' => 'required|email|max:255|unique:usuario',
             'password' => 'required|min:6|max:18|confirmed',
         ]);
+
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
+
+       //Create user
+        $user = $this->create($request->all());
+
+        //Authenticates user
+        $this->guard()->login($user);
+
+       //Redirects users
+        return redirect($this->redirectPath);
+    }
+
+    protected function validator(array $data)
+    {
+        $validacion = Validator::make($data, [
+            'ruc'       => 'required|numeric|digits:11|unique:empresa,ruc,NULL,id,deleted_at,NULL', // deleted_at = NULL
+            'razonsocial'    => 'required|string|max:200|unique:empresa,razonsocial,NULL,id,deleted_at,NULL',
+            'direccion' => 'required|string|max:255',
+            'telefono'   => 'required|numeric|digits:9',
+            'email' => 'required|email|max:255|unique:usuario',
+            'password' => 'required|min:6|max:18|confirmed',
+        ]);
+
+        if ($validacion->fails()) {
+            return $validacion->messages()->toJson();
+        }
     }
 
     protected function create(array $data)

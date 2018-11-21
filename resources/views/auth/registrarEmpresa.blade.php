@@ -11,12 +11,14 @@
                 </div>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/registro') }}">
+            <div id="divMensajeError"></div>
+
+            <form class="form-horizontal" id="registro" role="form" method="POST" action="{{ url('/registro') }}">
                 {{ csrf_field() }}
 
                 <div class="form-group{{ $errors->has('ruc') ? ' has-error' : '' }}">
                     <div class="col-xs-12">
-                        <input name="ruc" id="ruc" class="form-control" type="text" required="" placeholder="RUC" autofocus>
+                        <input name="ruc" id="ruc" class="form-control" type="text" placeholder="RUC" autofocus>
                         <i class="md md-account-circle form-control-feedback l-h-34"></i>
                         @if ($errors->has('ruc'))
                             <span class="help-block">
@@ -27,19 +29,19 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="razonsocial" id="razonsocial" class="form-control" type="text" required="" placeholder="Razón Social" readonly="readonly">
+                        <input name="razonsocial" id="razonsocial" class="form-control" type="text" placeholder="Razón Social" >
                         <i class="md md-info-outline form-control-feedback l-h-34"></i>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="direccion" id="direccion" class="form-control" type="text" required="" placeholder="Dirección" readonly="readonly">
+                        <input name="direccion" id="direccion" class="form-control" type="text" placeholder="Dirección" >
                         <i class="md md-account-balance form-control-feedback l-h-34"></i>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12">
-                        <input name="telefono" id="telefono" class="form-control" type="text" required="" placeholder="Teléfono">
+                        <input name="telefono" id="telefono" class="form-control" type="text" placeholder="Teléfono">
                         <i class="md md-phone form-control-feedback l-h-34"></i>
                     </div>
                 </div>
@@ -47,7 +49,7 @@
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
 
                     <div class="col-md-12">
-                        <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" placeholder="Correo Electrónico" required autofocus>
+                        <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" placeholder="Correo Electrónico" autofocus>
                         <i class="md md-mail form-control-feedback l-h-34"></i>
 
                         @if ($errors->has('email'))
@@ -61,7 +63,7 @@
                 <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
 
                     <div class="col-md-12">
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" required>
+                        <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" >
                         <i class="md md-vpn-key form-control-feedback l-h-34"></i>
 
                         @if ($errors->has('password'))
@@ -75,7 +77,7 @@
                 <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
 
                     <div class="col-md-12">
-                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirme Contraseña" required>
+                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirme Contraseña">
                         <i class="md md-vpn-key form-control-feedback l-h-34"></i>
 
                         @if ($errors->has('password_confirmation'))
@@ -88,9 +90,9 @@
 
                 <div class="form-group" style="text-align: center">
                     <div class="col-md-6">
-                        <button class="btn btn-primary btn-custom w-md waves-effect waves-light" type="submit">
+                        <a class="btnGuardar btn btn-primary btn-custom w-md waves-effect waves-light">
                             Registrar
-                        </button>
+                        </a>
                     </div>
                     <div class="col-md-6">
                         <a href="{{ url('/bolsa/login') }}" class="btn btn-success btn-custom w-md waves-effect waves-light">
@@ -105,8 +107,14 @@
 
 @include('auth.bolsa.footer')
 
+
 <script>
-    function consultaRUC(){
+
+$('.btnGuardar').on('click', function(){
+    guardarRegistro();    
+});
+
+ /*   function consultaRUC(){
         var ruc = $("#ruc").val();
         $.ajax({
             type: 'GET',
@@ -136,5 +144,6 @@
             $("#razonsocial").val('');
             $("#direccion").val('');
         }
-    });
+    });*/
 </script>
+
