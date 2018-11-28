@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 	<thead>
 		<tr>
 			<th style='width: 5%' class='text-center'>#</th>
+			<th class='text-center'>EMPRESA</th>
 			<th class='text-center'>OFERTA</th>
 			<th class='text-center'>REQUISITOS</th>
 			<th class='text-center'>EXPERIENCIA</th>
@@ -28,8 +29,8 @@ use Illuminate\Support\Facades\DB;
 		$classbtn = '';
 		$txtbtn = '';
 		$alumno_id = OfertaALumno::getIdALumno();
-        $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
-        $especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
+	        $escuela_id = DB::table('Alumno')->where('id', $alumno_id)->value('escuela_id');
+        	$especialidad_id = DB::table('Alumno')->where('id', $alumno_id)->value('especialidad_id');
 		$facultad_id = DB::table('Escuela')->where('id', $escuela_id)->value('facultad_id');
 		if($facultad_id == ''){
 			$result = DB::select("SELECT DISTINCT E.ID, E.NOMBRE, E.DETALLE, E.TEMPORALIDAD, E.DEDICACION, E.REQUISITOS, E.EXPERIENCIA, EA.EVENTO_ID AS ID_VALIDADOR, E.FECHAI, E.FECHAF, 
@@ -37,12 +38,12 @@ use Illuminate\Support\Facades\DB;
 			 FROM EVENTO E LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 			 INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID 
 			 WHERE ROWNUM <= ".$cant_filas."  
-			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+			 AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAI BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
-					$classbtn  = 'btn btn-xs btn-light btn-block';
-					$txtbtn = '- ° -';
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ''>- ° -</button><td>";
-				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+				$classbtn  = 'btn btn-xs btn-light btn-block';
+				$txtbtn = '- ° -';
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->razonsocial."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = ''>- ° -</button><td>";
+				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' empresaOferta='".$r->razonsocial."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 				echo "</td></tr>";
 				$contador++;
 				$contadortemp++;
@@ -54,10 +55,10 @@ use Illuminate\Support\Facades\DB;
 				FROM EVENTO E LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 				INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID 
 				WHERE E.OPCIONEVENTO = 0 AND ROWNUM <= ".$cant_filas."  
-				AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+				AND E.TIPOEVENTO_ID IS NULL AND E.NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAI BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 			foreach ($result as $r) {
 				$fechaActual = strtotime(date("d-m-Y"));
-				$fechafinal=strtotime($r->fechai);
+				$fechafinal=strtotime($r->fechaf);
 				if($fechaActual>$fechafinal){
 					$classbtn  = 'btn btn-xs btn-light btn-block ';
 					$txtbtn = 'CADUCÓ';
@@ -71,8 +72,8 @@ use Illuminate\Support\Facades\DB;
 						$txtbtn = 'POSTULAR';
 					}
 				}
-				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
-				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+				echo "<tr><td class='text-center'>".$contador."</td><td>".$r->razonsocial."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
+				echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' empresaOferta='".$r->razonsocial."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 				echo "</td></tr>";
 				$contador++;
 				$contadortemp++;
@@ -88,10 +89,10 @@ use Illuminate\Support\Facades\DB;
 				LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 				INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID 
 				where ROWNUM <= ".$cant_filas." AND DE.FACULTAD_ID = ".$facultad_id." AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.TIPOEVENTO_ID IS NULL 
-				AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+				AND NOMBRE LIKE '%".$nombre."%' AND E.FECHAI BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 				foreach ($result as $r) {
 					$fechaActual = strtotime(date("d-m-Y"));
-					$fechafinal=strtotime($r->fechai);
+					$fechafinal=strtotime($r->fechaf);
 					if($fechaActual>$fechafinal){
 						$classbtn  = 'btn btn-xs btn-light btn-block ';
 						$txtbtn = 'CADUCÓ';
@@ -105,8 +106,8 @@ use Illuminate\Support\Facades\DB;
 							$txtbtn = 'POSTULAR';
 						}
 					}
-					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
-					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->razonsocial."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
+					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' empresaOferta='".$r->razonsocial."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 					echo "</td></tr>";
 					$contador++;
 					$contadortemp++;
@@ -124,10 +125,10 @@ use Illuminate\Support\Facades\DB;
 				LEFT JOIN EVENTO_ALUMNO EA ON EA.EVENTO_ID = E.ID 
 				INNER JOIN EMPRESA EMP ON EMP.ID = E.EMPRESA_ID  
 				where ROWNUM <= ".$cant_filas." AND DE.ESCUELA_ID = ".$escuela_id."  AND E.TIPOEVENTO_ID IS NULL 
-				AND NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%' AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
+				AND NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%' AND E.FECHAI BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 				foreach ($result as $r) {
 					$fechaActual = strtotime(date("d-m-Y"));
-					$fechafinal=strtotime($r->fechai);
+					$fechafinal=strtotime($r->fechaf);
 					if($fechaActual>$fechafinal){
 						$classbtn  = 'btn btn-xs btn-light btn-block ';
 						$txtbtn = 'CADUCÓ';
@@ -141,8 +142,8 @@ use Illuminate\Support\Facades\DB;
 							$txtbtn = 'POSTULAR';
 						}
 					}
-					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
-					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->razonsocial."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
+					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' empresaOferta='".$r->razonsocial."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 					echo "</td></tr>";
 					$contador++;
 					$contadortemp++;
@@ -163,7 +164,7 @@ use Illuminate\Support\Facades\DB;
 				AND NOMBRE LIKE '%".$nombre."%' AND E.REQUISITOS LIKE '%".$experiencia."%'  AND E.FECHAF BETWEEN TO_DATE('".$fechai."','yyyy-mm-dd') AND TO_DATE('".$fechaf."','yyyy-mm-dd') ");
 				foreach ($result as $r) {
 					$fechaActual = strtotime(date("d-m-Y"));
-					$fechafinal=strtotime($r->fechai);
+					$fechafinal=strtotime($r->fechaf);
 					if($fechaActual>$fechafinal){
 						$classbtn  = 'btn btn-xs btn-light btn-block ';
 						$txtbtn = 'CADUCÓ';
@@ -177,8 +178,8 @@ use Illuminate\Support\Facades\DB;
 							$txtbtn = 'POSTULAR';
 						}
 					}
-					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
-					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
+					echo "<tr><td class='text-center'>".$contador."</td><td>".$r->razonsocial."</td><td>".$r->nombre."</td><td class='text-center'>".$r->requisitos."</td><td class='text-center'>".$r->experiencia."</td><td class='text-center'>".Date::parse($r->fechai)->format('d/m/y')."</td><td class='text-center'>".Date::parse($r->fechaf)->format('d/m/y')."</td><td><button class='".$classbtn."' idevento='".$r->id."' idalumno = '".$alumno_id."'>".$txtbtn."</button><td>";
+					echo "<button class='btn btn-default btn-xs btn-ver' idoferta='".$r->id."' empresaOferta='".$r->razonsocial."' nombreOferta='".$r->nombre."' detalleOferta='".$r->detalle."' temporalidadOferta ='".$r->temporalidad."' dedicacionOferta='".$r->dedicacion."' requisitosOferta = '".$r->requisitos."' expererienciaOferta='".$r->experiencia."'  data-toggle='modal' data-target='#detalleModal'>VER DETALLE</button>";
 					echo "</td></tr>";
 					$contador++;
 					$contadortemp++;
@@ -199,6 +200,10 @@ use Illuminate\Support\Facades\DB;
       </div>
       <div class="modal-body">
 		<fieldset class"col-12">
+			<div class="form-group col-lg-12 col-sm-12">
+				<label for="empresaOfert" class="col-lg-4 col-sm-4  col-xs-12 control-label" style="float: left;">EMPRESA:</label>
+				<p  id="empresaOfert" class="col-lg-8 cols-sm-8 col-xs-12 control-label rounded" style="float: right;"></p>
+			</div>
 			<div class="form-group col-lg-12 col-sm-12">
 				<label for="nombreOfert" class="col-lg-4 col-sm-4  col-xs-12 control-label" style="float: left;">NOMBRE:</label>
 				<p  id="nombreOfert" class="col-lg-8 cols-sm-8 col-xs-12 control-label rounded" style="float: right;"></p>
@@ -250,6 +255,7 @@ use Illuminate\Support\Facades\DB;
 		 
 		$('.btn-ver').each(function(){
 			$(this).click(function(){
+				$("#empresaOfert").text(''+$(this).attr('empresaOferta'));
 				$("#nombreOfert").text(''+$(this).attr('nombreOferta'));
 				$("#detalleOfert").text(''+$(this).attr('detalleOferta'));
 

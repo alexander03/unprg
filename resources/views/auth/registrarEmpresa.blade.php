@@ -114,30 +114,26 @@ $('.btnGuardar').on('click', function(){
     guardarRegistro("{{ url('/registrovalidator') }}");    
 });
 
-    function consultaRUC(){
+ /*   function consultaRUC(){
         var ruc = $("#ruc").val();
         $.ajax({
             type: 'GET',
-            url: "SunatPHP/prueba.php",
+            url: "SunatPHP/demo.php",
             data: "ruc="+ruc,
-            dataType: "json",
             beforeSend(){
                 $("#ruc").val('Comprobando Empresa');
             },
-            success: function (data) {
-                if(data.razon_social == null) {
+            success: function (data, textStatus, jqXHR) {
+                if(data.RazonSocial == null) {
                     alert('Empresa no encontrada');
                     $("#ruc").val('').focus();
                 } else {
                     $("#ruc").val(ruc);
-                    $("#razonsocial").val(data.razon_social);
-                    $("#direccion").val(data.direccion);
+                    $("#razonsocial").val(data.RazonSocial);
+                    $("#direccion").val(data.Direccion);
                     $("#telefono").val('').focus();
                 }
             }
-        }).fail(function(){
-            alert('Empresa no encontrada');
-            $("#ruc").val('').focus();
         });
     };
 
@@ -148,6 +144,6 @@ $('.btnGuardar').on('click', function(){
             $("#razonsocial").val('');
             $("#direccion").val('');
         }
-    });
+    });*/
 </script>
 

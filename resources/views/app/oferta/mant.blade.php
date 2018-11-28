@@ -99,9 +99,10 @@ use App\Especialidad;
 				<div class="form-group">
 					{!! Form::label('detalle', 'Descripción:', array('class' => 'col-lg-1 col-md-1 col-sm-1 control-label')) !!}
 					<div class="col-lg-12 col-md-12 col-sm-12">
-						{!! Form::text('detalle', null, array('class' => 'form-control input-sm', 'id' => 'detalle', 'placeholder' => 'Ingrese descripción')) !!}
+						{!! Form::textarea('detalle', null, array('class' => 'form-control input-sm', 'id' => 'detalle', 'placeholder' => 'Ingrese descripción', 'rows' => '5')) !!}
 					</div>
 				</div>
+				<h4>Vigencia Oferta:</h4>
 				<div class="form-group col-xs-6">
 					{!! Form::label('fechaInicio', 'Fecha Inicio:', array('class' => '')) !!}
 					{!! Form::date('fechaInicio', null, array('class' => 'form-control ', 'id' => 'fechaInicio', 'placeholder' => 'fecha inicio')) !!}
@@ -152,7 +153,7 @@ use App\Especialidad;
 				</div>
 
 		<div class="form-group">
-			{!! Form::label('opcionevento', 'Opcion:', array('class' => 'col-lg-1 col-md-1 col-sm-1 control-label')) !!}
+			{!! Form::label('opcionevento', 'Definir interesados:', array('class' => 'col-lg-4 col-md-4 col-sm-4')) !!}
 			<div class="col-lg-12 col-md-12 col-sm-12" >
 				{!! Form::select('opcionevento', $cboOpcionEvento, null, array('class' => 'form-control input-sm opOferte', 'id' => 'opcionevento')) !!}
 			</div>

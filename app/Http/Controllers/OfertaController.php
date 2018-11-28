@@ -156,7 +156,20 @@ class OfertaController extends Controller
                 'fechaFin' => 'required',
             )
         );
+
+        if($request->input('cadenaDirecciones') == '' && $request->input('opcionevento')=="1"){
+            $dat[0]=array("Debe agregar al menos una restriccion");
+            return json_encode($dat);
+        }
         
+        $inicio=strtotime($request->input('fechaInicio'));
+        $fin=strtotime($request->input('fechaFin'));
+
+        if($inicio>$fin){
+            $dat[0]=array("Fecha de Fin de Vigencia debe ser mayor que la Fecha Inicio");
+            return json_encode($dat);
+        }
+
         if ($validacion->fails()) {
             return $validacion->messages()->toJson();
         }
