@@ -11,7 +11,6 @@ use App\OfertaAlumno;
 use App\Tipoevento;
 use App\Facultad;
 use App\Escuela;
-use App\Especialidad;
 use App\Librerias\Libreria;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -62,7 +61,6 @@ class OfertaAlumnoController extends Controller
     public function dessuscribir(Request $request){
         $res = '';
         $oferta_id           = Libreria::getParam($request->input('id'));
-        //OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('ALUMNO_ID','=',OfertaALumno::getIdALumno())->delete();
         DB::delete('DELETE FROM EVENTO_ALUMNO WHERE ALUMNO_ID='.OfertaALumno::getIdALumno().' AND EVENTO_ID = '.$oferta_id);
         $res='OK';
         return response()->json($res);
@@ -153,11 +151,7 @@ class OfertaAlumnoController extends Controller
      */
     public function destroy($id)
     {
-        // $ofertaalumno_id = DB::table('Evento_ALumno')->where('evento_id', $id)->value('id');
-        // $error = DB::transaction(function() use($ofertaalumno_id){
-        //     $ofertaalumno = OfertaAlumno::find($ofertaalumno_id);
-        //     $ofertaalumno->delete();
-        // });
+       
         $error = OfertaAlumno::where('EVENTO_ID','=',$oferta_id)->where('EVENTO_ID','=',OfertaALumno::getIdALumno())->delete();
         return is_null($error) ? "OK" : $error;
     }

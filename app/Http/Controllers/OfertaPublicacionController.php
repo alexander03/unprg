@@ -13,7 +13,6 @@ use App\OfertaAlumno;
 use App\EventoAlumno;
 use App\Facultad;
 use App\Escuela;
-use App\Especialidad;
 use App\Experiencias_Laborales;
 use App\Certificado;
 use App\CompetenciaAlumno;

@@ -155,6 +155,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('oferta/buscar', 'OfertaController@buscar')->name('oferta.buscar');
     Route::get('oferta/eliminar/{id}/{listarluego}', 'OfertaController@eliminar')->name('oferta.eliminar');
     Route::resource('oferta', 'OfertaController', array('except' => array('show')));
+    Route::get('oferta/aperturar/{id}', 'OfertaController@aperturar')->name('oferta.aperturar');
+    Route::get('oferta/cerrar/{id}', 'OfertaController@cerrar')->name('oferta.cerrar');
 
     /*SOCIO*/
     Route::post('socio/buscar', 'SocioController@buscar')->name('socio.buscar');
