@@ -359,9 +359,9 @@ class EncuestaController extends Controller
                         <td>';
 
                         if($value->tipo == 1) {
-                            $tabla .= '<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick=\'gestionpa(3, "alternativa", "", ' . $value->id . ');\'><div class="glyphicon glyphicon-list"></div> Alternativas</a>';
+                            $tabla .= '<a href="#carousel-ejemplo" class="btn btn-default btn-xs" data-slide="next" onclick=\'gestionpa(3, "alternativa", "", ' . $value->id . ');\'><div class="glyphicon glyphicon-list"></div> Alternativas</a>';
                         } else {
-                            $tabla .= '<a href="javascript:void(0)" style="btn btn-default btn-xs">Libre</a>';
+                            $tabla .= '<a href="javascript:void(0)" class="btn btn-default btn-xs">Libre</a>';
                         }
                     
                     $tabla .= "</td>
