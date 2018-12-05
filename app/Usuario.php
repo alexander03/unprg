@@ -51,7 +51,7 @@ class Usuario extends Authenticatable
     }
 
     public function alumno(){
-        return $this->belongsTo('App\Aumno', 'alumno_id');
+        return $this->belongsTo('App\Alumno', 'alumno_id');
     }
 
     public function sendPasswordResetNotification($token)
