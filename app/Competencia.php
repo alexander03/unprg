@@ -50,3 +50,4 @@ class Competencia extends Model
     }
 
 }
+
