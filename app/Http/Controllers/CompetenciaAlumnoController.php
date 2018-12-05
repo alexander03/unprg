@@ -52,7 +52,6 @@ class CompetenciaAlumnoController extends Controller
         $cabecera = array();
         $cabecera[] = array('valor' => '#', 'numero' => '1');
         $cabecera[] = array('valor' => 'Competencia', 'numero' => '1');
-        $cabecera[] = array('valor' => 'Calificacion(Max 5 ★)', 'numero' => '1');
         $cabecera[] = array('valor' => 'Operaciones', 'numero' => '2');
 
         $titulo_modificar = $this->tituloModificar;
@@ -115,7 +114,6 @@ class CompetenciaAlumnoController extends Controller
     {
         $listar = Libreria::getParam($request->input('listar'), 'NO');
         $reglas = array(
-            'calificacion' => 'required|integer',
             'competencia_id' => 'required|integer|exists:competencia,id,deleted_at,NULL',
         );
         $validacion = Validator::make($request->all(), $reglas);
@@ -124,7 +122,7 @@ class CompetenciaAlumnoController extends Controller
         }
         $error = DB::transaction(function () use ($request) {
             $competencia_alumno = new CompetenciaAlumno();
-            $competencia_alumno->calificacion = $request->input('calificacion');
+            $competencia_alumno->calificacion = 0;
             $competencia_alumno->competencia_id = $request->input('competencia_id');
             $competencia_alumno->alumno_id = CompetenciaAlumno::getIdAlumno();
             $competencia_alumno->save();
