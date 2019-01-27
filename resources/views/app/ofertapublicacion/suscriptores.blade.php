@@ -31,19 +31,17 @@
 													<td>
 													<a href="{{ route('vercurriculum',array('id'=>$value->alumno_id)) }}" class="btn btn-info waves-effect waves-light m-l-10 btn-xs" target="_blank"><i class="glyphicon glyphicon-eye-open"></i> Ver </a>
 													</td>
+													<td>
+														<a class="btn btn-success btn-xs waves-effect waves-light">
+															<i class="glyphicon glyphicon-envelope"></i> Enviar e-mail
+														</a>
+													</td>
 												</tr>
 												<?php
 												$contador = $contador + 1;
 												?>
 												@endforeach
 											</tbody>
-											<tfoot>
-												<tr>
-													@foreach($cabecera as $key => $value)
-														<th @if((int)$value['numero'] > 1) colspan="{{ $value['numero'] }}" @endif>{!! $value['valor'] !!}</th>
-													@endforeach
-												</tr>
-											</tfoot>
 										</table>
 										@endif
 									</div>

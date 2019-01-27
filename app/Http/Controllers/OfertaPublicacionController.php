@@ -127,6 +127,7 @@ class OfertaPublicacionController extends Controller
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Alumno', 'numero' => '1');
         $cabecera[]       = array('valor' => 'Curriculum', 'numero' => '1');
+        $cabecera[]       = array('valor' => 'Enviar e-mail', 'numero' => '1');
         $ruta             = $this->rutas;
 
         $tituloListar = $this->tituloListar;
