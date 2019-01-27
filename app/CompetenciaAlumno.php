@@ -44,14 +44,9 @@ class CompetenciaAlumno extends Model
         $user = Auth::user();
         // Obtiene el ID del Usuario Autenticado
         $id = Auth::id();
-        $result = DB::select('SELECT alumno_id FROM usuario WHERE id = ?', ['' . $id . '']);
-        foreach ($result as $r) {
-            //echo var_dump($r).' -> ';
-            //echo var_dump(json_encode($r));
-            $alumno_id = $r->alumno_id;
-        }
-        //echo $alumno_id;
-        return $alumno_id;
+        $usuario = Usuario::find($id);
+        $id = $usuario->alumno_id;
+        return $id;
     }
 
     public static function getIdEscuela()
@@ -59,7 +54,9 @@ class CompetenciaAlumno extends Model
         $escuela_id = null;
         $user = Auth::user();
         $id = Auth::id();
-        $result = DB::select('SELECT escuela_id FROM ALUMNO WHERE id = (SELECT alumno_id FROM usuario WHERE id = ?)', ['' . $id . '']);
+        $usuario = Usuario::find($id);
+        $id = $usuario->alumno_id;
+        $result = DB::select('SELECT escuela_id FROM ALUMNO WHERE id = ?', ['' . $id . '']);
         foreach ($result as $r) {
             $escuela_id = $r->escuela_id;
         }

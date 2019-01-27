@@ -19,9 +19,11 @@ use App\Alternativa;
 		@else 
 			<?php 
 				$user                        = Auth::user();
-        		$alumno_id                   = $user->alumno_id;
+        			$alumno_id                   = $user->alumno_id;
 				$respuesta = Respuesta::select('libre')->where('pregunta_id', '=', $pregunta->id)->where('alumno_id', '=', $alumno_id)->get();
-				echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>RESPUESTA: </b> <b>' . $respuesta[0]->libre . '</b><br><br>';
+				if(count($respuesta)>0){
+					echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>RESPUESTA: </b> <b>' . $respuesta[0]->libre . '</b><br><br>';
+				}
 			?>
 		@endif
 		<?php $i++; ?>

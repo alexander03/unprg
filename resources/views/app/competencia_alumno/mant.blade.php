@@ -55,7 +55,7 @@ input[type="radio"]:checked ~ label {
 			</select>
 		</div>
 	</div>
-	<div class="form-group">
+	<div class="form-group" style="display: none">
 		<label class="control-label col-xs-3">Calificación: </label>
 		<div class="col-xs-9">
 			<p class='clasificacion text-left'>

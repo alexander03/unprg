@@ -9,7 +9,7 @@ use App\Direccion_evento;
 use App\Empresa;
 use App\Alumno;
 use App\Tipoevento;
-use App\EventoALumno;
+use App\EventoAlumno;
 use App\Facultad;
 use App\Escuela;
 use App\Especialidad;

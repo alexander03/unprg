@@ -148,22 +148,22 @@
 			{!! Form::select('opcionevento', $cboOpcionEvento, null, array('class' => 'form-control opOferte', 'id' => 'opcionevento')) !!}
 		</div>
 
-		<div class="form-group col-xs-4" style="margin-left: 10px;">
+		<div class="form-group col-xs-6">
 			{!! Form::label('facultad_id', 'Facultad:', array('class' => ' visualisar')) !!}
 			{!! Form::select('facultad_id', $cboFacultad, null, array('class' => 'form-control input-sm visualisar', 'id' => 'facultad_id')) !!}
 		</div>
 
-		<div class="form-group col-xs-4" style="margin-left: 10px;">
+		<div class="form-group col-xs-6" style="margin-left: 10px;">
 			{!! Form::label('escuela_id', 'Escuela:', array('class' => 'visualisar')) !!}
 			<div id="selectescuela">
 				{!! Form::select('escuela_id', $cboEscuela, null, array('class' => 'form-control input-sm visualisar', 'id' => 'escuela_id')) !!}
 			</div>
 		</div>
 
-		<div class="form-group col-xs-4" style="margin-left: 10px;">
-			{!! Form::label('especialidad_id', 'Especialidad:', array('class' => 'visualisar')) !!}
+		<div style="display:none;">
+			{!! Form::label('especialidad_id', 'Especialidad:') !!}
 			<div id="selectespecialidad">
-				{!! Form::select('especialidad_id', $cboEspecialidad, null, array('class' => 'form-control input-sm visualisar', 'id' => 'especialidad_id')) !!}
+				{!! Form::select('especialidad_id', $cboEspecialidad, null, array('id' => 'especialidad_id')) !!}
 			</div>
 		</div>
 		<div class="form-group ">

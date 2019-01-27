@@ -44,7 +44,7 @@ if ($experienciaslaborales != null) {
 				</div>
 				<div class="form-group col-xs-8" style="margin-left: 10px;">
 					{!! Form::label('empresa', 'Empresa:', array('class' => '')) !!}
-					{!! Form::text('empresa', null, array('class' => 'form-control input-xs', 'id' => 'empresa', 'placeholder' => 'Ingrese Empresa', 'maxlength' => '120', 'readonly' => 'readonly')) !!}
+					{!! Form::text('empresa', null, array('class' => 'form-control input-xs', 'id' => 'empresa', 'placeholder' => 'Ingrese Empresa', 'maxlength' => '120')) !!}
 				</div>
 				<div class="form-group col-xs-12">
 					{!! Form::label('cargo', 'Cargo Desempeñaste:', array('class' => '')) !!}
@@ -116,7 +116,7 @@ $(document).ready(function() {
 </script>
 
 <script>
-    function consultaRUC(){
+/*    function consultaRUC(){
         var ruc = $("#ruc").val();
         $.ajax({
             type: 'GET',
@@ -145,4 +145,5 @@ $(document).ready(function() {
             $("#empresa").val('');
         }
     });
+*/
 </script>

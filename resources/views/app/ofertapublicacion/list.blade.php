@@ -26,7 +26,7 @@
 				echo $cant
 			?>
 			</td>
-			<td><a href="{{ route('PDFOferta', $value->id)}}" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-download-alt"></i> descargar pdf</a></td>
+			<td><a href="javascritp:void();" onclick="window.open('{{ route('PDFOferta', $value->id)}}','_blank')" class="btn btn-default btn-xs"><i class="glyphicon glyphicon-download-alt"></i> descargar pdf</a></td>
 			<td>{!! Form::button('<div class="glyphicon glyphicon-list"></div> Suscriptores', array('onclick' => 'modal(\''.URL::route($ruta["listsuscriptores"], $value->id).'\', \'Lista de suscriptores para: '.$value->nombre.'\', this);', 'class' => 'btn btn-default btn-xs')) !!}</td>
 		</tr>
 		<?php

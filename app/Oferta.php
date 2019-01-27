@@ -57,7 +57,7 @@ class Oferta extends Model
         			
     }
 
-    public function scopelistarsuscritos($query, $nombre, $empresa_id)
+    public function scopelistarsuscritos($query, $nombre, $empresa_id, $fechai='', $fechaf='')
     {
         return $query->where(function($subquery) use($nombre)
 		            {
@@ -70,7 +70,9 @@ class Oferta extends Model
 		            	}
                     })->where(function($subquery) {
 		            	$subquery->where('tipoevento_id', '=', null);
-                    })
+                    })->where(function($subquery) use($fechai, $fechaf){
+                        $subquery->whereBetween('fechaf', array($fechai, $fechaf));
+		            })
         			->orderBy('nombre', 'ASC');
         			
     }

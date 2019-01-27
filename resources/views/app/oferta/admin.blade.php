@@ -24,8 +24,8 @@
 					{!! Form::hidden('page', 1, array('id' => 'page')) !!}
 					{!! Form::hidden('accion', 'listar', array('id' => 'accion')) !!}
 					<div class="form-group">
-						{!! Form::label('nombre', 'Nombre:') !!}
-						{!! Form::text('nombre', '', array('class' => 'form-control input-xs', 'id' => 'nombre')) !!}
+						{!! Form::label('nombreof', 'Nombre:') !!}
+						{!! Form::text('nombreof', '', array('class' => 'form-control input-xs', 'id' => 'nombreof')) !!}
 					</div>
 					<div class="form-group">
 						{!! Form::label('fechai', 'Desde:', array('class' => '')) !!}
@@ -65,7 +65,7 @@
 
 		buscar('{{ $entidad }}');
 		init(IDFORMBUSQUEDA+'{{ $entidad }}', 'B', '{{ $entidad }}');
-		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="nombre"]').keyup(function (e) {
+		$(IDFORMBUSQUEDA + '{{ $entidad }} :input[id="nombreof"]').keyup(function (e) {
 			var key = window.event ? e.keyCode : e.which;
 			if (key == '13') {
 				buscar('{{ $entidad }}');

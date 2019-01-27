@@ -9,11 +9,10 @@ use App\Direccion_oferta;
 use App\Empresa;
 use App\Alumno;
 use App\Tipoevento;
-use App\OfertaALumno;
-use App\EventoALumno;
+use App\OfertaAlumno;
+use App\EventoAlumno;
 use App\Facultad;
 use App\Escuela;
-use App\Especialidad;
 use App\Experiencias_Laborales;
 use App\Certificado;
 use App\CompetenciaAlumno;
@@ -60,7 +59,9 @@ class OfertaPublicacionController extends Controller
         $nombre      = Libreria::getParam($request->input('nombre'));
         $empresa_id      = Oferta::getIdEmpresa();
         //$tipoevento_id      = Libreria::getParam($request->input('tipoevento_id'));
-        $resultado        = Oferta::listarsuscritos($nombre, $empresa_id);
+        $fechai = Libreria::getParam($request->input('fechai'));
+        $fechaf = Libreria::getParam($request->input('fechaf'));
+        $resultado        = Oferta::listarsuscritos($nombre, $empresa_id, $fechai, $fechaf);
         $lista            = $resultado->get();
         $cabecera         = array();
         $cabecera[]       = array('valor' => '#', 'numero' => '1');
@@ -154,7 +155,7 @@ class OfertaPublicacionController extends Controller
         PDF::SetDisplayMode('fullpage');
         PDF::writeHTML($html_content, true, false, true, false, '');
  
-        PDF::Output($nomoferta.'.pdf', 'D');
+        PDF::Output($nomoferta.'.pdf', 'I');
     }
 
     public function vercurriculum(Request $request, $id)

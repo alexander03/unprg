@@ -105,9 +105,9 @@
 													<td>{!! Form::button('<div class="glyphicon glyphicon-remove"></div> Eliminar', array('onclick' => 'gestionpa(2, "pregunta", ' . $value->id . ', ' . $encuesta_id . ');', 'class' => 'btn btn-xs btn-danger')) !!}</td>
 													<td>
 														@if($value->tipo == 1)
-														<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="next" onclick='gestionpa(3, "alternativa", "", {{ $value->id }}); $(".correcto").addClass("hidden");'><div class="glyphicon glyphicon-list"></div> Alternativas</a>
+														<a href="#carousel-ejemplo" class="btn btn-default btn-xs" data-slide="next" onclick='gestionpa(3, "alternativa", "", {{ $value->id }}); $(".correcto").addClass("hidden");'><div class="glyphicon glyphicon-list"></div> Alternativas</a>
 														@else
-														<a href="javascript:void(0)" style="btn btn-default btn-xs">Libre</a>
+														<a href="javascript:void(0)" class="btn btn-default btn-xs">Libre</a>
 														@endif
 													</td>
 												</tr>
@@ -132,7 +132,7 @@
     				</div>
     
 				    <div class="item">
-				      	<a href="#carousel-ejemplo" style="btn btn-default btn-xs" data-slide="prev" onclick="$('.correcto').addClass('hidden');"><div class="retorno glyphicon glyphicon-chevron-left"></div> Atrás</a>
+				      	<a href="#carousel-ejemplo" class="btn btn-default btn-xs" data-slide="prev" onclick="$('.correcto').addClass('hidden');"><div class="retorno glyphicon glyphicon-chevron-left"></div> Atrás</a>
 						<div class="row">
 						    <div class="col-sm-12">
 						        <div class="card-box table-responsive">
