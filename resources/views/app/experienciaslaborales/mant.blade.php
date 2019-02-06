@@ -116,34 +116,33 @@ $(document).ready(function() {
 </script>
 
 <script>
-/*    function consultaRUC(){
-        var ruc = $("#ruc").val();
-        $.ajax({
-            type: 'GET',
-            url: "SunatPHP/demo.php",
-            data: "ruc="+ruc,
-            beforeSend(){
-                $("#ruc").val('Comprobando Empresa');
-            },
-            success: function (data, textStatus, jqXHR) {
-                if(data.RazonSocial == null) {
-                    alert('Empresa no encontrada');
-                    $("#ruc").val('').focus();
-                } else {
-                    $("#ruc").val(ruc);
-                    $("#empresa").val(data.RazonSocial);
-                    $("#cargo").val('').focus();
-                }
+function consultaRUC(){
+    var ruc = $("#ruc").val();
+    $.ajax({
+        type: 'GET',
+        url: "SunatPHP/demo.php",
+        data: "ruc="+ruc,
+        beforeSend(){
+            $("#ruc").val('Comprobando Empresa');
+        },
+        success: function (data, textStatus, jqXHR) {
+            if(data.RazonSocial == null) {
+                alert('Empresa no encontrada');
+                $("#ruc").val('').focus();
+            } else {
+                $("#ruc").val(ruc);
+                $("#empresa").val(data.RazonSocial);
+                $("#cargo").val('').focus();
             }
-        });
-    };
-
-    $(document).on('keyup', '#ruc', function() {
-        if($(this).val().length === 11) {
-            consultaRUC();
-        } else {
-            $("#empresa").val('');
         }
     });
-*/
+};
+
+$(document).on('keyup', '#ruc', function() {
+    if($(this).val().length === 11) {
+        consultaRUC();
+    } else {
+        $("#empresa").val('');
+    }
+});
 </script>

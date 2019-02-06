@@ -114,36 +114,36 @@ $('.btnGuardar').on('click', function(){
     guardarRegistro("{{ url('/registrovalidator') }}");    
 });
 
- /*   function consultaRUC(){
-        var ruc = $("#ruc").val();
-        $.ajax({
-            type: 'GET',
-            url: "SunatPHP/demo.php",
-            data: "ruc="+ruc,
-            beforeSend(){
-                $("#ruc").val('Comprobando Empresa');
-            },
-            success: function (data, textStatus, jqXHR) {
-                if(data.RazonSocial == null) {
-                    alert('Empresa no encontrada');
-                    $("#ruc").val('').focus();
-                } else {
-                    $("#ruc").val(ruc);
-                    $("#razonsocial").val(data.RazonSocial);
-                    $("#direccion").val(data.Direccion);
-                    $("#telefono").val('').focus();
-                }
+function consultaRUC(){
+    var ruc = $("#ruc").val();
+    $.ajax({
+        type: 'GET',
+        url: "../SunatPHP/demo.php",
+        data: "ruc="+ruc,
+        beforeSend(){
+            $("#ruc").val('Comprobando Empresa');
+        },
+        success: function (data, textStatus, jqXHR) {
+            if(data.RazonSocial == null) {
+                alert('Empresa no encontrada');
+                $("#ruc").val('').focus();
+            } else {
+                $("#ruc").val(ruc);
+                $("#razonsocial").val(data.RazonSocial);
+                $("#direccion").val(data.Direccion);
+                $("#telefono").val('').focus();
             }
-        });
-    };
-
-    $(document).on('keyup', '#ruc', function() {
-        if($(this).val().length === 11) {
-            consultaRUC();
-        } else {
-            $("#razonsocial").val('');
-            $("#direccion").val('');
         }
-    });*/
+    });
+};
+
+$(document).on('keyup', '#ruc', function() {
+    if($(this).val().length === 11) {
+        consultaRUC();
+    } else {
+        $("#razonsocial").val('');
+        $("#direccion").val('');
+    }
+});
 </script>
 
